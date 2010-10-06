@@ -1,4 +1,3 @@
-/*test*/
 package blackbelt.mail;
 
 import java.util.ArrayList;
