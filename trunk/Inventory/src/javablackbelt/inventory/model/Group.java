@@ -11,10 +11,15 @@ import java.util.List;
  */
 public class Group {
 	
-
+	/////////////////////////
+	// VARIABLE DECLARATION
+	
 	private String groupName;
 	private List<User> listOfUsers = new ArrayList<User>();
-	private List<Item> listOfItems = new ArrayList<Item>();
+	private List<Item> inventoryItems = new ArrayList<Item>();
+	
+	///////////////////////////
+	// CONSTRUCTOR AND METHODS
 	
 	/**
 	 * Constructor.
@@ -23,6 +28,9 @@ public class Group {
 	public Group(String groupName) {
 		this.groupName = groupName;
 	}
+	
+	///////////////////////
+	// GETTERS AND SETTERS
 	
 	/**
 	 * To get the name of the group.
@@ -33,15 +41,18 @@ public class Group {
 	}
 	
 	/**
-	 * To get the list of users.
+	 * To get the list of users who belong to the group.
 	 * @return a list of users.
 	 */
 	public List<User> getListOfUsers() {
 		return listOfUsers;
 	}
 	
-	
-	public List<Item> getListOfItems() {
-		return listOfItems;
+	/**
+	 * Get the list of items of the group.
+	 * @return list of items
+ 	 */
+	public List<Item> getInventoryItems() {
+		return inventoryItems;
 	}
 }
