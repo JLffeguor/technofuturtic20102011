@@ -98,4 +98,6 @@ public enum ItemType {
 	public int getItemDuration() {
 		return itemDuration;
 	}
+	
+	
 }
