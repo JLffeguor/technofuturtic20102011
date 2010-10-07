@@ -16,24 +16,29 @@ public class User {
 		this.lastMailSendedDate = null;
 		this.newLetterMember = newLetterMember;
 		
-		//simulate users file
+		//simulate users file//
 		try{
 		File rep = new File("C:/testing/users");
 		rep.mkdirs();
 		PrintWriter make = new PrintWriter("C:/testing/users/"+this.pseudo+".html");
 		make.println("<html>\n<head>\n<title>"+this.pseudo+"</title>\n</head>");
 		make.println("<body>\n<p>user : "+this.pseudo+"</p>\n<p>your email : "+this.email+"</p>\n<p>your news letter groupe : ");
+		if(this.newLetterMember>2){this.newLetterMember=0;}//au cas ou...
 		if(this.newLetterMember==0){
 			make.println("your are not grouped</p>");
+		}
+		else if(this.newLetterMember==1){
+			make.println("your are weakly-grouped !</p>");
+		}
+		else if(this.newLetterMember==2){
+			make.println("your are dayly-grouped !</p>");
 		}
 		make.println("</body>\n</html>");
 		make.close();
 		}
 		catch(IOException e){
 			throw new RuntimeException(e);
-		}
-				
-		
+		}		
 	}
 	
 	
@@ -52,6 +57,9 @@ public class User {
 	}
 	public int getNewLetterGroupe(){
 		return this.newLetterMember;
+	}
+	public void setNewLetterGroupe(int newLetterGroupe){
+		this.newLetterMember=newLetterGroupe;
 	}
 	
 	

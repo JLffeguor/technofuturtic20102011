@@ -35,6 +35,14 @@ public class Mail {
 	public String getText(){
 		return this.text;
 	}
+	public String getFormatedText(){
+		String content = new String(this.text);
+		String result = new String("");
+		result+=content.substring(0, content.indexOf(".")+1)+"<br>";
+		content=content.substring(0, content.indexOf(".")+1);
+		System.out.println("test:"+content+" -- "+result);		
+		return result;
+	}
 	public boolean getImmadiate(){
 		return immadiate;
 	}
