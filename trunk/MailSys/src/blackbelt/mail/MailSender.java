@@ -59,7 +59,8 @@ public class MailSender extends Thread{
 		rep.mkdirs();
 		PrintWriter make = new PrintWriter("C:/testing/"+mail.getUser().getPseudo()+"/"+mail.getSubject()+".html");
 		make.println("<html>\n<head><title>"+mail.getSubject()+"</title></head>\n<body>");
-		make.println("<p>"+mail.getText()+"</p>");
+		make.println("<p>"+mail.getText()+"</p><br><hr>");
+		make.println("<p><a href=\"C:/testing/users/"+mail.getUser().getPseudo()+".html\">your account here</a></p>");
 		make.println("</body>\n</html>");
 		make.close();
 		}
