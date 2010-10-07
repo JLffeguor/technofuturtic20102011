@@ -108,5 +108,7 @@ public class ItemService {
 		Item userItem = new Item(user, itemType, user);
 		userItem.setCause(cause);
 		user.addItem(userItem);
+
+		System.out.println("L'utilisateur : " + user + "a reçu : " + userItem);
 	}
 }
