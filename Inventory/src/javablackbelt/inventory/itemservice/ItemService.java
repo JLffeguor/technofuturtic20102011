@@ -58,7 +58,7 @@ public class ItemService {
 				// CREATION D'UN OBJET ITEM ET ENVOI DANS LA LISTE (SAC) DE
 				// L'USER
 
-				Item userItem = new Item(user, item, user);
+				Item userItem = new Item(user, item);
 				userItem.setCause(cause);
 				user.addItem(userItem);
 
@@ -105,7 +105,7 @@ public class ItemService {
 
 		// INSTANCIATION D'UN OBJET ITEM + AJOUT A LA LISTE (SAC) DE L'USER
 
-		Item userItem = new Item(user, itemType, user);
+		Item userItem = new Item(user, itemType);
 		userItem.setCause(cause);
 		user.addItem(userItem);
 

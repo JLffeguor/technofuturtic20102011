@@ -3,30 +3,52 @@ package javablackbelt.inventory.model;
 import java.util.ArrayList;
 import java.util.List;
 
-// User class.
-// A user has a nick name and a list of items
+/**
+ * User class.
+ * A user has a nick name and a list of items
+ */
 public class User {
 	
+	/////////////////////////
+	// VARIABLE DECLARATION
+	
 	private String nickName;
-	private List<Item> listOfItems = new ArrayList<Item>();
+	private List<Item> inventoryItems = new ArrayList<Item>();
 	
-	// Constructor
-	public User(String inNickName) {
-		nickName = inNickName;
+	///////////////////////////
+	// CONSTRUCTOR AND METHODS
+	
+	/**
+	 * Constructor
+	 */
+	public User(String nickName) {
+		this.nickName = nickName;
 	}
 	
-	// To add an item in the list
+	/**
+	 * To add an item in the list
+	 * @param itemToAdd
+	 */
 	public void addItem(Item itemToAdd) {
-		this.listOfItems.add(itemToAdd);
+		this.inventoryItems.add(itemToAdd);
 	}
 	
-	// Return the name of the user 
+	///////////////////////
+	// GETTERS AND SETTERS
+	
+	/**
+	 * Return the name of the user
+	 * @return nick name
+	 */
 	public String getNickName() {
 		return nickName;
 	}
 	
-	// Return the list of items
+	/**
+	 * Get the list of items
+	 * @return list of items
+	 */
 	public List<Item> getListOfItems() {
-		return listOfItems;
+		return inventoryItems;
 	}
 }

@@ -11,6 +11,9 @@ import java.util.GregorianCalendar;
  */
 public class Item {
 	
+	/////////////////////////
+	// VARIABLE DECLARATION
+	
 	private User owner;
 	private ItemType itemType;
 	
@@ -42,18 +45,22 @@ public class Item {
 	User userTarget;
 	Group groupTarget;
 	
+	///////////////////////////
+	// CONSTRUCTOR AND METHODS
+	
 	/**
 	 * Constructor.
-	 * 
 	 * @param itemType the type of item.
 	 * @param initialOwner the initial owner.
 	 */
-	public Item(User owner, ItemType itemType, User initialOwner) {
-		this.owner = owner;
+	public Item(User owner, ItemType itemType) {
+		this.owner = this.initialOwner = owner;
 		this.itemType = itemType;
-		this.initialOwner = initialOwner;
 		this.creationDate = new Date();
 	}
+	
+	///////////////////////
+	// GETTERS AND SETTERS
 	
 	/**
 	 * When this method is called the current date
@@ -137,7 +144,7 @@ public class Item {
 	}
 	
 	/**
-	 * 
+	 * Get the activation date
 	 * @return activation date
 	 */
 	public Date getActivationDate() {
@@ -168,13 +175,20 @@ public class Item {
 	public String getActivationDescription() {
 		return activationDescription;
 	}
-
+	
+	/**
+	 * Get the user target.
+	 * @return user target
+	 */
 	public User getUserTarget() {
 		return userTarget;
 	}
-
+	
+	/**
+	 * Get the target group.
+	 * @return group target
+	 */
 	public Group getGroupTarget() {
 		return groupTarget;
 	}
-	
 }
