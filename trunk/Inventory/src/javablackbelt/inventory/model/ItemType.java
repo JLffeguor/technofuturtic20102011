@@ -38,8 +38,8 @@ public enum ItemType {
 	MILK("Milk", 1, 12, "Healthy glas of milk. It will give strength to one of your student."),
 	COURSE_CHAPTER("Course chapter", 4, 24*7, "Access to any course chapter for 7 days"),
 	IMAGE_HOME_24("Image on home page 24h", 4, 24, "Hack the BlackBeltFactory.com home page with any image of your choice for 24h. Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. Please don't put no hate message."),
-	IMAGE_HOME_6("Image on home page 24h", 4, 6, "Hack the BlackBeltFactory.com home page with any image of your choice for 24h. Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. Please don't put no hate message."),
-	IMAGE_HOME_1("Image on home page 24h", 4, 1, "Hack the BlackBeltFactory.com home page with any image of your choice for 24h. Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. Please don't put no hate message.");
+	IMAGE_HOME_6("Image on home page 6h", 4, 6, "Hack the BlackBeltFactory.com home page with any image of your choice for 24h. Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. Please don't put no hate message."),
+	IMAGE_HOME_1("Image on home page 1h", 4, 1, "Hack the BlackBeltFactory.com home page with any image of your choice for 24h. Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. Please don't put no hate message.");
 
 
 	private String itemName;
