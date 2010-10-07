@@ -1,6 +1,6 @@
 package pdfGenerator;
 
-import generatorpdf.HtmlToPdf;
+import htmltopdf.HtmlToPdf;
 import coursepage.CourseTextFormatter;
 
 public class PdfGenerator {
