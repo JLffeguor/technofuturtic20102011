@@ -22,24 +22,11 @@ public class ItemService {
 		List<ItemType> tempItemList = new ArrayList<ItemType>();
 		List<Item> userList = new ArrayList<Item>();
 
-		userList = user.getListOfItems();
-
 		// PARCOURS DE L'ENUM ET DE LA LISTE DE L'USER
 
 		for (ItemType enumItems : ItemType.values()) {
-			for (Item userListItems : userList) {
-
-				// SI ENUMITEMS (TYPE ITEM) EST EGAL A USERLISTITEMS.GETUSERTYPE
-				// (TYPE DE L'ITEM DANS LA LISTE DE L'USER)
-
-				if (!(enumItems.equals(userListItems.getItemType()))) {
-
-					// AJOUT DANS LA LISTE TEMPORAIRE QUI VA RECUP LES ELEMENTS
-					// NN PRESENTS DANS LA LISTE DE L'USER MAIS PRESENTS DANS
-					// L'ENUM
-
-					tempItemList.add(enumItems);
-				}
+			if (level >= enumItems.getItemLevel()) {
+				tempItemList.add(enumItems);
 			}
 		}
 
@@ -47,58 +34,28 @@ public class ItemService {
 
 		int random = (int) ((Math.random() * (tempItemList.size() - 0)) + 0);
 
-		// PARCOURS DE LA LISTE TEMPORAIRE
+		Item userItem = new Item(user, tempItemList.get(random));
+		userItem.setCause(cause);
+		user.addItem(userItem);
 
-		for (ItemType item : tempItemList) {
+		System.out.println("l'utilisateur : " + user.getNickName()
+				+ " a reçu : " + userItem.getItemType().getItemName());
 
-			// SI LE COMPTEUR EST EGAL A LA VALEUR ALEATOIRE
-
-			if ((itemCount == random) && (level == item.getItemLevel())) {
-
-				// CREATION D'UN OBJET ITEM ET ENVOI DANS LA LISTE (SAC) DE
-				// L'USER
-
-				Item userItem = new Item(user, item);
-				userItem.setCause(cause);
-				user.addItem(userItem);
-
-				// AVERTIT L'UTILISATEUR QU'IL A OBTENU UN ITEM
-
-				System.out.println("L'utilisateur : " + user + "a reçu : "
-						+ item.getItemName());
-			}
-
-			// SINON INCREMENTATION DU COMPTEUR
-
-			else {
-				itemCount++;
-			}
-		}
 	}
 
 	public static void dropRandomItem(User user, int level, int percent,
 			String cause) {
 
-		// CREATION D'UN TABLEAU DE 100 BOOLEENS
-
-		boolean tab[] = new boolean[100];
-
-		// PARCOURS DU TABLEAU ET MISE DES X PREMIERS A TRUE
-
-		for (int i = 0; i < percent; i++) {
-			tab[i] = true;
-		}
-
-		// GENERATION D'UN NOMBRE ALEATOIRE
-
 		int random = (int) ((Math.random() * (100 - 0)) + 0);
 
-		// SI TAB[RANDOM] EST EGAL A TRUE, APPEL DE LA METHODE DROPRANDOMITEM
+		System.out.println(random);
 
-		if (tab[random] == true) {
+		if (random <= percent) {
 			dropRandomItem(user, level, cause);
 		}
 
+		else
+			System.out.println("You loose...");
 	}
 
 	public static void dropItem(User user, ItemType itemType, String cause) {
@@ -109,6 +66,7 @@ public class ItemService {
 		userItem.setCause(cause);
 		user.addItem(userItem);
 
-		System.out.println("L'utilisateur : " + user + "a reçu : " + userItem);
+		System.out.println("L'utilisateur : " + user.getNickName()
+				+ " a reçu : " + userItem.getItemType().getItemName());
 	}
 }
