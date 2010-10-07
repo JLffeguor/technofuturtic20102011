@@ -11,18 +11,16 @@ public class ItemService2 {
 	
 	public void sendItemTo(User sender,Item item, User receiver){
 		//ajouter l'item dans la InventoryItems de la cible
-		receiver.getInventoryItems().add(item);
-		
-		//changer l'owner de l'item
-		item.setOwner(receiver);
+		receiver.addItem(item);
 		
 		//envoi d'un email au receveur
 		System.out.println(receiver.getNickName()+ " vient de recevoir dans son inventaire "
 				+item.getItemType().getItemName()+ " de la part de "+sender.getNickName());
 		
 		//supprimer l'item de la InventoryItems de l'envoyeur
-		sender.getInventoryItems().remove(item);
+		sender.removeItem(item);
 	}
+	
 	
 	
 	

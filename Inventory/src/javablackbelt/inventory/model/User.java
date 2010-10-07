@@ -48,7 +48,7 @@ public class User {
 	 * Get the list of items
 	 * @return list of items
 	 */
-	public List<Item> getListOfItems() {
+	public List<Item> getInventoryItems() {
 		return inventoryItems;
 	}
 }

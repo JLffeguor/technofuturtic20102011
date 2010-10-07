@@ -191,4 +191,10 @@ public class Item {
 	public Group getGroupTarget() {
 		return groupTarget;
 	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+	
+	
 }
