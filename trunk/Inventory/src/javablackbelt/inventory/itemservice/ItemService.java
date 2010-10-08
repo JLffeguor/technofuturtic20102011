@@ -15,12 +15,12 @@ public class ItemService {
 
 		// VARIABLES
 
-		int itemCount = 0;
+		
 
 		// LISTES TEMPORAIRES
 
 		List<ItemType> tempItemList = new ArrayList<ItemType>();
-		List<Item> userList = new ArrayList<Item>();
+	
 
 		// PARCOURS DE L'ENUM ET DE LA LISTE DE L'USER
 
@@ -39,7 +39,7 @@ public class ItemService {
 		user.addItem(userItem);
 
 		System.out.println("l'utilisateur : " + user.getNickName()
-				+ " a reçu : " + userItem.getItemType().getItemName());
+				+ " a reï¿½u : " + userItem.getItemType().getItemName());
 
 	}
 
@@ -67,6 +67,6 @@ public class ItemService {
 		user.addItem(userItem);
 
 		System.out.println("L'utilisateur : " + user.getNickName()
-				+ " a reçu : " + userItem.getItemType().getItemName());
+				+ " a reï¿½u : " + userItem.getItemType().getItemName());
 	}
 }
