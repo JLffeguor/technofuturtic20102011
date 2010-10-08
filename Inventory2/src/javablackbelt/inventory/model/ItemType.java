@@ -6,8 +6,20 @@ package javablackbelt.inventory.model;
 
 public enum ItemType {
 
-	// ENUM
-	 
+	/** Is an ItemType appliable to a user (as offering a beer), 
+	 * a group (as offering a barrel of beer) 
+	 * or is global (as changing the home page).  */
+	public enum TargetType {
+		USER,GROUP,GLOBAL;
+	}
+
+	/** Group some ItemTypes to ease their retrieval */
+	public enum Group {
+		BACKGROUND,IMAGE_HOME;
+	}
+
+	
+	
 	BEER_PINT("Beer", 1, 12, "Refreshing pint of Belgian beer. Attention, it's not alcoohol free.",TargetType.USER,null),
 	BEER_BARREL("Beer Barrel", 2, 12, "Barrel of beer for a group",TargetType.GROUP,null),
 	CHAMPAIN_BLASS("Champain", 2, 24, "Glass of excellent French Champain",TargetType.USER,null),
@@ -52,16 +64,9 @@ public enum ItemType {
 	private int itemLevel;
 	private int itemDuration;
 	private TargetType targetType;
-	private ItemTypeGroup itemTypeGroup;
+	private Group itemTypeGroup;
 
-	/**
-	 * @param itemNam
-	 * @param itemLvl
-	 * @param itemDur
-	 * @param itemDesc
-	 */
-	ItemType(String itemNam, int itemLvl, int itemDur, String itemDesc, TargetType targetType, ItemTypeGroup itemTypeGroup) {
-		
+	ItemType(String itemNam, int itemLvl, int itemDur, String itemDesc, TargetType targetType, Group itemTypeGroup) {
 		this.itemName = itemNam;
 		this.itemDescription = itemDesc;
 		this.itemLevel = itemLvl;
@@ -70,65 +75,44 @@ public enum ItemType {
 		this.itemTypeGroup=itemTypeGroup;
 	}
 
-	// GETTERS
-	
-	/**
-	 * @return itemName
-	 */
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
+	//////////////////////////////////// Generated Code ////////////////////////////////////////
 	
 	public String getItemName() {
 		return itemName;
 	}
 
-	/**
-	 * @return itemDescription
-	 */
-	
 	public String getItemDescription() {
 		return itemDescription;
 	}
 
-	/**
-	 * @return itemLevel
-	 */
 	
 	public int getItemLevel() {
 		return itemLevel;
 	}
 	
-	/**
-	 * @return itemDuration
-	 */
-	
 	public int getItemDuration() {
 		return itemDuration;
 	}
-	
-	/**
-	 * @return targetType
-	 */
 	
 	public TargetType getTargetType() {
 		return targetType;
 	}
 	
-	/**
-	 * @return itemTypeGroup
-	 */
 	
-	public ItemTypeGroup getItemTypeGroup() {
+	public Group getItemTypeGroup() {
 		return itemTypeGroup;
 	}
 
-	// SETTERS
 	
-	public void setTargetType(TargetType targetType) {
-		this.targetType = targetType;
-	}
-
-	public void setItemTypeGroup(ItemTypeGroup itemTypeGroup) {
-		this.itemTypeGroup = itemTypeGroup;
-	}
 	
 	
 }
