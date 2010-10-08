@@ -1,9 +1,7 @@
 package javablackbelt.inventory.model;
 
 /**
- * 
  * @author forma711
- *
  */
 
 public enum ItemType {
@@ -46,9 +44,10 @@ public enum ItemType {
 	private String itemDescription;
 	private int itemLevel;
 	private int itemDuration;
-	
+	private TargetType targetType;
+	private ItemTypeGroup itemTypeGroup;
+
 	/**
-	 * 
 	 * @param itemNam
 	 * @param itemLvl
 	 * @param itemDur
@@ -63,8 +62,9 @@ public enum ItemType {
 		this.itemDuration = itemDur;
 	}
 
+	// GETTERS
+	
 	/**
-	 * 
 	 * @return itemName
 	 */
 	
@@ -73,7 +73,6 @@ public enum ItemType {
 	}
 
 	/**
-	 * 
 	 * @return itemDescription
 	 */
 	
@@ -82,7 +81,6 @@ public enum ItemType {
 	}
 
 	/**
-	 * 
 	 * @return itemLevel
 	 */
 	
@@ -91,12 +89,37 @@ public enum ItemType {
 	}
 	
 	/**
-	 * 
 	 * @return itemDuration
 	 */
-
+	
 	public int getItemDuration() {
 		return itemDuration;
+	}
+	
+	/**
+	 * @return targetType
+	 */
+	
+	public TargetType getTargetType() {
+		return targetType;
+	}
+	
+	/**
+	 * @return itemTypeGroup
+	 */
+	
+	public ItemTypeGroup getItemTypeGroup() {
+		return itemTypeGroup;
+	}
+
+	// SETTERS
+	
+	public void setTargetType(TargetType targetType) {
+		this.targetType = targetType;
+	}
+
+	public void setItemTypeGroup(ItemTypeGroup itemTypeGroup) {
+		this.itemTypeGroup = itemTypeGroup;
 	}
 	
 	
