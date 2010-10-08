@@ -12,6 +12,9 @@ public class User  {
 	/////////////////////////
 	// VARIABLE DECLARATION
 	
+	private static long countUsers = 0 ;
+	
+	private long userId;
 	private String nickName;
 	private List<Item> inventoryItems = new ArrayList<Item>();
 	
@@ -23,6 +26,7 @@ public class User  {
 	 */
 	public User(String nickName) {
 		this.nickName = nickName;
+		this.userId = countUsers++;	
 	}
 	
 
