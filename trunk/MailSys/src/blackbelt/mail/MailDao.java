@@ -24,7 +24,9 @@ public class MailDao {
 		return this.db;
 	}
 	public Mail findNextMail(){
-		Mail nextMail = (this.db.size()>0)?this.db.remove(0):null;
+		Mail nextMail = (this.db.size()>0)
+					?
+				this.db.remove(0):null;
 		return nextMail;
 	}
 	
