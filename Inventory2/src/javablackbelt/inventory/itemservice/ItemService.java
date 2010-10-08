@@ -17,12 +17,12 @@ public class ItemService {
 	
 	public static void dropRandomItem(User user, int level, String cause) {
 
-		// LISTES TEMPORAIRES
+		/** temporary lists */
 
 		List<ItemType> tempItemList = new ArrayList<ItemType>();
 	
 
-		// PARCOURS DE L'ENUM ET DE LA LISTE DE L'USER
+		/** add items in the tempItemList if their level is >= than enumItems level */ 
 
 		for (ItemType enumItems : ItemType.values()) {
 			if (level >= enumItems.getItemLevel()) {
@@ -30,7 +30,7 @@ public class ItemService {
 			}
 		}
 
-		// GENERATION VALEUR ALEATOIRE COMPRISE ENTRE 0 ET LA TAILLE DE LA LISTE
+		/** generate random number between 0 and list size */
 
 		int random = (int) ((Math.random() * (tempItemList.size() - 0)) + 0);
 
@@ -53,10 +53,12 @@ public class ItemService {
 	public static void dropRandomItem(User user, int level, int percent,
 			String cause) {
 
+		/** generate random number between 0 and 100 */
+		
 		int random = (int) ((Math.random() * (100 - 0)) + 0);
 
 		System.out.println(random);
-
+		
 		if (random <= percent) {
 			dropRandomItem(user, level, cause);
 		}
@@ -73,7 +75,7 @@ public class ItemService {
 	
 	public static void dropItem(User user, ItemType itemType, String cause) {
 
-		// INSTANCIATION D'UN OBJET ITEM + AJOUT A LA LISTE (SAC) DE L'USER
+		/** add an item to the user list */ 
 
 		Item userItem = new Item(user, itemType);
 		userItem.setCause(cause);
