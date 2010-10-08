@@ -19,12 +19,6 @@ public class Mail {
 		this.creationDate = new Date();
 	}
 ///////
-///////
-
-	
-	
-		
-/////////
 /////////
 	public User getUser(){
 		return this.user;
@@ -41,7 +35,6 @@ public class Mail {
 		while(content.length()>0){
 		result+=content.substring(0, content.indexOf(".")+1)+"<br>";
 		content=content.substring(content.substring(0, content.indexOf(".")+1).length(), content.length());
-		System.out.println("test:"+content+" -- "+result);
 		}
 		return result;
 	}

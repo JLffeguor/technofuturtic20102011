@@ -10,6 +10,7 @@ public class MainTest {
 		User u1 = new User("yoyo","j_gusbin@hotmail.fr",1);
 		User u2 = new User("fafa","fatonalia@hotmail.com",2);
 		User u3 = new User("nawak","bidule_machin@hotmail.fr",1);
+		User u4 = new User("ohmygad","truc_machinchouette@hotmail.fr",1);
 		
 		
 		MailSender consumer = new MailSender();
