@@ -4,15 +4,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Class Item.
- * This class describe an item.
+ * An Item is in the inventory of a user and can be activated.
+ * 
  * @author forma710
  *
  */
 public class Item {
-	
-	/////////////////////////
-	// VARIABLE DECLARATION
 	
 	private ItemContainer owner;
 	private ItemType itemType;
@@ -38,7 +35,7 @@ public class Item {
 	
 	/** Non null when activated. e.g.: "Refreshing pint of
 	Belgian beer offered by John<link>" */
-	String activationDescription;
+	private String activationDescription;
 	
 	/** User on which the item has been activated.
 	Either group or user, if any. e.g.: a beer is offered to somebody */
