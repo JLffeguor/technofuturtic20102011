@@ -24,7 +24,7 @@ public class TestDataGenerator {
 						+ "produces .class files with bytecode.In the following diagram, you see these elements, with the ClassLoader "
 						+ "responsible of finding/loading the .class files at runtime.\n");
 		Section section111 = new Section(
-				"1.1.1 Exercice",
+				"1.1.1. Exercice",
 				"<p>Execute the following steps</p></br><ul><p>    </p><li>Run a program that throws a NullPointerException (as on the example above).</li><p>    </p><li>Build a new class that iterates through an array but goes too far</li><p>    </p><li>Check the Java SE JavaDoc, locate Throwable, Exception and browse through the subclasses of RuntimeException. Note that the notion of subclass will be seen in a later chapter.</li><p></p></ul>");
 
 		root = section1;
