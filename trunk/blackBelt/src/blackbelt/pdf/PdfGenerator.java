@@ -10,6 +10,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.html.simpleparser.StyleSheet;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -43,29 +44,53 @@ public class PdfGenerator {
 	 * @throws IOException */
 	private void recursiveWalk(Section currentSection) throws DocumentException, IOException{
 		// Title
-			//Style
+			//Style of the title
 		Font fontTitle = new Font(Font.getFamily(DOCUMENT_RESULT), 18, Font.BOLD);
-		fontTitle.setSize(18);
+		int sizeTitle = findNumberOfTagHtmlTitle(currentSection.getTitle());
+		switch(sizeTitle){
+			case 1:
+				fontTitle.setSize(20);
+				break;
+			case 3:
+				fontTitle.setSize(17);
+				break;
+			case 5:
+				fontTitle.setSize(12);
+				break;
+			default:
+				fontTitle.setSize(10);
+				break;
+		}
 		fontTitle.setColor(170, 0, 0);
-			//Text and Style
+			//Set the style to the title 
 		Chunk pTitle = new Chunk(currentSection.getTitle(), fontTitle);
+//			if(sizeTitle == 1){
+//				pTitle.setUnderline(3.5f, -8f);
+//			}
 			//Add Text
 		this.doc.add(pTitle);
+		this.doc.add(Chunk.NEWLINE);
+		this.doc.add(Chunk.NEWLINE);
 		
 		// Body
 		CourseTextFormatter sectionFormatter = new CourseTextFormatter("", currentSection.getBody());
 		StyleSheet styleBody = new StyleSheet();
-		styleBody.loadStyle("p", "size", "12px"); //Style of the body
+		styleBody.loadStyle("p", "size", "8"); //Style of the body
 		List<Element> objBody; //Create List with the paragraph
 		objBody = HTMLWorker.parseToList(new StringReader(sectionFormatter.format()), styleBody); //Format text and apply style
 			for (int i = 0; i < objBody.size(); i++){
 				this.doc.add(objBody.get(i)); //Add paragraph
+				this.doc.add(Chunk.NEWLINE);  //Add return to line
 			}
 
 		// Childs (recursive call)
 		for (Section sSection : currentSection.getSubSections()) {
 			recursiveWalk(sSection);
 		}
+	}
+	
+	public int findNumberOfTagHtmlTitle(String title) {
+		return title.lastIndexOf(".");
 	}
 	
 }
