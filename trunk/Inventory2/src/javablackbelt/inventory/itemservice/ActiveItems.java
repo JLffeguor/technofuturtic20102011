@@ -7,29 +7,25 @@ import java.util.Map;
 
 import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.ItemType;
+import javablackbelt.inventory.model.User;
 
 public class ActiveItems {
 	
 
-	private Map<String, List<Item>> userMap = new HashMap<String, List<Item>>();
-	private Map<String, List<Item>> groupMap = new HashMap<String, List<Item>>();
+	private Map<Long, List<Item>> userListActiveItemsMap = new HashMap<Long, List<Item>>();
+	private Map<Long, List<Item>> groupActiveItemsMap = new HashMap<Long, List<Item>>();
 	private List<Item> globalItems = new ArrayList<Item>();	
-	
+	 
     private static ActiveItems instance = new ActiveItems();  // Singleton.
     
     
-    public void getActiveItems(ItemType.Group itemTypeGroup){
-    	
+    public void getActiveItems(ItemType.Group itemTypeGroup){   	
     }
     
-    public void getActiveItems(user){
+    public void getActiveItems(User user){
     	
     }
-    
-    public void getActiveItems(Group group){
-    	
-    }
-    
+        
     public void getGlobalActiveItems(ItemType itemType){
     	
     }
