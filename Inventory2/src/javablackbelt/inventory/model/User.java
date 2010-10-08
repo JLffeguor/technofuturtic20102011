@@ -30,7 +30,6 @@ public class User  {
 	}
 	
 
-	
 	/**
 	 * To add an item in the list
 	 * @param itemToAdd
@@ -63,5 +62,7 @@ public class User  {
 		return nickName;
 	}
 	
-	
+	public long getUserId() {
+		return userId;
+	}
 }
