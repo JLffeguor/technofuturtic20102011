@@ -327,8 +327,12 @@ public class CourseTextFormatter {
 			int height = element.getOptionalIntValue("height", width*9/16);
 			String videoId = element.getMandatoryValue("id");
 			
+			
 			// Video object creation (to get the html).
 //			Video video;
+			
+			//Use a boolean to know if we will format in pdf
+			
 			String typeValue = element.getMandatoryValue("type").toLowerCase();
 			
 			if ("youtube".equals(typeValue)) {
@@ -347,7 +351,11 @@ public class CourseTextFormatter {
 				insertErrorMessage("[video] element with unsupported type value '"+typeValue+"'. Should be 'youtube' or 'vimeo'");
 				return;
 			}
-			
+			//use a boolean to know if we should format to pdf
+			boolean shouldWeFormatToPdf = true;
+			if (shouldWeFormatToPdf){
+				addResultTextBlock("<img src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "\n" + videoId);
+			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
 			
 		} catch (MandatoryParameterNotFoundException e) {
