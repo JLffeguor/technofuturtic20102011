@@ -11,12 +11,12 @@ import java.util.GregorianCalendar;
  */
 public class Item {
 	
-	private ItemContainer owner;
+	private User owner;
 	private ItemType itemType;
 	
 	/** User who dropped that item initially. If initialOwner <> owner,
 	that item has been given by initialOwner to somebody else, then to owner */
-	private final ItemContainer initialOwner;
+	private final User initialOwner;
 	
 	/** when that item has been dropped */
 	private final Date creationDate;
@@ -50,7 +50,7 @@ public class Item {
 	 * @param itemType the type of item.
 	 * @param initialOwner the initial owner.
 	 */
-	public Item(ItemContainer owner, ItemType itemType) {
+	public Item(User owner, ItemType itemType) {
 		this.owner = this.initialOwner = owner;
 		this.itemType = itemType;
 		this.creationDate = new Date();
@@ -112,10 +112,15 @@ public class Item {
 	 * 
 	 * @return owner
 	 */
-	public ItemContainer getOwner() {
+	public User getOwner() {
 		return owner;
 	}
 	
+	
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
 	/**
 	 * To get the type of the item
 	 * @return item type
@@ -128,7 +133,7 @@ public class Item {
 	 * To get the initial owner
 	 * @return initial owner
 	 */
-	public ItemContainer getInitialOwner() {
+	public User getInitialOwner() {
 		return initialOwner;
 	}
 	
@@ -189,9 +194,6 @@ public class Item {
 		return groupTarget;
 	}
 
-	public void setOwner(ItemContainer owner) {
-		this.owner = owner;
-	}
 	
 	
 }
