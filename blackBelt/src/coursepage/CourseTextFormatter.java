@@ -277,7 +277,7 @@ public class CourseTextFormatter {
 		try {
 			String srcValue = element.getMandatoryValue("src");
 			/* only for data test */
-			String imageUrl = ("C:\\Eclipse\\eclipse-jee-galileo-SR2-win32\\workspace\\BlackBeltPdf\\images.gif");
+			String imageUrl = ("S:\\DocumentsPourPDF\\imagesTestForPdf.gif");
 //			String imageUrl = (new PictureResource(course, srcValue)).getURL();
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
 			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
