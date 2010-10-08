@@ -9,14 +9,14 @@ import java.util.List;
  * @author forma710
  *
  */
-public class Group extends ItemContainer{
+public class Group {
 	   
 	/////////////////////////
 	// VARIABLE DECLARATION
 	
 	private String groupName;
 	private List<User> listOfUsers = new ArrayList<User>();
-	private List<Item> inventoryItems = new ArrayList<Item>();
+	//private List<Item> inventoryItems = new ArrayList<Item>();
 	
 	///////////////////////////
 	// CONSTRUCTOR AND METHODS
@@ -28,26 +28,6 @@ public class Group extends ItemContainer{
 	public Group(String groupName) {
 		this.groupName = groupName;
 	}
-	
-	
-	/**
-	 * To add an item in the list
-	 * @param itemToAdd
-	 */
-	public void addItem(Item itemToAdd) {
-		inventoryItems.add(itemToAdd);
-		itemToAdd.setOwner(this); // changement du proprietaire de l'objet
-	}
-	
-	
-	/**
-	 * To remove an item in the list
-	 * @param itemToRemove
-	 */
-	public void removeItem(Item itemToRemove) {
-		inventoryItems.remove(itemToRemove);  // supprime un objet de l'inventaire d'un user
-	}
-	
 	
 	
 	
@@ -62,21 +42,5 @@ public class Group extends ItemContainer{
 		return groupName;
 	}
 	
-	/**
-	 * To get the list of users who belong to the group.
-	 * @return a list of users.
-	 */
-	public List<User> getListOfUsers() {
-		return listOfUsers;
-	}
-	
-	/**
-	 * Get the list of items of the group.
-	 * @return list of items
- 	 */
-	/*
-	public List<Item> getInventoryItems() {
-		return inventoryItems;
-	}
-	*/
+
 }

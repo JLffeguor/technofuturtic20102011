@@ -32,7 +32,7 @@ public class Main {
 		ItemService2 iService = new ItemService2();
 		
 		
-		iService.sendItemTo(pierre,beerGlass,g1);
+		iService.sendItemTo(pierre,backSleep,david);
 	
 		//gerer les receveurs : USER, GROUP, GLOBAL
 		

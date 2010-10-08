@@ -7,7 +7,7 @@ import java.util.List;
  * User class.
  * A user has a nick name and a list of items
  */
-public class User extends ItemContainer {
+public class User  {
 	
 	/////////////////////////
 	// VARIABLE DECLARATION
@@ -25,10 +25,7 @@ public class User extends ItemContainer {
 		this.nickName = nickName;
 	}
 	
-	/**
-	 * To add an item in the list
-	 * @param itemToAdd   
-	 */
+
 	
 	/**
 	 * To add an item in the list
