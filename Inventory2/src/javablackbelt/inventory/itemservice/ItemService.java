@@ -8,14 +8,14 @@ import javablackbelt.inventory.model.ItemType;
 import javablackbelt.inventory.model.User;
 
 public class ItemService {
-
-	// METHODES
-
+	
+	/**
+	 * @param user
+	 * @param level
+	 * @param cause
+	 */
+	
 	public static void dropRandomItem(User user, int level, String cause) {
-
-		// VARIABLES
-
-		
 
 		// LISTES TEMPORAIRES
 
@@ -39,9 +39,16 @@ public class ItemService {
 		user.addItem(userItem);
 
 		System.out.println("l'utilisateur : " + user.getNickName()
-				+ " a reï¿½u : " + userItem.getItemType().getItemName());
+				+ " a reçu : " + userItem.getItemType().getItemName());
 
 	}
+	
+	/**
+	 * @param user
+	 * @param level
+	 * @param percent
+	 * @param cause
+	 */
 
 	public static void dropRandomItem(User user, int level, int percent,
 			String cause) {
@@ -58,6 +65,12 @@ public class ItemService {
 			System.out.println("You loose...");
 	}
 
+	/**
+	 * @param user
+	 * @param itemType
+	 * @param cause
+	 */
+	
 	public static void dropItem(User user, ItemType itemType, String cause) {
 
 		// INSTANCIATION D'UN OBJET ITEM + AJOUT A LA LISTE (SAC) DE L'USER
@@ -67,6 +80,6 @@ public class ItemService {
 		user.addItem(userItem);
 
 		System.out.println("L'utilisateur : " + user.getNickName()
-				+ " a reï¿½u : " + userItem.getItemType().getItemName());
+				+ " a reçu : " + userItem.getItemType().getItemName());
 	}
 }
