@@ -7,9 +7,9 @@ public class MainTest {
 	public static void main(String[] args) {
 				
 		///////// Données de test ///////
-		User u1 = new User("yoyo","j_gusbin@hotmail.fr",15);
-		User u2 = new User("fafa","fatonalia@hotmail.com",30);
-		User u3 = new User("nawak","bidule_machin@hotmail.fr",15);
+		User u1 = new User("yoyo","j_gusbin@hotmail.fr",1);
+		User u2 = new User("fafa","fatonalia@hotmail.com",2);
+		User u3 = new User("nawak","bidule_machin@hotmail.fr",1);
 		
 		
 		MailSender consumer = new MailSender();
