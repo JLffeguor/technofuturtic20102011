@@ -16,7 +16,6 @@ public class ActiveItems2 {
 	private Map<Long, List<Item>> userListActiveItemsMap;
 	private Map<Long, List<Item>> groupActiveItemsMap;
 	private List<Item> globalItems;
-
 	
 	private static ActiveItems2 instance = new ActiveItems2(); // Singleton.
 
@@ -27,8 +26,6 @@ public class ActiveItems2 {
 		 Map<Long, List<Item>> groupActiveItemsMap = new HashMap<Long, List<Item>>();
 		 List<Item> globalItems = new ArrayList<Item>();
 	}
-	
-	
 	
 	public void addItemToUserListActiveItemsMap(Item item, User user){
 		 Long userId = user.getUserId();
@@ -41,7 +38,6 @@ public class ActiveItems2 {
 		userItemsList.add(item);
 	}
 	
-	
 	public void addItemToGroupActiveItemsMap(Item item, Group group){
 		Long groupId = group.getGroupId();
 		 List<Item> groupItemsList = groupActiveItemsMap.get(groupId);
@@ -53,14 +49,10 @@ public class ActiveItems2 {
 		groupItemsList.add(item);
 	}
 	
-
 	public void addItemToGloballyActiveItems(Item item){
 		globalItems.add(item);
 	}
 	
-	
-	
-
 	public static ActiveItems2 getInstance() {
 		return instance;
 	}

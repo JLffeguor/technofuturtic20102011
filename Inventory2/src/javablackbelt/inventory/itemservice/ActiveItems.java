@@ -12,43 +12,46 @@ import javablackbelt.inventory.model.User;
 
 public class ActiveItems {
 
-	private Map<Long, List<Item>> userListActiveItemsMap = new HashMap<Long, List<Item>>();
-	private Map<Long, List<Item>> groupActiveItemsMap = new HashMap<Long, List<Item>>();
-	private List<Item> globalItems = new ArrayList<Item>();
+	private Map<Long, List<Item>> userListActiveItemsMap;
+	private Map<Long, List<Item>> groupActiveItemsMap;
+	private List<Item> globalItems;
 
 	private static ActiveItems instance = new ActiveItems(); // Singleton.
-
-	private Date actualDate = new Date();
-
+	
+	private ActiveItems(){
+		 Map<Long, List<Item>> userListActiveItemsMap = new HashMap<Long, List<Item>>();
+		 Map<Long, List<Item>> groupActiveItemsMap = new HashMap<Long, List<Item>>();
+		 List<Item> globalItems = new ArrayList<Item>();
+	}
+	
 	public void getActiveItems(ItemType.Group itemTypeGroup) {
 
 		for(Item i : globalItems) {
-
+			if(new Date().after(i.getRemovalDate())) {
+				globalItems.remove(i);
+			} else if(i.getItemType().getItemTypeGroup() == itemTypeGroup) // return i;
+				System.out.println(i.getItemType().getItemDescription());
 		}
 	}
 
 	public void getActiveItems(User user) {
 
 		for (Item i : userListActiveItemsMap.get(user.getUserId())) {
-
-			if(actualDate.compareTo(i.getRemovalDate()) <= 0){
+			if(new Date().after(i.getRemovalDate())) {
 				userListActiveItemsMap.remove(i);
 				user.removeItem(i);
-			} else
+			} else // return i;
 				System.out.println(i.getItemType().getItemDescription());
 		}
 	}
 
 	public void getGlobalActiveItems(ItemType itemType) {
 
-		
 		for (Item i : globalItems) {
-
-			if(actualDate.compareTo(i.getRemovalDate()) <= 0){
+			if(new Date().after(i.getRemovalDate())) {
 				globalItems.remove(i);
-			} else if (itemType.equals(i.getItemType())) {
+			} else if (itemType.equals(i.getItemType())) // return i;
 				System.out.println(i.getItemType().getItemName());
-			}
 		}
 	}
 

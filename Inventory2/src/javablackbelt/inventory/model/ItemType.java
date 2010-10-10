@@ -6,9 +6,6 @@ package javablackbelt.inventory.model;
 
 public enum ItemType {
 
-	
-	
-	
 	BEER_PINT("Beer", 1, 12, "Refreshing pint of Belgian beer. Attention, it's not alcoohol free.",TargetType.USER,null),
 	BEER_BARREL("Beer Barrel", 2, 12, "Barrel of beer for a group",TargetType.GROUP,null),
 	CHAMPAIN_BLASS("Champain", 2, 24, "Glass of excellent French Champain",TargetType.USER,null),
@@ -47,14 +44,13 @@ public enum ItemType {
 			" Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. " +
 			"Please don't put no hate message.",TargetType.GLOBAL, Group.IMAGE_HOME);
 
-
 	/** Is an ItemType appliable to a user (as offering a beer), 
 	 * a group (as offering a barrel of beer) 
 	 * or is global (as changing the home page).  */
 	public enum TargetType {
 		USER,GROUP,GLOBAL;
 	}
-
+	
 	/** Group some ItemTypes to ease their retrieval */
 	public enum Group {
 		BACKGROUND,IMAGE_HOME;
@@ -95,7 +91,6 @@ public enum ItemType {
 		return itemDescription;
 	}
 
-	
 	public int getItemLevel() {
 		return itemLevel;
 	}
@@ -108,12 +103,7 @@ public enum ItemType {
 		return targetType;
 	}
 	
-	
 	public Group getItemTypeGroup() {
 		return itemTypeGroup;
-	}
-
-	
-	
-	
+	}	
 }

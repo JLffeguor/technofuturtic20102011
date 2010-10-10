@@ -15,18 +15,14 @@ public class ItemService2 {
 		} 
 		if (item.getItemType().getTargetType()==ItemType.TargetType.GROUP){
 			throw new RuntimeException("Group items cannot be sent to a user ! ");
-		} 
-		
+		} 	
 		//add item in User's Inventory
 		receiver.addItem(item);
 		System.out.println(receiver.getNickName()+ " jsut receive the object "
 				+item.getItemType().getItemName()+ " from "+sender.getNickName());
-		
 		//remove item from sender'inventory
 		sender.removeItem(item);
 	}
-	
-	
 	
 	public void activateItemGlobally(User sender, Item item) {
 		
@@ -36,16 +32,12 @@ public class ItemService2 {
 		if (item.getItemType().getTargetType()==ItemType.TargetType.GROUP){
 			throw new RuntimeException("Group items cannot be activate on a group ! ");
 		} 
-		
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
-		ActiveItems2.getInstance().addItemToGloballyActiveItems(item);
-		
-		
+		ActiveItems2.getInstance().addItemToGloballyActiveItems(item);	
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
-				+ " has been activated by " + sender.getNickName());
-		
+				+ " has been activated by " + sender.getNickName());	
 	}
 
 	public void activateItemOnGroup(User sender, Item item, Group receiver) {
@@ -55,16 +47,13 @@ public class ItemService2 {
 		} 
 		if (item.getItemType().getTargetType()==ItemType.TargetType.GLOBAL){
 			throw new RuntimeException("Group items cannot be activate globally ! ");
-		} 
-		
+		} 	
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
 		ActiveItems2.getInstance().addItemToGroupActiveItemsMap(item, receiver);
-		
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName());
-		
 	}
 
 	public void activateItemOnUser(User sender, Item item, User receiver) {
@@ -74,17 +63,12 @@ public class ItemService2 {
 		} 
 		if (item.getItemType().getTargetType()==ItemType.TargetType.GROUP){
 			throw new RuntimeException("User items cannot be activate on a group ! ");
-		} 
-		
+		} 	
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
 		ActiveItems2.getInstance().addItemToUserListActiveItemsMap(item, receiver);
-		
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName());
-		
 	}
-
-			
-		}
+}
