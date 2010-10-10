@@ -11,11 +11,15 @@ import java.util.List;
  */
 public class Group {
 	   
+	
+	private static long countGroup = 0 ;
+	
 	/////////////////////////
 	// VARIABLE DECLARATION
 	
 	private String groupName;
 	private List<User> listOfUsers = new ArrayList<User>();
+	private long groupId;
 	//private List<Item> inventoryItems = new ArrayList<Item>();
 	
 	///////////////////////////
@@ -27,6 +31,7 @@ public class Group {
 	 */
 	public Group(String groupName) {
 		this.groupName = groupName;
+		this.groupId = Group.countGroup++;	
 	}
 	
 	
@@ -40,6 +45,12 @@ public class Group {
 	 */
 	public String getGroupName() {
 		return groupName;
+	}
+
+
+
+	public long getGroupId() {
+		return groupId;
 	}
 	
 
