@@ -5,9 +5,6 @@ import java.util.GregorianCalendar;
 
 /**
  * An Item is in the inventory of a user and can be activated.
- * 
- * @author forma710
- *
  */
 public class Item {
 	
@@ -42,22 +39,11 @@ public class Item {
 	User userTarget;
 	Group groupTarget;
 	
-	///////////////////////////
-	// CONSTRUCTOR AND METHODS
-	
-	/**
-	 * Constructor.
-	 * @param itemType the type of item.
-	 * @param initialOwner the initial owner.
-	 */
 	public Item(User owner, ItemType itemType) {
 		this.owner = this.initialOwner = owner;
 		this.itemType = itemType;
 		this.creationDate = new Date();
 	}
-	
-	///////////////////////
-	// GETTERS AND SETTERS
 	
 	/**
 	 * When this method is called the current date
@@ -65,12 +51,9 @@ public class Item {
 	 * This method set also the removal date.
 	 */
 	public void setActivationDate() {
-		// set activation date and removal date with the current date.
-		this.activationDate = this.removalDate = new Date();  
+		this.activationDate = new Date();  
 		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(this.removalDate);
-		// add the item duration (in hours) to the activation date.
-		cal.add(GregorianCalendar.HOUR, this.itemType.getItemDuration());
+		cal.add(GregorianCalendar.HOUR_OF_DAY, this.itemType.getItemDuration());
 		this.removalDate = cal.getTime();
 	}
 	
@@ -92,108 +75,55 @@ public class Item {
 		this.activationDescription = activationDescription;
 	}
 	
-	/**
-	 * Set the user target.
-	 * @param userTarget
-	 */
 	public void setUserTarget(User userTarget) {
 		this.userTarget = userTarget;
 	}
-	
-	/**
-	 * Set the group target.
-	 * @param groupTarget
-	 */
+
 	public void setGroupTarget(Group groupTarget) {
 		this.groupTarget = groupTarget;
 	}
 
-	/**
-	 * 
-	 * @return owner
-	 */
 	public User getOwner() {
 		return owner;
 	}
-	
 	
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
 
-	/**
-	 * To get the type of the item
-	 * @return item type
-	 */
 	public ItemType getItemType() {
 		return itemType;
 	}
 	
-	/**
-	 * To get the initial owner
-	 * @return initial owner
-	 */
 	public User getInitialOwner() {
 		return initialOwner;
 	}
 	
-	/**
-	 * To get the creation date of the item
-	 * @return creation date
-	 */
 	public Date getCreationDate() {
 		return creationDate;
 	}
 	
-	/**
-	 * Get the activation date
-	 * @return activation date
-	 */
 	public Date getActivationDate() {
 		return activationDate;
 	}
 	
-	/**
-	 * To get the removal date
-	 * @return removal date
-	 */
 	public Date getRemovalDate() {
 		return removalDate;
 	}
 	
-	/**
-	 * To get the description of why the item 
-	 * has been created. 
-	 * @return cause
-	 */
 	public String getCause() {
 		return cause;
 	}
 	
-	/**
-	 * Get the description of the activation. 
-	 * @return activation description
-	 */
 	public String getActivationDescription() {
 		return activationDescription;
 	}
 	
-	/**
-	 * Get the user target.
-	 * @return user target
-	 */
 	public User getUserTarget() {
 		return userTarget;
 	}
 	
-	/**
-	 * Get the target group.
-	 * @return group target
-	 */
 	public Group getGroupTarget() {
 		return groupTarget;
 	}
-
-	
-	
 }
