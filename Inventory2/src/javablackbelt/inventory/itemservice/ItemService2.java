@@ -19,8 +19,8 @@ public class ItemService2 {
 		
 		//add item in User's Inventory
 		receiver.addItem(item);
-		System.out.println(receiver.getNickName()+ " vient de recevoir dans son inventaire "
-				+item.getItemType().getItemName()+ " de la part de "+sender.getNickName());
+		System.out.println(receiver.getNickName()+ " jsut receive the object "
+				+item.getItemType().getItemName()+ " from "+sender.getNickName());
 		
 		//remove item from sender'inventory
 		sender.removeItem(item);
@@ -39,14 +39,16 @@ public class ItemService2 {
 		
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
+		ActiveItems2.getInstance().addItemToGloballyActiveItems(item);
+		
 		
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
-				+ " vient d'être activé par " + sender.getNickName());
+				+ " has been activated by " + sender.getNickName());
 		
 	}
 
-	public void activateItemOnGroup(User sender, Item item, Group group) {
+	public void activateItemOnGroup(User sender, Item item, Group receiver) {
 		
 		if (item.getItemType().getTargetType()==ItemType.TargetType.USER){
 			throw new RuntimeException("Group items cannot be activate on a user ! ");
@@ -57,14 +59,15 @@ public class ItemService2 {
 		
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
+		ActiveItems2.getInstance().addItemToGroupActiveItemsMap(item, receiver);
 		
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
-				+ " vient d'être activé par " + sender.getNickName());
+				+ " has been activated by " + sender.getNickName());
 		
 	}
 
-	public void activateItemOnUser(User sender, Item item, User user) {
+	public void activateItemOnUser(User sender, Item item, User receiver) {
 
 		if (item.getItemType().getTargetType()==ItemType.TargetType.GLOBAL){
 			throw new RuntimeException("User items cannot be activate globally ! ");
@@ -75,10 +78,11 @@ public class ItemService2 {
 		
 		// initialization of activationDate and removalDate  
 		item.setActivationDate();
+		ActiveItems2.getInstance().addItemToUserListActiveItemsMap(item, receiver);
 		
 		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
-				+ " vient d'être activé par " + sender.getNickName());
+				+ " has been activated by " + sender.getNickName());
 		
 	}
 
