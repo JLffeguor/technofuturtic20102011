@@ -51,12 +51,14 @@ public class TestDataGenerator {
 						+ " sauvages ou en captivité, ne dépassent pas 2 ou 3 ans. Dans la nature leurs principaux ennemis "
 						+ "sont les prédateurs : rapaces, serpents, mammifères carnivores et même des hérons ou des corbeaux "
 						+ "qui capturent les plus jeunes. Ils craignent également les hivers trop froids, les maladies et"
-						+ " les machines agricoles qui détruisent leur terrier[2].Ils creusent en effet des terriers "
+						+ " les machines agricoles qui détruisent leur terrier.Ils creusent en effet des terriers "
 						+ "complexes à entrées multiples, avec tout un jeu de chambres, de greniers et de latrines "
 						+ "reliés par un réseau de tunnels qui peuvent plonger à plus de 2m sous la surface du sol"
 						+ " en hiver. Le terrier s'agrandit au cours de la vie de l'animal, qui y vit en solitaire."
 						+ " Le hamster en sortira généralement au crépuscule ou à la nuit tombée, bien que certaines"
-						+ " espèces soient également diurnes[2].Hamster de Roborovski à l'entrée de son nid.Certaines"
+						+ " espèces soient également diurnes.");
+				Section section1132 = new Section(
+						"1.1.3.1.","Hamster de Roborovski à l'entrée de son nid.Certaines"
 						+ " espèces sont particulièrement agressives vis-à-vis de leurs congénères, et des règles "
 						+ "hiérarchiques strictes règlent ces rencontres. Les femelles sont souvent dominantes."
 						+ " Les cricétinés se défendent âprement avec leurs incisives quand ils sont attaqués."
@@ -92,6 +94,7 @@ public class TestDataGenerator {
 		section2.getSubSections().add(section21);
 		section11.getSubSections().add(section113);
 		section113.getSubSections().add(section1131);
+		section113.getSubSections().add(section1132);
 	}
 
 	public Section getRoot() {
