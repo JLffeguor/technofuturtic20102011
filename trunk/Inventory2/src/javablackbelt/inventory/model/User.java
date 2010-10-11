@@ -22,11 +22,11 @@ public class User  {
 
 	public void addItem(Item itemToAdd) {
 		inventoryItems.add(itemToAdd);
-		itemToAdd.setOwner(this); // changement du proprietaire de l'objet
+		itemToAdd.setOwner(this); /** change of object owner */
 	}
 
 	public void removeItem(Item itemToRemove) {
-		inventoryItems.remove(itemToRemove);  // supprime un objet de l'inventaire d'un user
+		inventoryItems.remove(itemToRemove);  /** delete an object from user inventory */
 	}
 
 	public String getNickName() {
