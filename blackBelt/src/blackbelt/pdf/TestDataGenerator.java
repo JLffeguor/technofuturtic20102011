@@ -27,7 +27,7 @@ public class TestDataGenerator {
 						+ "produces .class files with bytecode.In the following diagram, you see these elements, with the ClassLoader "
 						+ "responsible of finding/loading the .class files at runtime.\n");
 		Section section113 = new Section(
-				"2.2. Nos amis les Hamster",
+				"1.1.3. Nos amis les Hamster",
 				"Voilà, enfin disponible pour tous, une rubrique qui va certainement faire fureur et avoir des répercussions " +
 				"relativement conséquentes, une rubrique vraiment super qui va amuser les petits comme les tout petits," +
 				" une rubrique hors du commun qui va transporter dans un univers féérique les hommes les plus terre-à-terre" +
