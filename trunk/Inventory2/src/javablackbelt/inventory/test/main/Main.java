@@ -1,7 +1,10 @@
 package javablackbelt.inventory.test.main;
 
-import javablackbelt.inventory.itemservice.ItemService2;
-import javablackbelt.inventory.model.*;
+import javablackbelt.inventory.itemservice.ItemService;
+import javablackbelt.inventory.model.Group;
+import javablackbelt.inventory.model.Item;
+import javablackbelt.inventory.model.ItemType;
+import javablackbelt.inventory.model.User;
 
 
 
@@ -29,10 +32,10 @@ public class Main {
 		pierre.addItem(beerGlass); 
 		pierre.addItem(backSleep);
 		
-		ItemService2 iService = new ItemService2();
 		
 		
-		iService.sendItemTo(pierre,backSleep,david);
+		ItemService iServ = new ItemService();
+		iServ.sendItemTo(pierre,backSleep,david);
 	
 		//gerer les receveurs : USER, GROUP, GLOBAL
 		

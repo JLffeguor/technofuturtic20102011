@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.ItemType;
 import javablackbelt.inventory.model.User;
@@ -24,6 +25,7 @@ public class ActiveItems {
 		 List<Item> globalItems = new ArrayList<Item>();
 	}
 	
+	
 	public void getActiveItems(ItemType.Group itemTypeGroup) {
 
 		for(Item i : globalItems) {
@@ -34,6 +36,7 @@ public class ActiveItems {
 		}
 	}
 
+	
 	public void getActiveItems(User user) {
 
 		for (Item i : userListActiveItemsMap.get(user.getUserId())) {
@@ -45,6 +48,7 @@ public class ActiveItems {
 		}
 	}
 
+	
 	public void getGlobalActiveItems(ItemType itemType) {
 
 		for (Item i : globalItems) {
@@ -55,7 +59,37 @@ public class ActiveItems {
 		}
 	}
 
-	public ActiveItems getInstance() {
+	
+	
+	public void addItemToUserListActiveItemsMap(Item item, User user){
+		 Long userId = user.getUserId();
+		 List<Item> userItemsList = userListActiveItemsMap.get(userId);
+		 if (userItemsList==null){
+			 //creation of userId in the Map
+			 userItemsList = new ArrayList<Item>();
+			 userListActiveItemsMap.put(userId, userItemsList);
+		 } 
+		userItemsList.add(item);
+	}
+	
+	public void addItemToGroupActiveItemsMap(Item item, Group group){
+		Long groupId = group.getGroupId();
+		 List<Item> groupItemsList = groupActiveItemsMap.get(groupId);
+		 if (groupItemsList==null){
+			 //creation of userId in the Map
+			 groupItemsList = new ArrayList<Item>();
+			 groupActiveItemsMap.put(groupId, groupItemsList);
+		 } 
+		groupItemsList.add(item);
+	}
+	
+	public void addItemToGloballyActiveItems(Item item){
+		globalItems.add(item);
+	}
+	
+	
+	
+	public static ActiveItems getInstance() {
 		return instance;
 	}
 }
