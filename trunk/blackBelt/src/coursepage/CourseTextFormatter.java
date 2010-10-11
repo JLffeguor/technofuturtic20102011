@@ -247,11 +247,13 @@ public class CourseTextFormatter {
 		try {
 			String srcValue = element.getMandatoryValue("src");
 //			String srcUrl = (new PictureResource(course, srcValue)).getURL();
+			/** only for data test */
 			String srcUrl = ("S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf");
 			
 			String imageValue = element.getOptionalValue("image");
 //			String imageUrl = (new PictureResource(course, imageValue)).getURL();
-			String imageUrl = ("S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf");
+			/** only for data test */
+			String imageUrl = ("S:\\DocumentsPourPDF\\imagesVideo.jpg");
 
 			if(imageValue != null){
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
