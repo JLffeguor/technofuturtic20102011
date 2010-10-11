@@ -20,7 +20,7 @@ public class DataBaseConnection {
 		}
 
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=root&password=123");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/mailing?user=root&password=123");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

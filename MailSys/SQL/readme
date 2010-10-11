@@ -1,0 +1,5 @@
+For the database of test, use the root user with password 123.
+The port of the db is the default port.
+The name of the db is 'mailing'.
+
+Execute the SQL file in the SQL folder of this project to create the tables in the db.
