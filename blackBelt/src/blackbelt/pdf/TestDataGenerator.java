@@ -86,7 +86,8 @@ public class TestDataGenerator {
 				"(as on the example above).</li><p>    </p><li>Build a new class that iterates through an array but goes too " +
 				"far</li><p>    </p><li>Check the Java SE JavaDoc, locate Throwable, Exception and browse through the subclasses" +
 				" of RuntimeException. Note that the notion of subclass will be seen in a later chapter.</li><p></p></ul>" +
-				"[attachment <a href = \"S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf\"><img align = \"middle\" src = \"S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf\" style=\"border: medium none;\"></a>]");
+				"[attachment <a href = \"S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf\"><img align = \"middle\" " +
+				"src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg\" style=\"border: medium none\"></a>]");
 
 		root = section1;
 
