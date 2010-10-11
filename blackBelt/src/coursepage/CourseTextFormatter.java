@@ -354,7 +354,7 @@ public class CourseTextFormatter {
 			//use a boolean to know if we should format to pdf
 			boolean shouldWeFormatToPdf = true;
 			if (shouldWeFormatToPdf){
-				addResultTextBlock("</p></p><img align='center' src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "<p>" + videoId + "\nYou can watch this video on BlackBeltFactory");
+				addResultTextBlock("</p></p><img align='center' src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "<p align = 'center'>" + videoId + " (You can watch this video on BlackBeltFactory) </p>");
 			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
 			
