@@ -276,7 +276,7 @@ public class CourseTextFormatter {
 	protected void insertImage(Element element) {
 		try {
 			String srcValue = element.getMandatoryValue("src");
-			/* only for data test */
+			/** only for data test */
 			String imageUrl = ("S:\\DocumentsPourPDF\\imagesTestForPdf.gif");
 //			String imageUrl = (new PictureResource(course, srcValue)).getURL();
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
