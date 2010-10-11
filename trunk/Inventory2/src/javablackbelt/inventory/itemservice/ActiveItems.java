@@ -17,7 +17,7 @@ public class ActiveItems {
 	private Map<Long, List<Item>> groupActiveItemsMap;
 	private List<Item> globalItems;
 
-	private static ActiveItems instance = new ActiveItems(); // Singleton.
+	private static ActiveItems instance = new ActiveItems(); /** Singleton. */
 	
 	private ActiveItems(){
 		 Map<Long, List<Item>> userListActiveItemsMap = new HashMap<Long, List<Item>>();
@@ -29,8 +29,12 @@ public class ActiveItems {
 	public void getActiveItems(ItemType.Group itemTypeGroup) {
 
 		for(Item i : globalItems) {
+			
+			/** if actual Date > than getRemovalDate */
+			
 			if(new Date().after(i.getRemovalDate())) {
 				globalItems.remove(i);
+								
 			} else if(i.getItemType().getItemTypeGroup() == itemTypeGroup) // return i;
 				System.out.println(i.getItemType().getItemDescription());
 		}
@@ -40,6 +44,9 @@ public class ActiveItems {
 	public void getActiveItems(User user) {
 
 		for (Item i : userListActiveItemsMap.get(user.getUserId())) {
+			
+			/** if actual Date > than getRemovalDate */
+			
 			if(new Date().after(i.getRemovalDate())) {
 				userListActiveItemsMap.remove(i);
 				user.removeItem(i);
@@ -52,6 +59,9 @@ public class ActiveItems {
 	public void getGlobalActiveItems(ItemType itemType) {
 
 		for (Item i : globalItems) {
+			
+			/** if actual Date > than getRemovalDate */
+			
 			if(new Date().after(i.getRemovalDate())) {
 				globalItems.remove(i);
 			} else if (itemType.equals(i.getItemType())) // return i;
@@ -65,7 +75,9 @@ public class ActiveItems {
 		 Long userId = user.getUserId();
 		 List<Item> userItemsList = userListActiveItemsMap.get(userId);
 		 if (userItemsList==null){
-			 //creation of userId in the Map
+			 
+			 /** creation of userId in the Map */
+			 
 			 userItemsList = new ArrayList<Item>();
 			 userListActiveItemsMap.put(userId, userItemsList);
 		 } 
@@ -76,7 +88,9 @@ public class ActiveItems {
 		Long groupId = group.getGroupId();
 		 List<Item> groupItemsList = groupActiveItemsMap.get(groupId);
 		 if (groupItemsList==null){
-			 //creation of userId in the Map
+			 
+			 /** creation of userId in the Map */
+			 
 			 groupItemsList = new ArrayList<Item>();
 			 groupActiveItemsMap.put(groupId, groupItemsList);
 		 } 
