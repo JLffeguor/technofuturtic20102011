@@ -247,16 +247,18 @@ public class CourseTextFormatter {
 		try {
 			String srcValue = element.getMandatoryValue("src");
 //			String srcUrl = (new PictureResource(course, srcValue)).getURL();
+			String srcUrl = ("S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf");
 			
 			String imageValue = element.getOptionalValue("image");
 //			String imageUrl = (new PictureResource(course, imageValue)).getURL();
+			String imageUrl = ("S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf");
 
 			if(imageValue != null){
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-//			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
-//									"<a href='" + srcUrl + "'><img style='border: none;' align='middle' src='"+imageUrl+"'/></a>" +
-//									"<br/><span style='font-size: 65%; font-color: #999999;' align='center'>Click to download</span>" + 
-//							   "</div>");
+			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
+									"<a href='" + srcUrl + "'><img style='border: none;' align='middle' src='"+imageUrl+"'/></a>" +
+									"<br/><span style='font-size: 65%; font-color: #999999;' align='center'>Click to download</span>" + 
+							   "</div>");
 			} else {
 				shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
 				element.innerText = StringEscapeUtils.escapeHtml(element.innerText);
