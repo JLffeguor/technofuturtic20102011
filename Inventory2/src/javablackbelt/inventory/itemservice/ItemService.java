@@ -10,29 +10,34 @@ import javablackbelt.inventory.model.User;
 
 public class ItemService {
 
+	/** Selects an ItemType with level = given level.
+	 * Creates a new Item and puts it in the inventory of the given user.*/
 	public static void dropRandomItem(User user, int level, String cause) {
 
-		/** temporary lists */
-		List<ItemType> tempItemList = new ArrayList<ItemType>();
+		// temporary lists 
+		List<ItemType> itemsWithLevel = new ArrayList<ItemType>();
 
-		/**
-		 * add items in the tempItemList if their level is >= than enumItems
-		 * level
-		 */
+		// add items in the tempItemList if their level is >= than enumItems level
 		for (ItemType enumItems : ItemType.values()) {
-			if (level >= enumItems.getItemLevel()) {
-				tempItemList.add(enumItems);
+			if (level == enumItems.getItemLevel()) {
+				itemsWithLevel.add(enumItems);
 			}
 		}
-		/** generate random number between 0 and list size */
-		int random = (int) (Math.random() * tempItemList.size());
-		Item userItem = new Item(user, tempItemList.get(random));
+		
+		// Randomly selects the itemType
+		ItemType itemType = itemsWithLevel.get( (int) (Math.random() * itemsWithLevel.size()) );
+		
+		// Creates the item.
+		Item userItem = new Item(user, itemType);
 		userItem.setCause(cause);
 		user.addItem(userItem);
+		
+		// TODO: delete me.
 		System.out.println(user.getNickName() + " revieved : "
 				+ userItem.getItemType().getItemName());
 	}
 
+	//doc
 	public static void dropRandomItem(User user, int level, int percent,
 			String cause) {
 
@@ -40,6 +45,7 @@ public class ItemService {
 			dropRandomItem(user, level, cause);
 	}
 
+	//doc .... when is it typically used ?
 	public static void dropItem(User user, ItemType itemType, String cause) {
 
 		/** add an item to the user list */
@@ -50,13 +56,12 @@ public class ItemService {
 				+ userItem.getItemType().getItemName());
 	}
 
+	
+	
+	/** send an user's item or a globally item to a user */
 	public void sendItemTo(User sender, Item item, User receiver) {
 
 		/** Check of Item destination (GLOBAL, GROUP, USER) */
-		if (item.getItemType().getTargetType() == ItemType.TargetType.GLOBAL) {
-			throw new RuntimeException(
-					"Global items cannot be sent to a user or a group ! ");
-		}
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GROUP) {
 			throw new RuntimeException(
 					"Group items cannot be sent to a user ! ");
@@ -70,56 +75,69 @@ public class ItemService {
 		sender.removeItem(item);
 	}
 
+	/** activate a globally item by a user */
 	public void activateItemGlobally(User sender, Item item) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.USER) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Global items cannot be activate on a user ! ");
 		}
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GROUP) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Group items cannot be activate on a group ! ");
 		}
 
 		/** initialization of activationDate and removalDate */
 		item.setActivationDate();
+		
+		/** add an actived item to the globalItemsList */
 		ActiveItems.getInstance().addItemToGloballyActiveItems(item);
-		/** activation item on the site */
+		
+		/** activation item on the site (background or home page) */
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName() + " on the "
 				+ item.getItemType().getItemTypeGroup());
 	}
 
+	
+	
+	/** activate an item on a group by a user */
 	public void activateItemOnGroup(User sender, Item item, Group receiver) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.USER) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Group items cannot be activate on a user ! ");
 		}
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GLOBAL) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"Group items cannot be activate globally ! ");
 		}
 		/** initialization of activationDate and removalDate */
 		item.setActivationDate();
+		
+		/** add an actived item to the groupActiveItemsMap */
 		ActiveItems.getInstance().addItemToGroupActiveItemsMap(item, receiver);
+		
 		/** activation item on the site */
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName());
 	}
 
+	
+	/** activate an item on a user by another user */
 	public void activateItemOnUser(User sender, Item item, User receiver) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GLOBAL) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"User items cannot be activate globally ! ");
 		}
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GROUP) {
-			throw new RuntimeException(
-					"User items cannot be activate on a group ! ");
+			throw new IllegalArgumentException("User items cannot be activate on a group ! ");
 		}
 		/** initialization of activationDate and removalDate */
 		item.setActivationDate();
+		
+		/** add an actived item to the UsertActiveItemsMap */
 		ActiveItems.getInstance().addItemToUserListActiveItemsMap(item,
 				receiver);
 		/** activation item on the site */

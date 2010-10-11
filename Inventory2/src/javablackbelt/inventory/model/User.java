@@ -17,7 +17,7 @@ public class User  {
 
 	public User(String nickName) {
 		this.nickName = nickName;
-		this.userId = ++countUsers;	
+		this.userId = ++User.countUsers;	
 	}
 
 	public void addItem(Item itemToAdd) {
