@@ -11,7 +11,7 @@ import javablackbelt.inventory.model.User;
 public class Display {
 
 	/** display list of active items by user */
-	public void displayActiveItemsByList(Map<Long, List<Item>> inMap,
+	public static void displayActiveItemsByList(Map<Long, List<Item>> inMap,
 			Long mapKey) {
 
 		for (Item i : inMap.get(mapKey)) {
@@ -23,7 +23,7 @@ public class Display {
 	}
 
 	/** display the globalList of active items */
-	public void displayGlobalItems() {
+	public static void displayGlobalItems() {
 
 		List<Item> globalItems = new ArrayList<Item>();
 		globalItems = ActiveItems.getInstance().getGlobalItemsList();
@@ -37,7 +37,7 @@ public class Display {
 	}
 
 	/** display the user list */
-	public void displayUserItemsList(User user) {
+	public static void displayUserItemsList(User user) {
 
 		for (Item i : user.getInventoryItems()) {
 			System.out.println("Item : " + i.getItemType().getItemName());
