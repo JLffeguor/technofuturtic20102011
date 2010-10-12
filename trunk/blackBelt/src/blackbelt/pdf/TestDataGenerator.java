@@ -58,8 +58,8 @@ public class TestDataGenerator {
 						+ " Le hamster en sortira généralement au crépuscule ou à la nuit tombée, bien que certaines"
 						+ " espèces soient également diurnes.");
 				Section section1132 = new Section(
-						"1.1.3.1.","Hamster de Roborovski à l'entrée de son nid.<h1>Certaines"
-						+ " espèces sont particulièrement agressives</h1> vis-à-vis de leurs congénères, et des règles "
+						"1.1.3.1.","Hamster de Roborovski à l'entrée de son nid.Certaines"
+						+ " espèces sont particulièrement agressives vis-à-vis de leurs congénères, et des règles "
 						+ "hiérarchiques strictes règlent ces rencontres. Les femelles sont souvent dominantes."
 						+ " Les cricétinés se défendent âprement avec leurs incisives quand ils sont attaqués."
 						+ " Ils attaquent aussi quand ils se font capturer malgré leur fourrure propice au camouflage."
