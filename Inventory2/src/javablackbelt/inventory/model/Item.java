@@ -51,6 +51,9 @@ public class Item {
 	 * This method set also the removal date.
 	 */
 	public void setActivationDate() {
+		if(this.removalDate != null) {
+			throw new RuntimeException("This item has already been activated");
+		}
 		this.activationDate = new Date();  
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.add(GregorianCalendar.HOUR_OF_DAY, this.itemType.getItemDuration());

@@ -26,6 +26,7 @@ public class Main {
 		g1.addUserToGroup(u3);
 		g1.addUserToGroup(u4);
 		
+		
 		/////////////// Display group Users
 		System.out.println("User of group : " + g1.getGroupName());
 		System.out.println("------------------------------------");
@@ -72,15 +73,11 @@ public class Main {
 		System.out.println("\n");
 		
 		
-		////////////Send an item from U1 to U2
-		ItemService.sendItemTo(u1, ItemType.BAKG_RICE, u2);
+		////////////Send items from User to User
+		ItemService.sendItemTo(u1, u1.getInventoryItems().get(u1.getInventoryItems().size()-1) , u2);
+		System.out.println("View of " + u1.getNickName() + " 's inventory : " + u1.);
 		
-		
-		
-		
-		
-		
-		
-		
+		ItemService.sendItemTo(u1, u1.getInventoryItems().get(u1.getInventoryItems().size()-1) , u2);
+	
 	}
 }
