@@ -80,10 +80,12 @@ public class MailDao {
 				  "\n       AND " +
 				  "\n          (" +
 				  "\n               MailingDelai = 0 " +
-				  "\n           OR (MailingDelai = 1 AND STR_TO_DATE('"+dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
-				  "\n           OR (MailingDelai = 2 AND STR_TO_DATE('"+dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
+				  "\n           OR  u.lastMailSendedDate IS     NULL " +
+				  "\n           OR  (u.lastMailSendedDate IS NOT NULL" +
+				  "\n           AND ((MailingDelai = 1 AND STR_TO_DATE('"+dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
+				  "\n           OR (MailingDelai = 2 AND STR_TO_DATE('"+dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)))" +
 				  "\n          )" +
-				  " \n     ) " +
+				  "\n     ) " +
 				  "\nORDER BY m.IsImediateMessage DESC " +
 				  "\nLIMIT 1;";
 			rs = statement.executeQuery(sql);
