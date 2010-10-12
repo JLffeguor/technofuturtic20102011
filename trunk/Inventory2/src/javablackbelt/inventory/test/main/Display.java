@@ -6,11 +6,11 @@ import java.util.Map;
 
 import javablackbelt.inventory.itemservice.ActiveItems;
 import javablackbelt.inventory.model.Item;
+import javablackbelt.inventory.model.User;
 
 public class Display {
 
-
-	/** display list by user */
+	/** display list of active items by user */
 	public void displayActiveItemsByList(Map<Long, List<Item>> inMap,
 			Long mapKey) {
 
@@ -22,12 +22,12 @@ public class Display {
 		}
 	}
 
-	/** display the globalList */
+	/** display the globalList of active items */
 	public void displayGlobalItems() {
-		
+
 		List<Item> globalItems = new ArrayList<Item>();
 		globalItems = ActiveItems.getInstance().getGlobalItemsList();
-		
+
 		for (Item i : globalItems) {
 			System.out.println("");
 			System.out.print(i.getItemType().getItemName() + " "
@@ -35,5 +35,14 @@ public class Display {
 			System.out.println("");
 		}
 	}
-	
+
+	/** display the user list */
+	public void displayUserItemsList(User user) {
+
+		for (Item i : user.getInventoryItems()) {
+			System.out.println("Item : " + i.getItemType().getItemName());
+			System.out.println("Description : "
+					+ i.getItemType().getItemDescription());
+		}
+	}
 }
