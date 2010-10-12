@@ -36,4 +36,8 @@ public class User  {
 	public long getUserId() {
 		return userId;
 	}
+	
+	public List<Item> getInventoryItems() {
+		return this.inventoryItems;
+	}
 }
