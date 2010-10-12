@@ -6,24 +6,19 @@ public class MainTest {
 	
 	public static void main(String[] args) {
 				
-		///////// Données de test ///////
-		User u1 = new User("yoyo","j_gusbin@hotmail.fr",1);
-		User u2 = new User("fafa","fatonalia@hotmail.com",2);
-		User u3 = new User("nawak","bidule_machin@hotmail.fr",1);
-		User u4 = new User("ohmygad","truc_machinchouette@hotmail.fr",1);
 		
 		
 		MailSender consumer = new MailSender();
 		consumer.start();
 		
 
-		MailService.instance.send("blablabla", "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", u2,false);
-		MailService.instance.send("reblabla ", "contenu de. la mort qui tue, again.", u2,false);
-		MailService.instance.send("rerereblabla ", "deuxieme contenu de la mort qui tue, plusieur fois.", u2,false);
-		MailService.instance.send("la reproduction des pinguins en australie", "deuxieme contenu de la mort qui tue.encore.", u2,false);
-		MailService.instance.send("sujet de la mort qui tue", "contenu de la mort qui tue.", u1,false);
-		MailService.instance.send("encore sujet de la mort qui tue", "blablabla. blablabla blabla.", u2,false);
-		MailService.instance.send("woooooot","i'm on the road,AGAIN.",u3,false);
+		MailService.instance.send("blablabla", "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 2,false);
+		MailService.instance.send("reblabla ", "contenu de. la mort qui tue, again.", 2,false);
+		MailService.instance.send("rerereblabla ", "deuxieme contenu de la mort qui tue, plusieur fois.", 2,false);
+		MailService.instance.send("la reproduction des pinguins en australie", "deuxieme contenu de la mort qui tue.encore.", 2,false);
+		MailService.instance.send("sujet de la mort qui tue", "contenu de la mort qui tue.", 1,false);
+		MailService.instance.send("encore sujet de la mort qui tue", "blablabla. blablabla blabla.", 3,false);
+		MailService.instance.send("woooooot","i'm on the road,AGAIN.",4,false);
 
 //		sendMeThisMailDude("deuxieme sujet","la reproduction des pinguing e afrique du sud est grandement menacée!!",s2);
 
