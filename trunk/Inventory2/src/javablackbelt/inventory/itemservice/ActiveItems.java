@@ -28,28 +28,6 @@ public class ActiveItems {
 		List<Item> globalItems = new ArrayList<Item>();
 	}
 
-	/** display list by user */
-	public void displayActiveItemsByList(Map<Long, List<Item>> inMap,
-			Long mapKey) {
-
-		for (Item i : inMap.get(mapKey)) {
-			System.out.println("");
-			System.out.print(i.getItemType().getItemName() + " "
-					+ i.getItemType().getItemDescription());
-			System.out.println("");
-		}
-	}
-
-	/** display the globalList */
-	public void displayGlobalItems() {
-		for (Item i : globalItems) {
-			System.out.println("");
-			System.out.print(i.getItemType().getItemName() + " "
-					+ i.getItemType().getItemDescription());
-			System.out.println("");
-		}
-	}
-
 	/**
 	 * returns the active item list for a specific user. Return null if no list
 	 * update of the user's list of active items (suppress the non-active items
@@ -227,5 +205,9 @@ public class ActiveItems {
 
 	public static ActiveItems getInstance() {
 		return instance;
+	}
+	
+	public List<Item> getGlobalItemsList(){
+		return globalItems;
 	}
 }
