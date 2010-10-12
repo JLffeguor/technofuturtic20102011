@@ -21,13 +21,13 @@ public class Mail {
 		this.immadiate = immadiate;
 		this.creationDate = new Date();
 	}
-	public Mail(int id,User user,String subject,String text,boolean immadiate){
+	public Mail(int id,User user,String subject,String text,boolean immadiate,Date date){
 		this.id=id;
 		this.user = user;
 		this.subject = subject;
 		this.text = text;
 		this.immadiate = immadiate;
-		this.creationDate = new Date();
+		this.creationDate = date;
 	}
 ///////
 /////////
@@ -62,7 +62,7 @@ public class Mail {
 	public String getDateMessage(){	
 		GregorianCalendar gDate = new GregorianCalendar();
 		gDate.setGregorianChange(this.creationDate);
-		String date = gDate.get(GregorianCalendar.YEAR)+"/"+gDate.get(GregorianCalendar.MONTH)+"/"+gDate.get(GregorianCalendar.DAY_OF_MONTH)+" ("+gDate.get(GregorianCalendar.HOUR_OF_DAY)+":"+gDate.get(GregorianCalendar.MINUTE)+")";
+		String date = gDate.get(GregorianCalendar.YEAR)+"/"+gDate.get(GregorianCalendar.MONTH)+"/"+gDate.get(GregorianCalendar.DAY_OF_MONTH)+" ("+gDate.get(GregorianCalendar.HOUR_OF_DAY)+":"+gDate.get(GregorianCalendar.MINUTE)+":"+gDate.get(GregorianCalendar.SECOND)+")";
 		return date;
 	}
 	

@@ -11,11 +11,11 @@ public class User {
 	private Date lastMailSendedDate;
 	private int mailingDelai;//0= none  1= weakly    2= dayly
 	
-	public User(int id,String pseudo,String email,int mailingDelai){
+	public User(int id,String pseudo,String email,Date lastMailSendedDate,int mailingDelai){
 		this.id=id;
 		this.pseudo = pseudo;
 		this.email=email;
-		this.lastMailSendedDate = null;
+		this.lastMailSendedDate = lastMailSendedDate;
 		this.mailingDelai = mailingDelai;
 		
 		//simulate users file//

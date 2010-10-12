@@ -24,7 +24,6 @@ public class DataBaseConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("db loaded");
     }
 
 }
