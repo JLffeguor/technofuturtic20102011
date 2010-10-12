@@ -21,13 +21,18 @@ public class ActiveItems {
 	private static ActiveItems instance = new ActiveItems();
 
 	/** Singleton. */
-
-	private ActiveItems() {
-		Map<Long, List<Item>> userListActiveItemsMap = new HashMap<Long, List<Item>>();
-		Map<Long, List<Item>> groupActiveItemsMap = new HashMap<Long, List<Item>>();
-		List<Item> globalItems = new ArrayList<Item>();
+	
+	private ActiveItems(){
+		userListActiveItemsMap=new HashMap<Long, List<Item>>();
+		groupActiveItemsMap=new HashMap<Long, List<Item>>();
+		globalItems=new ArrayList<Item>();
 	}
 
+	public static ActiveItems getInstance() {
+		return instance;
+	}
+
+	
 	/**
 	 * returns the active item list for a specific user. Return null if no list
 	 * update of the user's list of active items (suppress the non-active items
@@ -112,6 +117,7 @@ public class ActiveItems {
 		}
 	}
 
+	
 	/** returns the globally active item. Return null if no list */
 	synchronized public List<Item> getGlobalActiveItems(ItemType itemType) {
 
@@ -125,6 +131,7 @@ public class ActiveItems {
 		}
 	}
 
+	
 	/** print active item on the itemTypeGroup (Background or image_home) */
 	synchronized public void getActiveItems(ItemType.Group itemTypeGroup) {
 
@@ -144,9 +151,9 @@ public class ActiveItems {
 		}
 	}
 
+	
 	/** returns the items still activated */
-	synchronized public List<Item> itemsStillActivated(
-			List<Item> genericItemList) {
+	synchronized public List<Item> itemsStillActivated(List<Item> genericItemList) {
 
 		List<Item> tempItemList = new ArrayList<Item>();
 
@@ -160,12 +167,20 @@ public class ActiveItems {
 		}
 		return tempItemList;
 	}
+	
+	
+	///////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	synchronized public void addItemToUserListActiveItemsMap(Item item,
 			User user) {
 		Long userId = user.getUserId();
-		List<Item> userItemsList = groupActiveItemsMap.get(userId);
+
+		List<Item> userItemsList = new ArrayList<Item>();
+		userItemsList = userListActiveItemsMap.get(userId);
 
 		// Create list if no list yet.
 		if (userItemsList == null) {
@@ -173,14 +188,16 @@ public class ActiveItems {
 			// ... /** creation of userId in the Map */
 
 			userItemsList = new ArrayList<Item>();
-			groupActiveItemsMap.put(userId, userItemsList);
+			userListActiveItemsMap.put(userId, userItemsList);
 		}
 		userItemsList.add(item);
+
 	}
 
+	
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	synchronized public void addItemToGroupActiveItemsMap(Item item, Group group) {
-		Long groupId = group.getGroupId();
+		long groupId = group.getGroupId();
 		List<Item> groupItemsList = groupActiveItemsMap.get(groupId);
 		if (groupItemsList == null) {
 
@@ -192,9 +209,15 @@ public class ActiveItems {
 		groupItemsList.add(item);
 	}
 
+	
+	
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	/** Replace active item by a new active item (background or image_home) */
 	synchronized public void addItemToGloballyActiveItems(Item item) {
+		if(globalItems == null){
+			globalItems.add(item);
+		} 
+		
 		for (Item i : globalItems) {
 			if (i.getItemType().getItemTypeGroup() == item.getItemType()
 					.getItemTypeGroup()) {
@@ -203,11 +226,6 @@ public class ActiveItems {
 		}
 	}
 
-	public static ActiveItems getInstance() {
-		return instance;
-	}
 	
-	public List<Item> getGlobalItemsList(){
-		return globalItems;
-	}
+	
 }
