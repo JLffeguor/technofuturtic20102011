@@ -5,13 +5,24 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Mail {
+	private int id;
 	private User user;
 	private String subject;
 	private String text;
 	private boolean immadiate;    // true => Non groupable
 	//int priority;   // 0 = high priority,  1 = normal,  2 = low (as newsletter)
 	private Date creationDate;	
+	
 	public Mail(User user,String subject,String text,boolean immadiate){
+		this.id = -1;
+		this.user = user;
+		this.subject = subject;
+		this.text = text;
+		this.immadiate = immadiate;
+		this.creationDate = new Date();
+	}
+	public Mail(int id,User user,String subject,String text,boolean immadiate){
+		this.id=id;
 		this.user = user;
 		this.subject = subject;
 		this.text = text;
@@ -20,6 +31,10 @@ public class Mail {
 	}
 ///////
 /////////
+	public int getId()
+	{
+		return this.id;
+	}
 	public User getUser(){
 		return this.user;
 	}
@@ -50,4 +65,5 @@ public class Mail {
 		String date = gDate.get(GregorianCalendar.YEAR)+"/"+gDate.get(GregorianCalendar.MONTH)+"/"+gDate.get(GregorianCalendar.DAY_OF_MONTH)+" ("+gDate.get(GregorianCalendar.HOUR_OF_DAY)+":"+gDate.get(GregorianCalendar.MINUTE)+")";
 		return date;
 	}
+	
 }
