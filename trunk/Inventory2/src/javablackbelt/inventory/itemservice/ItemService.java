@@ -37,11 +37,12 @@ public class ItemService {
 				+ userItem.getItemType().getItemName());
 	}
 
-	//doc
-	public static void dropRandomItem(User user, int level, int percent,
-			String cause) {
+	/** Selects an ItemType with level = given level.
+	 * @param percent between 1 and 100, chances to drop something.
+	 * Creates a new Item and puts it in the inventory of the given user.*/
+	public static void dropRandomItem(User user, int level, int percent, String cause) {
 
-		if (((int) Math.random() * 100) <= percent)
+		if ( ((int) (Math.random()* 100) + 1) <= percent)
 			dropRandomItem(user, level, cause);
 	}
 
@@ -58,8 +59,9 @@ public class ItemService {
 
 	
 	
+	
 	/** send an user's item or a globally item to a user */
-	public void sendItemTo(User sender, Item item, User receiver) {
+	public static void sendItemTo(User sender, Item item, User receiver) {
 
 		/** Check of Item destination (GLOBAL, GROUP, USER) */
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GROUP) {
@@ -76,7 +78,7 @@ public class ItemService {
 	}
 
 	/** activate a globally item by a user */
-	public void activateItemGlobally(User sender, Item item) {
+	public static void activateItemGlobally(User sender, Item item) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.USER) {
 			throw new IllegalArgumentException(
@@ -102,7 +104,7 @@ public class ItemService {
 	
 	
 	/** activate an item on a group by a user */
-	public void activateItemOnGroup(User sender, Item item, Group receiver) {
+	public static void activateItemOnGroup(User sender, Item item, Group receiver) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.USER) {
 			throw new IllegalArgumentException(
@@ -125,7 +127,7 @@ public class ItemService {
 
 	
 	/** activate an item on a user by another user */
-	public void activateItemOnUser(User sender, Item item, User receiver) {
+	public static void activateItemOnUser(User sender, Item item, User receiver) {
 
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GLOBAL) {
 			throw new IllegalArgumentException(
