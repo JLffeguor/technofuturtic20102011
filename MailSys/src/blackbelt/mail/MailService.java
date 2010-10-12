@@ -20,7 +20,8 @@ public class MailService {
 			Statement st = DataBaseConnection.conn.createStatement();
 			ResultSet rs= st.executeQuery("SELECT * FROM USERS WHERE id LIKE "+userID);
 			rs.first();
-			User user = new User(rs.getInt("id"),rs.getString("pseudo"),rs.getString("email"),rs.getInt("mailingDelai"));
+			User user = new User(rs.getInt("id"),rs.getString("pseudo"),rs.getString("email"),rs.getDate("lastMailSendedDate"),rs.getInt("mailingDelai"));
+			rs.close();
 			Mail mail = new Mail(user,subject,text,isAImmadiateMessage);
 			MailDao.instance.save(mail);
 		}
