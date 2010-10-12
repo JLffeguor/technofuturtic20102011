@@ -19,12 +19,26 @@ public class Group {
 		this.groupName = groupName;
 		this.groupId = ++Group.countGroup;	
 	}
-
+	
+	public void addUserToGroup(User user) {
+		listOfUsers.add(user);
+	}
+	
 	public String getGroupName() {
 		return groupName;
 	}
 
 	public long getGroupId() {
 		return groupId;
+	}
+	
+	public void displayListOfUser() {
+		for(User u : listOfUsers) {
+			System.out.println(u.getNickName() + ", " + u.getUserId());
+		}
+	}
+	
+	public List<User> getListOfUser() {
+		return this.listOfUsers;
 	}
 }
