@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 /** From a source text of a Section (with tags as "[image ...]"),
  * produces html for the browser.
  *  
-*  
+ *  
  * @author John
  *
  */
@@ -281,7 +281,7 @@ public class CourseTextFormatter {
 		try {
 			String srcValue = element.getMandatoryValue("src");
 			/** only for data test */
-			String imageUrl = ("S:\\DocumentsPourPDF\\imagesTestForPdf.gif");
+			String imageUrl = ("S:\\DocumentsPourPDF\\images2.jpg");
 //			String imageUrl = (new PictureResource(course, srcValue)).getURL();
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
 			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
