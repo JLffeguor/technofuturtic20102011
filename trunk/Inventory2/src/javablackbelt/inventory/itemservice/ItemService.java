@@ -98,7 +98,7 @@ public class ItemService {
 		/** activation item on the site (background or home page) */
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName() + " on the "
-				+ item.getItemType().getItemTypeGroup());
+				+ item.getItemType().getItemTypeGroup() + "\n");
 	}
 
 	
@@ -122,7 +122,7 @@ public class ItemService {
 		
 		/** activation item on the site */
 		System.out.println(item.getItemType().getItemDescription()
-				+ " has been activated by " + sender.getNickName());
+				+ " has been activated by " + sender.getNickName() + " on group " + receiver.getGroupName() + "\n");
 	}
 
 	
@@ -144,10 +144,6 @@ public class ItemService {
 				receiver);
 		/** activation item on the site */
 		System.out.println(item.getItemType().getItemDescription()
-				+ " has been activated by " + sender.getNickName());
-	}
-	
-	
-	
-	
+				+ " has been activated by " + sender.getNickName() + " on " + receiver.getNickName() + "\n");
+	}	
 }

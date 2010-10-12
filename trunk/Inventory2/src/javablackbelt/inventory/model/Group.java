@@ -13,7 +13,7 @@ public class Group {
 
 	private String groupName;
 	private List<User> listOfUsers = new ArrayList<User>();
-	private long groupId;
+	private Long groupId;
 
 	public Group(String groupName) {
 		this.groupName = groupName;
@@ -28,7 +28,7 @@ public class Group {
 		return groupName;
 	}
 
-	public long getGroupId() {
+	public Long getGroupId() {
 		return groupId;
 	}
 	

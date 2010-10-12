@@ -225,6 +225,10 @@ public class ActiveItems {
 			}
 		}
 	}
+	
+	public List<Item> getGlobalItemsList(){
+		return globalItems;
+	}
 
 	
 	

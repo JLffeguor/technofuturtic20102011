@@ -1,5 +1,6 @@
 package javablackbelt.inventory.test.main;
 
+import javablackbelt.inventory.itemservice.ActiveItems;
 import javablackbelt.inventory.itemservice.ItemService;
 import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.ItemType;
@@ -8,7 +9,7 @@ import javablackbelt.inventory.model.User;
 public class Main {
 
 	public static void main(String[] args) {
-			
+		
 		Group g1 = new Group("Tech No Future Team");
 		
 		///// Users creation
@@ -25,7 +26,6 @@ public class Main {
 		g1.addUserToGroup(u2);
 		g1.addUserToGroup(u3);
 		g1.addUserToGroup(u4);
-		
 		
 		/////////////// Display group Users
 		System.out.println("User of group : " + g1.getGroupName());
@@ -51,7 +51,7 @@ public class Main {
 		ItemService.dropRandomItem(u4, 1, "Exam succeded...");
 		ItemService.dropRandomItem(u5, 3, "Happy birthday " + u5.getNickName() + "!");
 		System.out.println("\n");
-		
+
 		///////////// Drop an item randomly, with a percent of chances to win...
 		System.out.println("Dropping an item randomly, with a percent of chances to win it :");
 		System.out.println("---------------------------------------------------------------");
@@ -65,19 +65,52 @@ public class Main {
 		System.out.println("-----------------------------------");
 		
 		ItemService.dropItem(u1, ItemType.BAKG_RICE, "Welcome to the Java intermediate course"); // to activate on the background
-		ItemService.dropItem(u2, ItemType.BEER_PINT, "Yellow belt"); // to activate on a user
-		ItemService.dropItem(u3, ItemType.BEER_BARREL, "Whole group get their Yellow belt"); // to activate on a group
-		ItemService.dropItem(u4, ItemType.ENLARGER, "To have some fun..."); // to activate on a user
+		ItemService.dropItem(u2, ItemType.BEER_BARREL, "Whole group get their Yellow belt"); // to activate on a group
+		ItemService.dropItem(u3, ItemType.BEER_PINT, "Yellow belt"); // to activate on a user
+		ItemService.dropItem(u4, ItemType.ENLARGER, "To have some fun..."); // to activate on a user		
+		ItemService.dropItem(u5, ItemType.BEER_BARREL, "To be drunk..");
 		ItemService.dropItem(u5, ItemType.BAKG_NAKED, "To help you to be a " +
 				"better Java developer.."); // to activate on the Background
 		System.out.println("\n");
+
 		
-		
-		////////////Send items from User to User
+		//////////// Send items from u1 to u2
+		System.out.println("\n**	BEFORE THE 'sendItemTo(..)' OPERATION **\n");
+		Display.displayUserItemsList(u1);
+		Display.displayUserItemsList(u2);
 		ItemService.sendItemTo(u1, u1.getInventoryItems().get(u1.getInventoryItems().size()-1) , u2);
-		System.out.println("View of " + u1.getNickName() + " 's inventory : " + u1.);
+		System.out.println("\n**	AFTER THE 'sendItemTo(..)' OPERATION **\n");
 		
-		ItemService.sendItemTo(u1, u1.getInventoryItems().get(u1.getInventoryItems().size()-1) , u2);
-	
+		Display.displayUserItemsList(u1);
+		Display.displayUserItemsList(u2);
+		
+		
+		//////////// Send items from u1 to u3		
+		System.out.println("\n**	BEFORE THE 'sendItemTo(..)' OPERATION **\n");
+		Display.displayUserItemsList(u1);
+		Display.displayUserItemsList(u3);
+		ItemService.sendItemTo(u1, u1.getInventoryItems().get(u1.getInventoryItems().size()-1) , u3);	
+		System.out.println("\n**	AFTER THE 'sendItemTo(..)' OPERATION **\n");
+		Display.displayUserItemsList(u1);
+		Display.displayUserItemsList(u3);
+		
+		
+		//////////// u3 active an item on u4
+		System.out.println("\n**	BEFORE THE 'activeItemOnUser(..)' OPERATION **\n");
+		Display.displayUserItemsList(u3);
+		Display.displayUserItemsList(u4);
+		ItemService.activateItemOnUser(u3, u3.getInventoryItems().get(1), u4);
+		System.out.println("\n**	AFTER THE 'activeItemOnUser(..)' OPERATION **\n");
+		Display.displayUserItemsList(u3);
+		Display.displayUserItemsList(u4);
+		
+		//////////// u5 active an item on g1
+		System.out.println("\n**	BEFORE THE 'activateItemOnGroup(..)' OPERATION **\n");
+		Display.displayUserItemsList(u5);
+		Display.displayGroupItemsList(g1);
+		ItemService.activateItemOnGroup(u5, u5.getInventoryItems().get(1), g1);
+		System.out.println("\n**	AFTER THE 'activeItemOnUser(..)' OPERATION **\n");
+		Display.displayUserItemsList(u5);
+		Display.displayGroupItemsList(g1);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javablackbelt.inventory.itemservice.ActiveItems;
+import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.User;
 
@@ -38,11 +39,36 @@ public class Display {
 
 	/** display the user list */
 	public static void displayUserItemsList(User user) {
-
-		for (Item i : user.getInventoryItems()) {
-			System.out.println("Item : " + i.getItemType().getItemName());
-			System.out.println("Description : "
-					+ i.getItemType().getItemDescription());
+		System.out.println("	------- " + user.getNickName() + "'s inventory -------");
+		if(user.getInventoryItems().isEmpty()) {
+			System.out.println("xxxxx NO ITEM xxxxx");
 		}
+		else{
+			for (Item i : user.getInventoryItems()) {
+				System.out.println("--> Item : " + i.getItemType().getItemName());
+				System.out.println("--> Description : "
+						+ i.getItemType().getItemDescription() + "\n--> Activaton date : "
+						+ i.getActivationDate() + "\n--> Removal date : "
+						+ i.getRemovalDate() + "\n");
+			}
+		}
+		System.out.println("");
+	}
+	
+	public static void displayGroupItemsList(Group group) {
+		System.out.println("	------- " + group.getGroupName() + "'s inventory -------");
+		if(ActiveItems.getInstance().getActiveItems(group) == null) {
+			System.out.println("xxxxx NO ITEM xxxxx");
+		}
+		else{
+			for (Item i : ActiveItems.getInstance().getActiveItems(group)) {
+				System.out.println("--> Item : " + i.getItemType().getItemName());
+				System.out.println("--> Description : "
+						+ i.getItemType().getItemDescription() + "\n--> Activaton date : "
+						+ i.getActivationDate() + "\n--> Removal date : "
+						+ i.getRemovalDate() + "\n");
+			}
+		}
+		System.out.println("");
 	}
 }
