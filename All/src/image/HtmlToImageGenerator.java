@@ -21,6 +21,7 @@ public class HtmlToImageGenerator {
 			//Add style to String HTML code *2
 			String htmlWithStyle = "<div style=\"font-family:monospace;font-size:14px;\">"+html;
 			
+			/* Styles for java formating ************************************ */
 			//CSS into HTML : the library(html2image) doesn't recognize CSS
 			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"java_plain\"", "span style=\"color: rgb(0, 0, 0);\"");
 			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"java_keyword\"", "span style=\"color: #7f0055;font-weight: bold;\"");
@@ -31,6 +32,20 @@ public class HtmlToImageGenerator {
 			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"java_comment\"", "span style=\"color: #008800;\"");
 			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"java_javadoc_comment\"", "span style=\"color: #3f5fbf;\"");
 			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"java_javadoc_tag\"", "span style=\"color: #3f5fbf;\"");
+			
+
+//			/* Styles for XML formating ************************************ */
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_symbols\"", "color: rgb(0, 59, 255);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_tag\"", "color: rgb(0, 0, 0);background-color: rgb(228, 230, 160);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_plain\"", "color: rgb(0, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_comment\"", "color: rgb(147, 147, 147);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_name\"", "color: rgb(0, 0, 0);font-weight: bold;\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_name\"", "color: rgb(0, 55, 255);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_char_data\"", "color: rgb(0, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_processing_instruction\"", "color: rgb(0, 0, 0);font-weight: bold;font-style: italic;\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_value\"", "color: rgb(193, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_name\"", "color: rgb(0, 0, 196); background-color: rgb(228, 230, 160);\"");
+
 			htmlWithStyle+="</div>";//End *2
 			
 			//Allows style "font-size" to function
