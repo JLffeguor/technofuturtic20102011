@@ -16,29 +16,38 @@ public class QuestionImageService {
 	
 	static final String QUESTION_IMAGE_DIRECTORY="C:\\workspaceDiff\\All\\";
 
+	/**
+	 * Find an image and return an image HTML tag of this one 
+	 * @param questionId : image identification
+	 * @param questionText : question text
+	 * @return an image HTML tag in string
+	 */
 	public static String replaceCodeTextWithImgTag(long questionId, String questionText) {
-		
+		File imageFile=new File(QUESTION_IMAGE_DIRECTORY+questionId);
+		if(!imageFile.exists())
+			create(questionId, questionText);
+		return "<img src=\""+imageFile+"\">";
 	}
 	
 	
 	/** Deletes old images and generate new ones.
-	 * Typically called when a new question is created or when an edit proposal is accepted.
-	 *  */
+	 * Typically called when a new question is created or when an edit proposal is accepted. 
+	 */
 	public static void updateQuestionImages(long questionId, String questionText) {
-		delete...
-		.... parse and call create.
+		delete(questionId);
+		create(questionId,questionText);
+		//.... parse.
 	}
 	
 	
 	/**
-	 * Deletes all images according to idImage 
-	 * @param QUESTION_IMAGE_DIRECTORY : image(s) directory 
-	 * @param idImage	: image identification
+	 * Deletes all images according to idImage
+	 * @param questionId : image identification
 	 */
-	public static void delete(String idImage){
+	public static void delete(long questionId){
 		File folder=new File(QUESTION_IMAGE_DIRECTORY);
 		//listeFile contains images according to idImage
-		File[] listeFile=folder.listFiles(new FileFilterImage(idImage));
+		File[] listeFile=folder.listFiles(new FileFilterImage(Long.toString(questionId)));
 		
 		for(File file:listeFile){
 			//check if file was deleted while the program is in execution
@@ -53,9 +62,9 @@ public class QuestionImageService {
 	 * @param html
 	 * @param id
 	 */
-	public static void create(String html,String id){
+	public static void create(long questionId, String questionText){
 		//generates image and saves it
-		HtmlToImageGenerator.imageGenerator(html,QUESTION_IMAGE_DIRECTORY+id);
+		HtmlToImageGenerator.imageGenerator(questionText,QUESTION_IMAGE_DIRECTORY+questionId);
 	}
 	
 	
