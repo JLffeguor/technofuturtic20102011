@@ -35,16 +35,18 @@ public class HtmlToImageGenerator {
 			
 
 //			/* Styles for XML formating ************************************ */
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_symbols\"", "color: rgb(0, 59, 255);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_tag\"", "color: rgb(0, 0, 0);background-color: rgb(228, 230, 160);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_plain\"", "color: rgb(0, 0, 0);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_comment\"", "color: rgb(147, 147, 147);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_name\"", "color: rgb(0, 0, 0);font-weight: bold;\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_name\"", "color: rgb(0, 55, 255);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_char_data\"", "color: rgb(0, 0, 0);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_processing_instruction\"", "color: rgb(0, 0, 0);font-weight: bold;font-style: italic;\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_value\"", "color: rgb(193, 0, 0);\"");
-//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_name\"", "color: rgb(0, 0, 196); background-color: rgb(228, 230, 160);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_symbols\"", "span style=\"color: rgb(0, 59, 255);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_tag\"", "span style=\"color: rgb(0, 0, 0);background-color: rgb(228, 230, 160);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_plain\"", "span style=\"color: rgb(0, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_comment\"", "span style=\"color: rgb(147, 147, 147);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_name\"", "span style=\"color: rgb(0, 0, 0);font-weight: bold;\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_tag_name\"", "span style=\"color: rgb(0, 55, 255);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_char_data\"", "span style=\"color: rgb(0, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_processing_instruction\"", "span style=\"color: rgb(0, 0, 0);font-weight: bold;font-style: italic;\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_attribute_value\"", "span style=\"color: rgb(193, 0, 0);\"");
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"xml_rife_name\"", "span style=\"color: rgb(0, 0, 196); background-color: rgb(228, 230, 160);\"");
+			
+//			htmlWithStyle=htmlWithStyle.replaceAll("span class=\"code\"", "span style=\"color: rgb(0, 0, 0);font-family: monospace;font-size: 130%;\"");
 
 			htmlWithStyle+="</div>";//End *2
 			
