@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import blackbelt.model.Mail;
@@ -29,7 +28,7 @@ public class MailSender extends Thread{
 				}
 				else{
 					sendMailList(nextMailList);
-					nextMailList.get(0).getUser().setLastMailSendedDate(new Date());
+					MailService.instance.updateLastMailSendedDate(nextMailList.get(0).getUser());
 					MailDao.instance.removeMails(nextMailList);
 					nextMailList = MailDao.instance.findNextMail();
 				}
