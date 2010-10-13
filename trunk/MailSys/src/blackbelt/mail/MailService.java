@@ -3,6 +3,8 @@ package blackbelt.mail;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import blackbelt.db.DataBaseConnection;
 import blackbelt.model.Mail;
@@ -31,6 +33,16 @@ public class MailService {
 	}
 	public void updateLastMailSendedDate(User user){
 		//todo
+		try{
+			Date now = new Date();
+			SimpleDateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy hh.mm.ss");
+			Statement st = DataBaseConnection.conn.createStatement();
+			st.execute("UPDATE users SET lastMailSendedDate =STR_TO_DATE('"+dFormat.format(now)+"', '%d.%m.%Y %H.%i.%s') WHERE id LIKE "+user.getId());
+			user.setLastMailSendedDate(now);
+		}
+		catch(SQLException e){
+			throw new RuntimeException(e);
+		}		
 	}
 
 	
