@@ -18,16 +18,16 @@ import blackbelt.model.User;
 /** Fake Dao to be replace by JPA code */
 public class MailDao {
 
-	final static int MAXEMAILFORASEND = 2;
-
 	public static MailDao instance = new MailDao();
 
+	SimpleDateFormat dFormat;
+	
 	public MailDao() {
+		this.dFormat = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss");
 	}
 
 	public void save(Mail mail) {
 		Statement st;
-		SimpleDateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy hh.mm.ss");
 		try {
 			st = DataBaseConnection.conn.createStatement();
 			String s;
@@ -36,7 +36,7 @@ public class MailDao {
 					 + "'" + mail.getSubject().replace("'", "''") + "',"
 					 + "'" + mail.getText().replace("'", "''") + "',"
 					 + ((mail.getImmadiate()) ? "1," : "0,")
-					 + "STR_TO_DATE('"+dFormat.format(mail.getDate())+"', '%d.%m.%Y %H.%i.%s'))";
+					 + "STR_TO_DATE('"+this.dFormat.format(mail.getDate())+"', '%d.%m.%Y %H.%i.%s'))";
 			st.execute(s);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,7 +50,6 @@ public class MailDao {
 		Date dateForWeek;
 		Date dateForDay;
 		GregorianCalendar cal;
-		SimpleDateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy hh.mm.ss");
 		List<Mail> mails;
 		Statement statement;
 		ResultSet rs;
@@ -82,8 +81,8 @@ public class MailDao {
 				  "\n               MailingDelai = 0 " +
 				  "\n           OR  u.lastMailSendedDate IS     NULL " +
 				  "\n           OR  (u.lastMailSendedDate IS NOT NULL" +
-				  "\n           AND ((MailingDelai = 1 AND STR_TO_DATE('"+dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
-				  "\n           OR (MailingDelai = 2 AND STR_TO_DATE('"+dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)))" +
+				  "\n           AND ((MailingDelai = 1 AND STR_TO_DATE('"+this.dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
+				  "\n           OR (MailingDelai = 2 AND STR_TO_DATE('"+this.dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)))" +
 				  "\n          )" +
 				  "\n     ) " +
 				  "\nORDER BY m.IsImediateMessage DESC " +
