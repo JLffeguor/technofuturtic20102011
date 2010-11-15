@@ -52,7 +52,6 @@ public class PdfGenerator {
 		this.doc.open();
 
 		//Create the column to avoid orphan
-		// TODO: add better comments (incl links to forum threads....)
 		this.pdfCb = pWriter.getDirectContent();
 		this.ct = new ColumnText(this.pdfCb);
 		this.ct.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
@@ -140,9 +139,9 @@ public class PdfGenerator {
 					this.ct.go();
 					break;
 				} else{
-					createFooter();
-					this.doc.newPage();
-					this.doc.add(this.imgLogo);
+					createFooter(); //Add footer
+					this.doc.newPage(); //Go to the new page
+					this.doc.add(this.imgLogo); //Add Logo
 					this.ct.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
 				}
 			}
