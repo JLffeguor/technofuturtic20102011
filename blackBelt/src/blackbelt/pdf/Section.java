@@ -8,10 +8,12 @@ public class Section {
 	private String title;
 	private String body;
 	private List<Section> subSections = new ArrayList<Section>();
+	private Section sParent;
 
-	public Section(String title, String body) {
+	public Section(String title, String body, Section parent) {
 		this.title = title;
 		this.body = body;
+		this.sParent = parent;
 	}
 
 	// getter && setter
@@ -25,5 +27,9 @@ public class Section {
 
 	public String getBody() {
 		return body;
+	}
+	
+	public Section getParent(){
+		return this.sParent;
 	}
 }
