@@ -3,10 +3,21 @@ package javablackbelt.inventory.model;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * An Item is in the inventory of a user and can be activated.
  */
+@Entity
+@Table(name="Item")
 public class Item {
+	
+	@Id
+	@GeneratedValue
+	private Long id;
 	
 	private User owner;
 	private ItemType itemType;

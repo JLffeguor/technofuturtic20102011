@@ -1,6 +1,5 @@
 package javablackbelt.inventory.test.main;
 
-import javablackbelt.inventory.itemservice.ActiveItems;
 import javablackbelt.inventory.itemservice.ItemService;
 import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.ItemType;
