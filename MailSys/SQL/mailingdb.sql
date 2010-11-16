@@ -50,5 +50,10 @@ ALTER TABLE `mails` ADD CONSTRAINT fk_mailhaveuser FOREIGN KEY (UserId) REFERENC
 -- Records of user
 -- ----------------------------
 INSERT INTO users VALUES ('1', 'toto', 'toto@hotmail.com', null, '0');
-
+INSERT INTO users VALUES ('2', 'mami', 'mami@hotmail.com', null, '1');
+INSERT INTO users VALUES ('3', 'alain', 'alain@hotmail.com', null, '2');
+INSERT INTO users VALUES ('4', 'eric', 'eric@hotmail.com', null, '2');
+INSERT INTO users VALUES ('5', 'steph', 'steph@hotmail.com', null, '1');
+INSERT INTO users VALUES ('6', 'john', 'john@hotmail.com', null, '0');
+INSERT INTO users VALUES ('7', 'tati', 'tati@hotmail.com', null, '0');
 
