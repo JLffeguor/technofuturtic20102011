@@ -1,4 +1,6 @@
-package blackbelt.pdf;
+package coursepage;
+
+import blackbelt.pdf.Section;
 
 public class TestDataGenerator {
 
