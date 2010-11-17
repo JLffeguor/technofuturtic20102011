@@ -1,15 +1,7 @@
 package blackbelt.pdf;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.*;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import blackbelt.dao.Dao;
-import blackbelt.dao.DaoServices;
 @Entity
 public class Section {
 	@Id @GeneratedValue

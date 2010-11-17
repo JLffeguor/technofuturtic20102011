@@ -20,6 +20,8 @@ public class DaoServices {
 		dataGenerator.generate();
 		Section section = dataGenerator.getRoot();
 		recursivSaving(section);
+		section = dataGenerator.getRootDeux();
+		recursivSaving(section);
 	}
 
 	public Section run(Long id){
