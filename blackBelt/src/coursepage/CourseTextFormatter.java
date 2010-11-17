@@ -338,13 +338,14 @@ public class CourseTextFormatter {
 			//Use a boolean to know if we will format in pdf
 			
 			String typeValue = element.getMandatoryValue("type").toLowerCase();
-			
+			String browser = new String("");
 			if ("youtube".equals(typeValue)) {
 //				video = new YoutubeVideo(videoId, width, height, false);
 
 			} else if ("vimeo".equals(typeValue)) {
 				try {
 					Long videoIdL = Long.parseLong(videoId);
+					browser = "http://vimeo.com/";
 //					video = new VimeoVideo(videoIdL, width, height);
 				} catch(NumberFormatException e) {
 					insertErrorMessage("Paramter id is supposed to be a number for Vimeo videos. Current value is ["+videoId+"]");
@@ -358,7 +359,7 @@ public class CourseTextFormatter {
 			//use a boolean to know if we should format to pdf
 			boolean shouldWeFormatToPdf = true;
 			if (shouldWeFormatToPdf){
-				addResultTextBlock("</p></p><img align='center' src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "<p align = 'center'>" + videoId + " (You can watch this video on BlackBeltFactory) </p>");
+				addResultTextBlock("</p></p><img align=\"center\" src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "<p align = \"center\"> Look this video : <a href=\""+ browser+ videoId + "\"> JPA wow exemple</a> </p>" );
 			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
 			
