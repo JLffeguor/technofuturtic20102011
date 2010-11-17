@@ -11,22 +11,37 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import blackbelt.db.DataBaseConnection;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
-/** Fake Dao to be replace by JPA code */
-public class MailDao {
 
+@Repository
+@Transactional
+public class MailDao {
+	
+	@PersistenceContext
+	private EntityManager em;
+	
 	public static MailDao instance = new MailDao();
 
-	SimpleDateFormat dFormat;
+	/*SimpleDateFormat dFormat;
 	
 	public MailDao() {
 		this.dFormat = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss");
-	}
-
+	}*/
+	
 	public void save(Mail mail) {
+		em.persist(mail);
+	}
+	
+	/*public void save(Mail mail) {
 		Statement st;
 		try {
 			st = DataBaseConnection.conn.createStatement();
@@ -35,13 +50,13 @@ public class MailDao {
 					 + mail.getUser().getId() +","
 					 + "'" + mail.getSubject().replace("'", "''") + "',"
 					 + "'" + mail.getText().replace("'", "''") + "',"
-					 + ((mail.getImmadiate()) ? "1," : "0,")
+					 + ((mail.getImmediate()) ? "1," : "0,")
 					 + "STR_TO_DATE('"+this.dFormat.format(mail.getDate())+"', '%d.%m.%Y %H.%i.%s'))";
 			st.execute(s);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public List<Mail> findNextMail() {
 		
@@ -66,6 +81,7 @@ public class MailDao {
 		mails = null;
 		
 		try {
+			
 			statement = DataBaseConnection.conn.createStatement();
 			sql = "SELECT u.Id iduser, u.pseudo pseudo, u.email email, u.lastMailSendedDate lastMailSendedDate, u.mailingDelai mailingDelai " +
 				  "FROM mails m " +
