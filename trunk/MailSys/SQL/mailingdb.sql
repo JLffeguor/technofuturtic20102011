@@ -22,7 +22,7 @@ CREATE TABLE users (
   pseudo             TEXT    NOT NULL,
   email              TEXT    NOT NULL,
   lastMailSendedDate TIMESTAMP WITH TIME ZONE NULL DEFAULT NULL,
-  maillingDelai       INT NOT NULL,
+  mailingDelai       INT NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -30,7 +30,7 @@ ALTER TABLE mails ADD CONSTRAINT fk_mailhaveuser FOREIGN KEY (UserId) REFERENCES
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO users (pseudo, email, maillingDelai	)
+INSERT INTO users (pseudo, email, mailingDelai	)
                   VALUES ('toto', 'toto@hotmail.com', '0'),
                          ('mami', 'mami@hotmail.com', '1'),
                          ('alain', 'alain@hotmail.com', '2'),
