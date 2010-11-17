@@ -5,16 +5,34 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
-public class User {
-	int id;
-	private String pseudo;
-	private String email;
-	private Date lastMailSendedDate;
-	private int mailingDelai;// 0= none 1= weakly 2= dayly
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-	public User(int id, String pseudo, String email, Date lastMailSendedDate, int mailingDelai) {
+@Entity
+@Table(name = "Users")
+public class User {
+	
+	@Id
+	private Long id;
+	
+	@Column(nullable = false)
+	private String pseudo;
+	
+	@Column(nullable = false)
+	private String email;
+	
+	private Date lastMailSendedDate;
+	
+	@Column(nullable = false)
+	private int mailingDelai;// 0= none 1= weakly 2= daily
+
+	public User() {}
+	
+	public User(String pseudo, String email, Date lastMailSendedDate, int mailingDelai) {
 		
-		this.id = id;
+		/////this.id = id;
 		this.pseudo = pseudo;
 		this.email = email;
 		this.lastMailSendedDate = lastMailSendedDate;
@@ -51,7 +69,7 @@ public class User {
 		}
 	}
 
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
@@ -78,5 +96,4 @@ public class User {
 	public void setMailingDelai(int newLetterGroupe) {
 		this.mailingDelai = newLetterGroupe;
 	}
-
 }

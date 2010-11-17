@@ -2,6 +2,20 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.13-bin.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/HibernateDependencies/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/JDBC/postgresql-9.0-801.jdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/JPASpec/javax.persistence_2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/Logging/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/Logging/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/Spring/spring.jar"/>
+	<classpathentry kind="lib" path="lib/SpringDependencies/asm.jar"/>
+	<classpathentry kind="lib" path="lib/SpringDependencies/cglib.jar"/>
+	<classpathentry kind="lib" path="lib/SpringDependencies/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/Hibernate/hibernate3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

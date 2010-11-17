@@ -5,34 +5,54 @@ package blackbelt.model;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Mails")
 public class Mail {
-	private int id;
+	
+	@Id
+	private Long id;
+	
+	@ManyToOne
+	@Column(nullable = false, name = "user_id")
 	private User user;
+	
+	@Column(nullable = false)
 	private String subject;
-	private String text;
-	private boolean immadiate; // true => Non groupable
+	
+	@Column(nullable = false)
+	private String content;
+	
+	private boolean immediate; // true => Non groupable
 	// int priority; // 0 = high priority, 1 = normal, 2 = low (as newsletter)
 	private Date creationDate;
 
-	public Mail(User user, String subject, String text, boolean immadiate) {
-		this.id = -1;
+	public Mail() {}
+	
+	public Mail(User user, String subject, String content, boolean immediate) {
+		////this.id = -1;
 		this.user = user;
 		this.subject = subject;
-		this.text = text;
-		this.immadiate = immadiate;
+		this.content = content;
+		this.immediate = immediate;
 		this.creationDate = new Date();
 	}
 
-	public Mail(int id, User user, String subject, String text, boolean immadiate, Date date) {
-		this.id = id;
+	public Mail(User user, String subject, String text, boolean immediate, Date date) {
+		////this.id = id;
 		this.user = user;
 		this.subject = subject;
-		this.text = text;
-		this.immadiate = immadiate;
+		this.content = text;
+		this.immediate = immediate;
 		this.creationDate = date;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return this.id;
 	}
 
@@ -45,12 +65,12 @@ public class Mail {
 	}
 
 	public String getText() {
-		return this.text;
+		return this.content;
 	}
 
 	public String getFormatedText() {
 
-		String content = new String(this.text);
+		String content = new String(this.content);
 		String result = new String("");
 
 		while (content.length() > 0) {
@@ -61,8 +81,8 @@ public class Mail {
 		return result;
 	}
 
-	public boolean getImmadiate() {
-		return immadiate;
+	public boolean getImmediate() {
+		return immediate;
 	}
 
 	public Date getDate() {
@@ -80,5 +100,4 @@ public class Mail {
 					+ gDate.get(GregorianCalendar.SECOND) + ")";
 		return date;
 	}
-
 }
