@@ -5,5 +5,26 @@
 	<classpathentry exported="true" kind="lib" path="S:/iText-5.0.4.jar" sourcepath="S:/iText5.0.4.zip"/>
 	<classpathentry kind="lib" path="S:/book/commons-lang-2.5-src.zip"/>
 	<classpathentry kind="lib" path="S:/book/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/asm.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/asm-attrs.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/cglib.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/commons-logging.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/hibernate3.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/hibernate-entitymanager.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/javassist-3.9.0.GA.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/javax.persistence_2.0.0.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/postgresql-9.0-801.jdbc4.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="S:/DocumentsPourPDF/FichiersJarPourFatonJPA/spring.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
