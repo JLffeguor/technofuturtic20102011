@@ -5,100 +5,65 @@ public class TestDataGenerator {
 	private Section root;
 
 	public void generate() {
-		Section section1 = new Section(
-				"1. Exceptions",
-				"Exceptions and Errors are special Java objects families used to describe problems that occurs in applications. They can be split into 3 sub families having a common ancestor (Throwable): Errors, Runtime Exceptions, Checked Exceptions.", null);
-		Section section11 = new Section(
-				"1.1. Runtime Exceptions",
-				"Runtime Exceptions are problems that happen in your application because you've written bad code. Try this example in Eclipse:[code]    public static void main(String[] args){         BankAccount ba = null;         printAccountDetails(ba);     }      public static void printAccountDetails(BankAccount ba){         System.out.println(ba.getAccountNumber() + \" - \" + ba.getBalance());     }[/code] The above example throws a NullPointerException because the getAccountNumber() method is called using a null reference. ", section1);
-		Section section12 = new Section(
-				"1.2. Checked Exceptions",
-				"[image src = \"S:\\DocumentsPourPDF\\images1.jpeg\"]", section1);
-		Section section112 = new Section(
-				"1.1.2. Throwing Runtime Exceptions",
-				"[code]# void Calcul(int (*t)[9],int (*f))# {# int i=0,j=1,k=0,p=0;# debut:# {# if (k==92)# {# return; //Il n'y a que 92 possibilités (je fais confiance a la litterature et le programme ne va pas plus loin et il faut bien sortir de la boucle)# }# if (j>=9) //Si on sort de l echiquier# {# k=k+1; //Compteur de solution# printf(\"Solution num %d \n\",k);# Affichage (t); //On affiche la solution# j=8; //On reviens a la derniere ligne# i=f[8]; //On reviens a la derniere reine posée# t[i][j]=0; //On efface la reine# p=-1; //On passe le parametre qui efface la reine# Reine(t,i,j,p); //On efface les impossibilités de la reine# i=f[8]+1; //On passe a la position suivante# goto rech; //On va rechercher si la pose d'une reine est possible ( c est sur que non mais bon! )## } [/code] If some conditions aren't met in your program you may want to throw an Exception.[video id  = \"http://www.kikibese.fr\" type = \"youtube\"] The syntax is easy, simply use the throw keyword and a new instance of a RuntimeException.See the below example:[code]public class BankAccount {     private String accountNumber;     private double balance;      // Constructors, getters & setters ...      public void debitAccount(double amount) {         if(balance < amount){             throw new RuntimeException(\"Balance too low to execute debit. \" + accountNumber);         }         balance -= amount;     } }[/code]", section11);
-		Section section2 = new Section(
-				"2. Classloading",
-				"The JVM includes a classloading mechanism that is necessary "
-						+ "to understand when weird deployment runtime problems happen.\n", null);
-		Section section21 = new Section(
-				"2.1. Files",
-				"As you know, source code is stored in .java files. The compiler "
-						+ "produces .class files with bytecode.In the following diagram, you see these elements, with the ClassLoader "
-						+ "responsible of finding/loading the .class files at runtime.", section2);
-		Section section113 = new Section(
-				"1.1.3. Nos amis les Hamster",
-				"Voilà, enfin disponible pour tous, une rubrique qui va certainement faire fureur et avoir des répercussions "
-						+ "relativement conséquentes, une rubrique vraiment super qui va amuser les petits comme les tout petits,"
-						+ " une rubrique hors du commun qui va transporter dans un univers féérique les hommes les plus terre-à-terre"
-						+ ", LA rubrique des photos de famille. Il s'agit des photos prises sur le vif des trois hamsters que nous avons"
-						+ " eu avec ma soeur, durant notre jeunesse, à savoir Friskette, Albert et Jimy. Ils reposent actuellement "
-						+ "quelque part dans le jardin de notre grand-maman et je suis tout ému d'enfin pourvoir leur adresser une"
-						+ " rubrique sur THE net qui fera passer leur mémoire à la postérité... mais trève de bavardage, voilà "
-						+ "LA rubrique \n", section11);
-		Section section1131 = new Section(
-				"1.1.3.1. Les moeurs de nos amis les hamsters",
-				"Et ici les toutes dernières nouveautés...:   [image src = \"S:\\DocumentsPourPDF\\images2.jpeg\"]\"Un hamster qui rote ressemble"
-						+ " à s'y méprendre à un hamster qui pête... question de référentiel...\"Les hamsters sont polygames,"
-						+ " c'est-à-dire que les mâles et les femelles n'ont pas de partenaire précis. À la saison des amour"
-						+ "s les mâles hamsters vont d'un terrier à l'autre à la recherche de femelles réceptives. Un opercule"
-						+ " empêche la fécondation des œufs par les mâles suivants et la femelle chasse alors le plus souvent "
-						+ "les prétendants de son territoire. La saison de reproduction se situe entre février et novembre."
-						+ " Les femelles auront deux à trois portées par an après une courte gestation  de 15 à 22 jours."
-						+ " Le nombre de petits par portée est très variable, pouvant aller jusqu'à 13, avec une moyenne de 5 à 7 petits."
-						+ " Les petits sont allaités 3 semaines environ et deviennent adultes à 6 ou 8 semaines."
-						+ "Le record de longévité connu pour un hamster sauvage est de 10 ans, mais la plupart des hamsters,"
-						+ " sauvages ou en captivité, ne dépassent pas 2 ou 3 ans. Dans la nature leurs principaux ennemis "
-						+ "sont les prédateurs : rapaces, serpents, mammifères carnivores et même des hérons ou des corbeaux "
-						+ "qui capturent les plus jeunes. Ils craignent également les hivers trop froids, les maladies et"
-						+ " les machines agricoles qui détruisent leur terrier.Ils creusent en effet des terriers "
-						+ "complexes à entrées multiples, avec tout un jeu de chambres, de greniers et de latrines "
-						+ "reliés par un réseau de tunnels qui peuvent plonger à plus de 2m sous la surface du sol"
-						+ " en hiver. Le terrier s'agrandit au cours de la vie de l'animal, qui y vit en solitaire."
-						+ " Le hamster en sortira généralement au crépuscule ou à la nuit tombée, bien que certaines"
-						+ " espèces soient également diurnes.", section113);
-				Section section1132 = new Section(
-						"1.1.3.1.","Hamster de Roborovski à l'entrée de son nid.Certaines"
-						+ " espèces sont particulièrement agressives vis-à-vis de leurs congénères, et des règles "
-						+ "hiérarchiques strictes règlent ces rencontres. Les femelles sont souvent dominantes."
-						+ " Les cricétinés se défendent âprement avec leurs incisives quand ils sont attaqués."
-						+ " Ils attaquent aussi quand ils se font capturer malgré leur fourrure propice au camouflage."
-						+ " Celle-ci est généralement dans des tons gris, noir, brun et roux, avec souvent des flancs plus clairs "
-						+ "ou une rayure dorsale.Les hamsters bénéficient d'une bonne vue pour trouver leurs proies,"
-						+ " mais leur ouïe et leur odorat sont également bien développés."
-						+ " Pour communiquer entre eux les mâles surtout utilisent un marquage olfactif du territoire."
-						+ " Plus l'animal est dominant, plus ses glandes sébacées seront développéesLes hamsters consomment"
-						+ " des plantes et des graines, et ils sont à leur tour une source de nourriture pour de nombreux"
-						+ " animaux carnivores.Leur habitude d'emporter les graines dans leur terrier sous terre joue "
-						+ "certainement un rôle dans la dispersion des semences.Pour les humains les hamsters sont"
-						+ " souvent considérés comme nuisibles lorsqu'ils ravagent les cultures de haricots, de maïs "
-						+ "ou de lentilles. On les chasse aussi parfois pour leur fourrure. Certaines espèces de hamsters,"
-						+ " élevées en captivité, sont appréciées comme animal de compagnie ou dans les laboratoires pour"
-						+ " les recherches comportementales ou physiologiques.Dans les pays où l'équilibre écologique"
-						+ " est fragile, comme par exemple dans l'État du Queensland en Australie, les hamsters sont interdits,"
-						+ " même en tant qu'animaux de compagnie afin de préserver la faune et la végétation locale."
-						+ "Pourchassés et piégés par les agriculteurs, parfois jusqu'à l'éradication totale sur certains "
-						+ "territoires, certaines populations de hamsters bénéficient à l'inverse d'un statut de protection "
-						+ "juridique. C'est le cas par exemple du hamster d'Europe en Alsace ou du Hamster doré en Syrie.", section113);
-		Section section111 = new Section(
-				"1.1.1. Exercice",
-				" Execute the following steps </br><ul>      <li>Run a program that throws a NullPointerException " +
-				"(as on the example above).</li>      <li>Build a new class that iterates through an array but goes too " +
-				"far</li>      <li>Check the Java SE JavaDoc, locate Throwable, Exception and browse through the subclasses" +
-				" of RuntimeException. Note that the notion of subclass will be seen in a later chapter.</li>  </ul>", section11 );
-//				"[attachment src = \"S:\\DocumentsPourPDF\\OO4 - Inheritence copy.pdf\" ]hello"
+		/** Create Section for the database*/
+		Section section6 = new Section("6. Wow - Speed Test", "This case is quite easy, except that it's designed as a test to be programmed as fast as possible. From the moment you read the statement below, you should measure the amount of time you need to make the program work.", null);
+		
+		Section section61 = new Section("6.1 Preparation", "Have Eclipse and your DB ready, with all the needed jar files and jdbc driver. Have a persistence.xml ready. If you use Spring, prepare your applicationContext.xml file. <br/>"
+										+ "For example, you may import and install <a href=\"http://www.javablackbelt.com/ui#coursePage/uuid=495af82d-cb5c-4e62-bcdd-5b352b636923\">this JPA project and DB</a>. "
+										+ "When you are ready, start your timer and read the statement below.", section6);
+		
+		Section section62 = new Section("6.2 Domain Model", "In the Wow game  (<i>World of Warcraft</i>), players group and kill bosses in dungeons. <br/>"
+										+ "A dungeon is a place with rooms and monsters. Imagine it's a building. Once you enter the building, you start killing monsters, for example the receptionist. <br/>"
+										+ "If another group of player decides to enter in the same dungeon (the building) they will see their own \"instance\" of the dungeon, where the receptionist is still alive. Each group entering in a dungeon has its own DungeonInstance. <br/>"
+										+ "A Dungeon is like a map defining the rooms of the building and the kind of monsters out there.<br/> "
+										+ "A DungeonInstance is like a game memory remembering which monster is alive or dead for the playing group. But that notion of alive/dead monster is out of the scope of this project. <br/>"
+										+ "Even the notion of monster is not modelized here, except bosses. A boss is a big monster wearing stuff. Once the boss is killed, players may steal stuff from the dead boss. Some bosses wear epic stuff, and this is modelized in our domain model. "
+										+ "[image src=\"S:\\DocumentsPourPDF\\images\\wowClassDiagram.jpg\"/]", section6);
+		
+		Section section63 = new Section("6.3 Data", "In this project, we modelize 2 dungeons: "
+										+ "<ul> <li><a href=\"http://www.wowwiki.com/The_Nexus_(instance)\">Nexus</a></li> <li><a href=\"http://www.wowwiki.com/Gundrak\">Gundrak</a></li></ul> "
+										+ "This is how the Nexus dungeon looks like from the outside: [image src=\"S:\\DocumentsPourPDF\\images\\The_Nexus.JPG\"/] <br/>"
+										+ "Each dungeon has a few bosses, some with epic stuff: "
+										+ "<ul> <li>Nexus<ul> <li>Grand Magus Telestra (epic stuff)</li> <li>Anomalus</li> <li>Keristrasza (epic stuff)</li> </ul> </li> <li>Gundrak <ul> <li>Noorabi</li> <li>Sla'dran</li> "
+										+ "</ul></li></ul> <br /> "
+										+ "A first group of 4 player gathers. Let's take alphabet letters as names to simplify.<ul>    <li>A</li>    <li>B</li>    <li>C</li>    <li>D</li></ul> "
+										+ "That group decides to enter into the Nexus dungeon. The system creates a DungeonInstance. <br />"
+										+ "[code escape=\"true\"]Nexus:Dungeon <- :DungeonInstance <-> :Group <- A, B, C, D [/code] <br/>"
+										+ "Another group of players (E, F and G) decides to play the same dungeon. Another DungeonInstance is created in the DB, also bound to Nexus. <br />"
+										+ "A third group of players (H, I, J, K and L) decides to play together, but in the other Dugeon: <i>Gundrak</i>. A corresponding DungeonInstance is created. <br/>"
+										+ "[image src=\"S:\\DocumentsPourPDF\\images\\wowObjectDiagram.jpg\"/]", section6);		
+		
+		Section section64 = new Section("6.4 Queries", "Let's start with the more easy queries: <ul>    <li><i>Select all the dungeons having a boss named \"Noorabi\".</i></li>	    <li><i>Select all the bosses of the Nexus dungeon.</i></li>	</ul> "
+										+ "The third query is harder: <ul>  <li><i>Which players are in a dungeonInstance of a dungeon having at least a boss wearing epic stuff?</i></li>	</ul> "
+										+ "In our DB, the two bosses wearing epic stuff are Grand Magus Telestra "
+										+ "[image src=\"S:\\DocumentsPourPDF\\images\\174px-Grand_Magus_Telestra.jpg\"/] "
+										+ "and Keristrasza. [image src=\"S:\\DocumentsPourPDF\\images\\200px-Keristrasza.jpg\"/])", section6);
+		
+		Section section65 = new Section("6.5 Optional Query", "Stop your timer now, before doing this last optional part: you are finished ;-)<br/> "
+										+ "<b>This last query is not part of the test</b> <br />"
+										+ "The optional query is: <ul>    <li><i>What is the name of the bosses that player A may meet in his current dungeon?</i></li></ul>", section6);
+		
+		Section section66 = new Section("6.6 How Long ?", "We have run this test in a controlled classroom with 11 average junior programmers. They had 3 months of Java practice. They completed the <i>JPA Fundamentals</i> course and workshop one month before the test and did not practice JPA much during the month preceding the test. 2 weeks before this wow speed test, they have done the previous test (Car Show). The 3 fastest students (according to the previous test) did not particpate. <br />" 
+										+ "The result was: <br/> "
+										+ "1st: 1h30 <br /> "
+										+ "2nd: 2h30 <br /> "
+										+ "others: too long (not finished). After 3h30, 4 students did not reach the queries. The 3 others were programming the queries. <br/> "
+										+ "A gifted programmer having experience with JPA should take less than 1h, but certainly more than 20 minutes (because the code to create the data is long, and you need time to understand the statement).", section6);
+		
+		Section section67 = new Section("6.7 Solution", "Dans cette vidéo, Johan, Julien et Pierre et  présentent une solution: [video id=\"16687877\" type=\"Vimeo\"/]", section6);
 
-		root = section1;
-
-		section1.getSubSections().add(section11);
-		section1.getSubSections().add(section12);
-		section11.getSubSections().add(section111);
-		section11.getSubSections().add(section112);
-//		 create a sub-subSection
-		section2.getSubSections().add(section21);
-		section11.getSubSections().add(section113);
-		section113.getSubSections().add(section1131);
-		section113.getSubSections().add(section1132);
+	
+		/** Add the section to their childs */
+		section6.getSubSections().add(section61);
+		section6.getSubSections().add(section62);
+		section6.getSubSections().add(section63);
+		section6.getSubSections().add(section64);
+		section6.getSubSections().add(section65);
+		section6.getSubSections().add(section66);
+		section6.getSubSections().add(section67);
+		
+		/** Return the section 6 when getRoot is call*/
+		root = section6;
 	}
 
 	public Section getRoot() {
