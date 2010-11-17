@@ -2,7 +2,8 @@ package blackbelt.pdf;
 
 public class TestDataGenerator {
 
-	private Section root;
+	private Section root1;
+	private Section root2;
 
 	public void generate() {
 		/** Create Section for the database*/
@@ -51,6 +52,8 @@ public class TestDataGenerator {
 										+ "A gifted programmer having experience with JPA should take less than 1h, but certainly more than 20 minutes (because the code to create the data is long, and you need time to understand the statement).", section6);
 		
 		Section section67 = new Section("6.7 Solution", "Dans cette vidéo, Johan, Julien et Pierre et  présentent une solution: [video id=\"16687877\" type=\"Vimeo\"/]", section6);
+		
+		Section section7 = new Section("7. Hello world", "Bonjour, je m'appelle Alfred et moi aussi je suis alcoolique", null);
 
 	
 		/** Add the section to their childs */
@@ -63,11 +66,15 @@ public class TestDataGenerator {
 		section6.getSubSections().add(section67);
 		
 		/** Return the section 6 when getRoot is call*/
-		root = section6;
+		root1 = section6;
+		root2 = section7;
 	}
 
 	public Section getRoot() {
-		return root;
+		return this.root1;
 	}
-
+	
+	public Section getRootDeux(){
+		return this.root2;
+	}
 }
