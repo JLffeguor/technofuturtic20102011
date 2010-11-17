@@ -94,7 +94,10 @@ public class PdfGenerator {
 		
 		CourseTextFormatter sectionFormatter = new CourseTextFormatter("", body);
 		StyleSheet styleBody = new StyleSheet();
-		styleBody.loadStyle("p", "size", "8"); //Style of the body
+		styleBody.loadTagStyle("ul", "i", "");
+		styleBody.loadTagStyle("ul", "indent", "12");
+//		styleBody.loadTagStyle("ul", "padding-left", "16");
+//		styleBody.loadTagStyle("ul", "align", "center");
 		List<Element> bodyElements; //Create List with the paragraph
 		bodyElements = HTMLWorker.parseToList(new StringReader(sectionFormatter.format()), styleBody); //Format text and apply style
 
