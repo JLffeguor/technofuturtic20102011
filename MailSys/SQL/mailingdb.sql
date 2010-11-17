@@ -12,7 +12,7 @@ CREATE TABLE mails (
   UserId            BIGINT  NOT NULL,
   Subject           TEXT    NOT NULL,
   Content           TEXT    NOT NULL,
-  immadiate         BOOLEAN NOT NULL,
+  immediate         BOOLEAN NOT NULL,
   creationdate      TIMESTAMP WITH TIME ZONE NOT NULL,
   PRIMARY KEY (id)
 );
