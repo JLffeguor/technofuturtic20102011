@@ -68,25 +68,25 @@ public class MailDao {
 		try {
 			statement = DataBaseConnection.conn.createStatement();
 			sql = "SELECT u.Id iduser, u.pseudo pseudo, u.email email, u.lastMailSendedDate lastMailSendedDate, u.mailingDelai mailingDelai " +
-				  "\nFROM mails m " +
-				  "\nINNER JOIN users u ON (m.UserId = u.id)" +
-				  "\nWHERE (" +
-				  "\n       m.IsImediateMessage=1" +
-				  "\n      ) " +
-				  "\n      OR" +
-				  "\n      (" +
-				  "\n           m.IsImediateMessage=0" +
-				  "\n       AND " +
-				  "\n          (" +
-				  "\n               MailingDelai = 0 " +
-				  "\n           OR  u.lastMailSendedDate IS     NULL " +
-				  "\n           OR  (u.lastMailSendedDate IS NOT NULL" +
-				  "\n           AND ((MailingDelai = 1 AND STR_TO_DATE('"+this.dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
-				  "\n           OR (MailingDelai = 2 AND STR_TO_DATE('"+this.dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)))" +
-				  "\n          )" +
-				  "\n     ) " +
-				  "\nORDER BY m.IsImediateMessage DESC " +
-				  "\nLIMIT 1;";
+				  "FROM mails m " +
+				  "INNER JOIN users u ON (m.UserId = u.id)" +
+				  "WHERE (" +
+				  "       m.IsImediateMessage=1" +
+				  "      ) " +
+				  "      OR" +
+				  "      (" +
+				  "           m.IsImediateMessage=0" +
+				  "       AND " +
+				  "          (" +
+				  "               MailingDelai = 0 " +
+				  "           OR  u.lastMailSendedDate IS     NULL " +
+				  "           OR  (u.lastMailSendedDate IS NOT NULL" +
+				  "           AND ((MailingDelai = 1 AND STR_TO_DATE('"+this.dFormat.format(dateForDay)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)" +
+				  "           OR (MailingDelai = 2 AND STR_TO_DATE('"+this.dFormat.format(dateForWeek)+"', '%d.%m.%Y %H.%i.%s') > u.lastMailSendedDate)))" +
+				  "          )" +
+				  "     ) " +
+				  "ORDER BY m.IsImediateMessage DESC " +
+				  "LIMIT 1;";
 			rs = statement.executeQuery(sql);
 			
 			if (!rs.first()) {

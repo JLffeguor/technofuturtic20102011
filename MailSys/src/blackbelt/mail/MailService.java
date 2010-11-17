@@ -16,7 +16,6 @@ public class MailService {
 	
 	
 	public void send(String subject, String text,int userID,boolean isAImmadiateMessage){
-		// TODO: templating around the content.
 		
 		try{
 			Statement st = DataBaseConnection.conn.createStatement();
@@ -26,21 +25,20 @@ public class MailService {
 			rs.close();
 			Mail mail = new Mail(user,subject,text,isAImmadiateMessage);
 			MailDao.instance.save(mail);
-		}
-		catch(SQLException e){
+		} catch(SQLException e){
 			throw new RuntimeException(e);
 		}		
 	}
+	
 	public void updateLastMailSendedDate(User user){
-		//todo
+
 		try{
 			Date now = new Date();
 			SimpleDateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss");
 			Statement st = DataBaseConnection.conn.createStatement();
 			st.execute("UPDATE users SET lastMailSendedDate =STR_TO_DATE('"+dFormat.format(now)+"', '%d.%m.%Y %H.%i.%s') WHERE id LIKE "+user.getId());
 			user.setLastMailSendedDate(now);
-		}
-		catch(SQLException e){
+		} catch(SQLException e){
 			throw new RuntimeException(e);
 		}		
 	}
