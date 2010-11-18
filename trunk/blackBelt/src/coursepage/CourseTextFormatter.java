@@ -341,6 +341,7 @@ public class CourseTextFormatter {
 			String browser = new String("");
 			if ("youtube".equals(typeValue)) {
 //				video = new YoutubeVideo(videoId, width, height, false);
+				browser ="http://www.youtube.com/watch?v=";
 
 			} else if ("vimeo".equals(typeValue)) {
 				try {
@@ -359,7 +360,9 @@ public class CourseTextFormatter {
 			//use a boolean to know if we should format to pdf
 			boolean shouldWeFormatToPdf = true;
 			if (shouldWeFormatToPdf){
-				addResultTextBlock("</p></p><img align=\"center\" src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \"" + "<p align = \"center\"> Look this video : <a href=\""+ browser+ videoId + "\"> JPA wow exemple</a> </p>" );
+				//addResultTextBlock("</p></p><img align=\"center\" src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \">" + "<p align = \"center\"> Look this video : <a href=\""+ browser+ videoId + "\"> JPA wow exemple</a> </p>" );
+				addResultTextBlock("</p></p><div style='overflow:auto' align='center'>Watch this video on "+browser+ videoId+"<br><a href=\""+ browser+ videoId + "\"> <img height=\"80\" width=\"80\" src = \"S:\\DocumentsPourPDF\\logovideo.jpg \"></a></div> ");
+
 			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
 			
