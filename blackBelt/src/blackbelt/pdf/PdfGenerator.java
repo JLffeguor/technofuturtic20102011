@@ -31,7 +31,7 @@ public class PdfGenerator {
 	private boolean hasBeenUsed = false;
 	private PdfWriter pWriter;
 	private PdfContentByte pdfCb;
-	private ColumnText ct;
+	private ColumnText columnText;
 	private int numPage = 1;
 	private Image imgLogo;
 	private int status = 0;
@@ -53,9 +53,9 @@ public class PdfGenerator {
 
 		//Create the column to avoid orphan
 		this.pdfCb = pWriter.getDirectContent();
-		this.ct = new ColumnText(this.pdfCb);
-		this.ct.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
-		this.ct.setLeading(0, 1.5f);
+		this.columnText = new ColumnText(this.pdfCb);
+		this.columnText.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
+		this.columnText.setLeading(0, 1.5f);
 //		this.statut = ColumnText.START_COLUMN;
 
 		//Create Logo
@@ -96,7 +96,6 @@ public class PdfGenerator {
 		StyleSheet styleBody = new StyleSheet();
 		styleBody.loadTagStyle("ul", "i", "");
 		styleBody.loadTagStyle("ul", "indent", "12");
-//		styleBody.loadTagStyle("ul", "padding-left", "16");
 //		styleBody.loadTagStyle("ul", "align", "center");
 		List<Element> bodyElements; //Create List with the paragraph
 		bodyElements = HTMLWorker.parseToList(new StringReader(sectionFormatter.format()), styleBody); //Format text and apply style
@@ -104,8 +103,8 @@ public class PdfGenerator {
 		for (Element element : bodyElements){
 			
 //			float beforeYLine = this.ct.getYLine();
-			this.ct.addElement(element);
-			this.ct.go();
+			this.columnText.addElement(element);
+			this.columnText.go();
 			
 //			if (this.ct.getYLine() < beforeYLine){
 //				this.ct.addElement(element); //Add element
@@ -135,26 +134,26 @@ public class PdfGenerator {
 //			}
 			
 			while (true){
-				this.status = this.ct.go();
+				this.status = this.columnText.go();
 				
-				if (this.ct.getYLine() > 120){
-					this.ct.addElement(new Paragraph("\n"));
-					this.ct.go();
+				if (this.columnText.getYLine() > 120){
+					this.columnText.addElement(new Paragraph("\n"));
+					this.columnText.go();
 					break;
 				} else{
 					createFooter(); //Add footer
 					this.doc.newPage(); //Go to the new page
 					this.doc.add(this.imgLogo); //Add Logo
-					this.ct.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
+					this.columnText.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
 				}
 			}
 		}
 	}
 
 	private void addTitle(Chunk pTitle) throws DocumentException {
-		this.ct.addElement(new Paragraph(pTitle));
-		this.ct.addElement(new Paragraph("\n"));
-		this.ct.go();
+		this.columnText.addElement(new Paragraph(pTitle));
+		this.columnText.addElement(new Paragraph("\n"));
+		this.columnText.go();
 	}
 
 
