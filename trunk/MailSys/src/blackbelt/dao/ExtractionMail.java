@@ -19,13 +19,6 @@ import blackbelt.model.User;
 @Repository
 public final class ExtractionMail {
 	
-	@Autowired
-	private static ExtractionMail instance;
-	
-	public static ExtractionMail getExtractionMail(){
-		return instance;
-	}
-	
 	@PersistenceContext
 	private EntityManager em;
 
