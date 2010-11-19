@@ -4,13 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.util.List;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
@@ -32,14 +35,17 @@ public class GenericPdfGenerator {
 	private PdfContentByte contentByte;
 	private ColumnText columnText;
 	private int linesAtTheAndOfTheDocumentToAvoidOrphan = 4;
+	private int pageNumber = 1;
+	private Image logo;
 	
 	
 	/** 
 	 * Create and prepare the document
-	 * @throws FileNotFoundException
 	 * @throws DocumentException
+	 * @throws IOException 
+	 * @throws MalformedURLException 
 	 * */
-	public GenericPdfGenerator() throws FileNotFoundException, DocumentException{
+	public GenericPdfGenerator() throws DocumentException, MalformedURLException, IOException{
 		
 		//Create the document and the writer
 		doc = new Document();
@@ -52,6 +58,13 @@ public class GenericPdfGenerator {
 		columnText = new ColumnText(contentByte);
 		columnText.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
 		columnText.setLeading(0, 1.5f);
+		
+		//Create the footer
+		addFooter();
+		
+		//Add Logo
+		logo = generateImageLogo("S:\\DocumentsPourPDF\\images1.jpg");
+		doc.add(logo);
 	}
 	
 	public GenericPdfGenerator(String path) throws FileNotFoundException, DocumentException{
@@ -67,6 +80,9 @@ public class GenericPdfGenerator {
 		columnText = new ColumnText(contentByte);
 		columnText.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
 		columnText.setLeading(0, 1.5f);
+		
+		//Create the footer
+		addFooter();
 	}
 	
 	
@@ -159,6 +175,9 @@ public class GenericPdfGenerator {
 				columnText.addElement(element);
 				columnText.go(false);
 			}
+			
+			columnText.addElement(new Paragraph("\n")); //Add a new line
+			columnText.go(false);
 		}
 	}
 	
@@ -209,10 +228,32 @@ public class GenericPdfGenerator {
 		columnText.setText(null);  // Removes any pending element (else it would be half rendered, only the part that would not fit the previous page would be rendered).
 	}
 	
-	/** Add a new page to the document */
-	private void newPage(){
+	private Image generateImageLogo(String path) throws BadElementException, MalformedURLException, IOException{
+		Image imageLogo;
+		imageLogo = Image.getInstance(path);
+		imageLogo.setAbsolutePosition(555, 800);
+//		imageLogo.setWidthPercentage(5); //To modify with the %
+		
+		/**Modify the pixel size*/
+		imageLogo.scaleAbsoluteHeight(30);
+		imageLogo.scaleAbsoluteWidth(30);
+		
+		return imageLogo;
+	}
+	
+	private void addFooter(){
+		Paragraph p = new Paragraph("Page : " + pageNumber);
+		ColumnText.showTextAligned(contentByte, Element.ALIGN_CENTER, p, (this.doc.right()- this.doc.left())/2+this.doc.leftMargin(), this.doc.bottom() - 12, 0);
+		pageNumber++;
+	}
+	
+	/** Add a new page to the document 
+	 * @throws DocumentException */
+	private void newPage() throws DocumentException{
 		doc.newPage();
+		doc.add(logo);
 		columnText.setYLine(PageSize.A4.getHeight() - 36);
+		addFooter();
 	}
 	
 	public void closeDocument(){
