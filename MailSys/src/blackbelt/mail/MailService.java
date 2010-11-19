@@ -6,18 +6,28 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import blackbelt.db.DataBaseConnection;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
+@Repository
+@Transactional
 public class MailService {
-
-	public static MailService instance = new MailService(); // TODO: replace by being a Sping bean.
 	
+	@PersistenceContext
+	private EntityManager em;
+	
+	public static MailService instance = new MailService(); // TODO: replace by being a Sping bean.
 	
 	public void send(String subject, String text,int userID,boolean isAImmadiateMessage){
 		
-		try{
+		/*try{
 			Statement st = DataBaseConnection.conn.createStatement();
 			ResultSet rs= st.executeQuery("SELECT * FROM USERS WHERE id LIKE "+userID);
 			rs.first();
@@ -27,7 +37,9 @@ public class MailService {
 			MailDao.instance.save(mail);
 		} catch(SQLException e){
 			throw new RuntimeException(e);
-		}		
+		}*/
+		
+		User user = (User) em.createQuery("").getSingleResult();
 	}
 	
 	public void updateLastMailSendedDate(User user){

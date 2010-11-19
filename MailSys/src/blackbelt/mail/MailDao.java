@@ -58,7 +58,9 @@ public class MailDao {
 		}
 	}*/
 
-	public List<Mail> findNextMail() {
+
+	
+public List<Mail> findNextMail() {
 		
 		String sql;
 		Date now;

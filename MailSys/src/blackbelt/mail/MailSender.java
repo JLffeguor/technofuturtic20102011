@@ -22,7 +22,7 @@ public class MailSender extends Thread {
 			while (nextMailList != null) {
 				
 				// TODO: given list as param should be for 1 user only....
-				if (nextMailList.get(0).getImmadiate()) {
+				if (nextMailList.get(0).getImmediate()) {
 					List<Mail> toSend = new ArrayList<Mail>();
 					toSend.add(nextMailList.get(0));
 					sendMailList(toSend);
