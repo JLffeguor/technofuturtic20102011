@@ -33,7 +33,7 @@ public class MailService {
 		im.save(mail, userID);
 	}
 
-	public void updateLastMailSendedDate(User user){
+	/*public void updateLastMailSendedDate(User user){
 
 		try{
 			Date now = new Date();
@@ -44,6 +44,6 @@ public class MailService {
 		} catch(SQLException e){
 			throw new RuntimeException(e);
 		}		
-	}
+	}*/
 }
 

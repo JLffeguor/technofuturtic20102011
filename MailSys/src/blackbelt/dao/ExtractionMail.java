@@ -9,16 +9,27 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
+@Repository
 public final class ExtractionMail {
-
+	
+	@Autowired
+	private static ExtractionMail instance;
+	
+	public static ExtractionMail getExtractionMail(){
+		return instance;
+	}
+	
 	@PersistenceContext
 	private EntityManager em;
 
+	@Transactional
 	public List<Mail> findNextMail() {
 
 		String sql;
@@ -85,5 +96,15 @@ public final class ExtractionMail {
 			Mail temp = em.find(Mail.class, mail.getId());
 			em.remove(temp);
 		}
+	}
+	
+	@Transactional
+	public void updateLastMailSendedDate(User user){
+		
+		User userToModify;
+		
+		userToModify = em.find(User.class, user.getId());
+		userToModify.setLastMailSendedDate(new Date());
+		em.persist(userToModify);		
 	}
 }
