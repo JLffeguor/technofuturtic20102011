@@ -34,7 +34,6 @@ public class PdfGenerator {
 	private ColumnText columnText;
 	private int numPage = 1;
 	private Image imgLogo;
-	private int status = 0;
 	private int sizeTitle = 0;
 
 	/** generate the PDF to the given OutputSteam */
@@ -61,11 +60,11 @@ public class PdfGenerator {
 		//Create Logo
 		this.doc.add(this.imgLogo); //Add Logo
 
+		//Create first footer
+		createFooter();
+		
 		//Write each section to the PDF document
 		recursiveWalk(rootSection);
-
-		//Create last footer
-		createFooter();
 
 		this.doc.close();
 		this.hasBeenUsed = true;
@@ -82,6 +81,8 @@ public class PdfGenerator {
 
 		// Childs (recursive call)
 		for (Section sSection : currentSection.getSubSections()) {
+			this.columnText.addElement(new Paragraph("\n"));
+			this.columnText.go();
 			recursiveWalk(sSection);
 		}
 	}
@@ -99,55 +100,56 @@ public class PdfGenerator {
 //		styleBody.loadTagStyle("ul", "align", "center");
 		List<Element> bodyElements; //Create List with the paragraph
 		bodyElements = HTMLWorker.parseToList(new StringReader(sectionFormatter.format()), styleBody); //Format text and apply style
-
+		
+		int status = ColumnText.START_COLUMN;
+		float position;
+		
 		for (Element element : bodyElements){
 			
-//			float beforeYLine = this.ct.getYLine();
-			this.columnText.addElement(element);
-			this.columnText.go();
-			
-//			if (this.ct.getYLine() < beforeYLine){
-//				this.ct.addElement(element); //Add element
-//				this.ct.go(false);  // Do it really (don't simulate).
-//			} else{
-//				createFooter();
-//				this.doc.newPage();
-//				this.doc.add(this.imgLogo);
-//				this.ct.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
-//				this.ct.setYLine(PageSize.A4.getHeight() - 36);
-//				this.ct.addElement(element); //Add element
-//				this.ct.go();
-//			}
-			
-//			this.status = this.ct.go(true);
-//			
-//			if (!ColumnText.hasMoreText(this.status)){ //If there's enough place
-//				this.ct.addElement(element); //Add element
-//				this.ct.go(false);  // Do it really (don't simulate).
-//			} else{ //Or
-//				createFooter(); //Add Footer
-//				this.doc.newPage(); //Add new page
-//				this.doc.add(this.imgLogo); //Add Logo
-//				this.ct.addElement(element); //Add element
-//				this.ct.setYLine(PageSize.A4.getHeight() - 36);
-//				this.ct.go();
-//			}
-			
-			while (true){
-				this.status = this.columnText.go();
-				
-				if (this.columnText.getYLine() > 120){
-					this.columnText.addElement(new Paragraph("\n"));
-					this.columnText.go();
-					break;
-				} else{
-					createFooter(); //Add footer
-					this.doc.newPage(); //Go to the new page
-					this.doc.add(this.imgLogo); //Add Logo
-					this.columnText.setSimpleColumn(36, 36, PageSize.A4.getWidth() - 36, PageSize.A4.getHeight() - 36, 18, Element.ALIGN_LEFT);
+			boolean pageOverflow = simulateAddElement(columnText, element);
+
+			if (! pageOverflow // All the text fits the page until now. 
+					||  columnText.getLinesWritten() > 4 // Or (too much text for the page, but) enough lines have been written at the bottom of the page.
+			){
+
+				// We write that text for real on the current page.
+				columnText.addElement(element);
+				columnText.go(false);
+
+				if (pageOverflow) {  // We need to print the rest on the next page.
+					newPage(doc, columnText);
+					// we don't need to add the element again after the go of the previous page, because elements causing overflow are not removed from the ColumnText.compositeElements list. It's still hanging there.
+					columnText.go(false);
 				}
+
+			} else {  // We want a new page before we print any part of the element.		
+				newPage(doc, columnText);
+
+				columnText.addElement(element);
+				columnText.go(false);
 			}
+
 		}
+	}
+	
+	/** Returns true if adding the element would overflow the page, and rolls back everything */
+	private static boolean simulateAddElement(ColumnText columnText, Element element)
+	throws DocumentException {
+		int status;
+		float position;
+		// Simulation start
+		position = columnText.getYLine();
+		columnText.addElement(element);
+		status = columnText.go(true);
+		clearBuffer(columnText);
+		columnText.setYLine(position); // come back as before the simulation.
+
+		return ColumnText.hasMoreText(status);
+	}
+	
+	/** Removes any element since the last real (non simulated) go **/
+	private static void clearBuffer(ColumnText columnText) {
+		columnText.setText(null);  // Removes any pending element (else it would be half rendered, only the part that would not fit the previous page would be rendered).
 	}
 
 	private void addTitle(Chunk pTitle) throws DocumentException {
@@ -212,5 +214,12 @@ public class PdfGenerator {
 		this.imgLogo.scaleAbsoluteHeight(30);
 		this.imgLogo.scaleAbsoluteWidth(30);
 
+	}
+	
+	private void newPage(Document doc, ColumnText columnText) throws DocumentException {
+		doc.newPage();
+		createFooter();
+		doc.add(this.imgLogo);
+		columnText.setYLine(PageSize.A4.getHeight() - 36);
 	}
 }
