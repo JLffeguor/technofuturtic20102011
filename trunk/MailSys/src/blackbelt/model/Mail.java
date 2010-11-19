@@ -59,6 +59,9 @@ public class Mail {
 	public User getUser() {
 		return this.user;
 	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	public String getSubject() {
 		return this.subject;

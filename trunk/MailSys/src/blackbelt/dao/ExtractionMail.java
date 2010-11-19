@@ -19,10 +19,6 @@ public final class ExtractionMail {
 	@PersistenceContext
 	private EntityManager em;
 
-	public void save(Mail mail) {
-		em.persist(mail);
-	}
-
 	public List<Mail> findNextMail() {
 
 		String sql;
@@ -89,6 +85,5 @@ public final class ExtractionMail {
 			Mail temp = em.find(Mail.class, mail.getId());
 			em.remove(temp);
 		}
-		
 	}
 }
