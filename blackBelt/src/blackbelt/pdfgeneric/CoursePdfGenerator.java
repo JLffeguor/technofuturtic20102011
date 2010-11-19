@@ -36,7 +36,8 @@ public class CoursePdfGenerator {
 		
 		//1nd. We add each section to the document
 		for (Section sList : sectionList){
-			pdf.addTitle(sList.getTitle(), 16); //Add the title
+			int size = calculTitleSize(sList); //Calcul the title's size
+			pdf.addTitle(sList.getTitle(), size); //Add the title
 			
 			//2nd. We format the body
 			body = sList.getBody();
@@ -49,6 +50,17 @@ public class CoursePdfGenerator {
 		/*IMPORTANT !!!
 		 * 3d. Never forget to close the document */
 		pdf.closeDocument();
+	}
+	
+	private int calculTitleSize(Section section){
+		int result = 20;
+		
+		while(section.getParent() != null){
+			section = section.getParent();
+			result -= 3;
+		}
+		
+		return result;
 	}
 }
 
