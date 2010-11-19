@@ -6,19 +6,25 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import blackbelt.dao.ExtractionMail;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
 public class MailSender extends Thread {
 
 	public final static int MS_BETWEEN_EACH_MAIL = 1000;
-
+	
+	@Autowired
+	private ExtractionMail extractMail;
+	
 	@Override
 	public void run() {
 		
 		while (isAlive()) {
 			
-			List<Mail> nextMailList = MailDao.instance.findNextMail();
+			List<Mail> nextMailList = extractMail.findNextMail();
 			while (nextMailList != null) {
 				
 				// TODO: given list as param should be for 1 user only....
@@ -26,13 +32,13 @@ public class MailSender extends Thread {
 					List<Mail> toSend = new ArrayList<Mail>();
 					toSend.add(nextMailList.get(0));
 					sendMailList(toSend);
-					MailDao.instance.removeMails(toSend);
-					nextMailList = MailDao.instance.findNextMail();
+					extractMail.removeMails(toSend);
+					nextMailList = extractMail.findNextMail();
 				} else {
 					sendMailList(nextMailList);
-					MailService.instance.updateLastMailSendedDate(nextMailList.get(0).getUser());
-					MailDao.instance.removeMails(nextMailList);
-					nextMailList = MailDao.instance.findNextMail();
+					extractMail.updateLastMailSendedDate(nextMailList.get(0).getUser());
+					extractMail.removeMails(nextMailList);
+					nextMailList = extractMail.findNextMail();
 				}
 
 				try {

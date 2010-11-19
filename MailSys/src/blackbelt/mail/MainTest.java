@@ -1,7 +1,6 @@
 package blackbelt.mail;
 
 public class MainTest{
-	static MailDao bdd = new MailDao();
 	
 	public static void main(String[] args) {
 		
