@@ -68,9 +68,8 @@ public class CourseTextFormatter {
 		}
 		
 		PTagsGenerator pTagsGenerator = new PTagsGenerator();
-		String s = pTagsGenerator.transformTextBlocksIntoStringWithPTags();
-		System.out.println(s);
-		return s;
+		
+		return pTagsGenerator.transformTextBlocksIntoStringWithPTags();
 	}
 	
 
