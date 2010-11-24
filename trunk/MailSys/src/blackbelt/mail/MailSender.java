@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import blackbelt.dao.ExtractionMail;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
+@Repository
 public class MailSender extends Thread {
 
-	public final static int MS_BETWEEN_EACH_MAIL = 1000;
+	public final static int MS_BETWEEN_EACH_MAIL = 100;
 	
 	@Autowired
 	private ExtractionMail extractMail;
@@ -53,7 +55,8 @@ public class MailSender extends Thread {
 				System.out.println("******************************************************************");
 				System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
 				System.out.println("******************************************************************");
-				sleep(MS_BETWEEN_EACH_MAIL * 15);
+				//sleep(MS_BETWEEN_EACH_MAIL * 15);
+				sleep(15000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

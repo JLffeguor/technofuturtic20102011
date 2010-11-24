@@ -7,19 +7,24 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Mails")
+@Table(name = "mails")
 public class Mail {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="SEQ_GEN")
+	@javax.persistence.SequenceGenerator(name="SEQ_GEN",sequenceName="seq_mails_id")
 	private Long id;
 	
 	@ManyToOne
-	@Column(nullable = false, name = "user_id")
+	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 	
 	@Column(nullable = false)

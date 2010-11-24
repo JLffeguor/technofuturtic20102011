@@ -1,14 +1,27 @@
 package blackbelt.mail;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
 public class MainTest{
 	
 	public static void main(String[] args) {
 		
-		MailSender consumer = new MailSender();
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+		
+		MailSender consumer = (MailSender)applicationContext.getBean("mailSender");;
 		consumer.start();
 		
-		DataTest data = new DataTest();
-		data.start();
+		DataTest dataTest = (DataTest)applicationContext.getBean("dataTest");
+		dataTest.run();
+		
+		
+	
+		
+//		
+//		DataTest data = new DataTest();
+//		data.start();
 		
 	}
 	

@@ -16,13 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
+@Transactional
 @Repository
-public final class ExtractionMail {
+public class ExtractionMail {
 	
 	@PersistenceContext
 	private EntityManager em;
 
-	@Transactional
+	
 	public List<Mail> findNextMail() {
 
 		String sql;
@@ -44,8 +45,8 @@ public final class ExtractionMail {
 
 		mails = null;
 
-		sql = "SELECT m.user "
-				+ "FROM Mails m "
+		sql = "SELECT user "
+			+ "FROM Mail m join m.user user "
 				+ "WHERE ("
 				+ "       m.immediate=true"
 				+ "      ) "
@@ -54,14 +55,15 @@ public final class ExtractionMail {
 				+ "           m.immediate=false"
 				+ "       AND "
 				+ "          ("
-				+ "               m.user.mailingDelai = 0 "
-				+ "           OR  m.user.lastMailSendedDate IS NULL "
+				+ "               m.user.lastMailSendedDate IS NULL "
 				+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
-				+ "                AND (    (m.user.mailingDelai = 1 AND :dateForDay > u.lastMailSendedDate)"
-				+ "                      OR (m.user.mailingDelai = 2 AND :dateForWeek > u.lastMailSendedDate)"
-				+ "                    )" + "              )" + "          )"
+				+ "                AND (    (m.user.mailingDelai = 1 AND :dateForDay > m.user.lastMailSendedDate)"
+				+ "                      OR (m.user.mailingDelai = 2 AND :dateForWeek > m.user.lastMailSendedDate)"
+				+ "                    )"
+				+ "              )"
+				+ "          )"
 				+ "     ) "
-				+ "ORDER BY m.IsImediateMessage DESC ";
+				+ "ORDER BY m.immediate DESC ";
 
 		query = em.createQuery(sql);
 		query.setParameter("dateForDay", dateForDay);
@@ -72,8 +74,9 @@ public final class ExtractionMail {
 			return null;
 		}
 
-		sql = "SELECT m " + "FROM Mails m WHERE m.user.id = :GetUserId "
-				+ "ORDER BY IsImediateMessage DESC";
+		sql = "SELECT m "
+			+ "FROM Mail m WHERE m.user.id = :GetUserId "
+		+ "ORDER BY immediate DESC";
 
 		query = em.createQuery(sql).setParameter("GetUserId",
 				users.get(0).getId());
@@ -82,7 +85,7 @@ public final class ExtractionMail {
 		return mails;
 	}
 
-	@Transactional //Used for find a mail to delete when this method is not called in a same transaction.
+	//Used for find a mail to delete when this method is not called in a same transaction.
 	public void removeMails(List<Mail> mails) {
 		
 		for (Mail mail : mails) {
@@ -91,7 +94,7 @@ public final class ExtractionMail {
 		}
 	}
 	
-	@Transactional
+	
 	public void updateLastMailSendedDate(User user){
 		
 		User userToModify;

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 
+@Transactional
 @Repository
 public class InsertionMail {
 	
@@ -17,12 +18,11 @@ public class InsertionMail {
 	@PersistenceContext
 	private EntityManager em;
 	
-	@Transactional
+	
 	public void save(Mail mail, Long idUser) {
 		User user = (User) em.find(User.class, idUser);
 		mail.setUser(user);
 		em.persist(mail);
-		
 	}
 	
 }
