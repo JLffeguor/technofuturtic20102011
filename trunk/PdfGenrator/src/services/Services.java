@@ -67,7 +67,7 @@ public class Services {
 			finalResult+="<html><head><title>"+this.section.getTitle()+"</title></head><body>";
 			/*Page de garde*/
 			finalResult+=addIntro();
-			finalResult+="<br/><br/><h1>"+this.section.getTitle()+"</h1>";
+			finalResult+="<br/><h1>"+this.section.getTitle()+"</h1>";
 			
 		}
 		else{
@@ -118,16 +118,16 @@ public class Services {
 		
 		switch(size){
 		case 0:
-			title = "<br/><br/><h1>"+currentSection.getTitle()+"</h1>";
+			title = "<br/><h1>"+currentSection.getTitle()+"</h1>";
 			break;
 		case 1:
-			title = "<br/><br/><h2>"+currentSection.getTitle()+"</h2>";
+			title = "<br/><h2>"+currentSection.getTitle()+"</h2>";
 			break;
 		case 2:
-			title = "<br/><br/><h3>"+currentSection.getTitle()+"</h3>";
+			title = "<br/><h3>"+currentSection.getTitle()+"</h3>";
 			break;
 		default:
-			title = "<br/><br/><h4>"+currentSection.getTitle()+"</h4>";
+			title = "<br/><h4>"+currentSection.getTitle()+"</h4>";
 			break;
 		}
 		
