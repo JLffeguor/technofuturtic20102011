@@ -317,7 +317,7 @@ public class CourseTextFormatter {
 //			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
 //					+element.innerText+"</pre>");
 
-            addResultTextBlock("<br/><pre xml:space='preserve'>"
+            addResultTextBlock("<br/><pre class='contentProgramListing' xml:space='preserve'>"
                     +element.innerText+"</pre>");
 		}
 	}
@@ -368,7 +368,7 @@ public class CourseTextFormatter {
 			boolean shouldWeFormatToPdf = true;
 			if (shouldWeFormatToPdf){
 				//addResultTextBlock("</p></p><img align=\"center\" src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \">" + "<p align = \"center\"> Look this video : <a href=\""+ browser+ videoId + "\"> JPA wow exemple</a> </p>" );
-				addResultTextBlock("</p></p><div style='overflow:auto' align='center'>Watch this video on "+browser+ videoId+"<br/><a href=\""+ browser+ videoId + "\"> <img height=\"80\" width=\"80\" src = \"http://www2c.ac-lille.fr/cazin-boulogne/pages/formations/logo_video.jpeg \"></a></div> ");
+				addResultTextBlock("</p></p><div style='overflow:auto' align='center'><a href=\""+ browser+ videoId + "\"><img height=\"80\" width=\"80\" src = \"http://www2c.ac-lille.fr/cazin-boulogne/pages/formations/logo_video.jpeg \"><br/><br/>Watch this video on "+browser+ videoId+"</a></div> ");
 
 			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
