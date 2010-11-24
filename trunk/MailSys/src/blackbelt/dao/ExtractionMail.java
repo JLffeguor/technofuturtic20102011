@@ -1,15 +1,16 @@
 package blackbelt.dao;
 
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,87 +21,100 @@ import blackbelt.model.User;
 @Repository
 public class ExtractionMail {
 	
+	
 	@PersistenceContext
 	private EntityManager em;
-
 	
-	public List<Mail> findNextMail() {
-
-		String sql;
-		Date now;
-		Date dateForWeek;
+	private User userContainingImmediateMails(){
+		Query query = em.createQuery(" SELECT user FROM Mail m join m.user user WHERE m.immediate=true")
+						.setMaxResults(1);
+		try{ return  (User)query.getSingleResult();
+		}catch(NoResultException e){
+		return null;	
+		}
+	}
+	
+	private User userContainingGroupedMails(){
+		/************************/
 		Date dateForDay;
-		GregorianCalendar cal;
-		List<Mail> mails;
-		Query query;
-		List<User> users;
-
-		now = new Date();
-		cal = new GregorianCalendar();
+		Date dateForWeek;		
+		Date now= new Date();
+		GregorianCalendar cal= new GregorianCalendar();
 		cal.setTime(now);
 		cal.add(Calendar.SECOND, -10);
 		dateForDay = cal.getTime();
 		cal.add(Calendar.SECOND, -30);
-		dateForWeek = cal.getTime();
-
-		mails = null;
-
-		sql = "SELECT user "
-			+ "FROM Mail m join m.user user "
-				+ "WHERE ("
-				+ "       m.immediate=true"
-				+ "      ) "
-				+ "      OR"
-				+ "      ("
-				+ "           m.immediate=false"
-				+ "       AND "
-				+ "          ("
-				+ "               m.user.lastMailSendedDate IS NULL "
-				+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
-				+ "                AND (    (m.user.mailingDelai = 1 AND :dateForDay > m.user.lastMailSendedDate)"
-				+ "                      OR (m.user.mailingDelai = 2 AND :dateForWeek > m.user.lastMailSendedDate)"
-				+ "                    )"
-				+ "              )"
-				+ "          )"
-				+ "     ) "
-				+ "ORDER BY m.immediate DESC ";
-
-		query = em.createQuery(sql);
-		query.setParameter("dateForDay", dateForDay);
-		query.setParameter("dateForWeek", dateForWeek);
-		users = query.getResultList();
-
-		if (users == null || users.size() == 0) {
+		dateForWeek = cal.getTime();	
+		/************************/
+		
+		Query query = em.createQuery("SELECT user "
+					+ "FROM Mail m join m.user user"
+						+ " WHERE ("
+						+ "         m.immediate=false"
+						+ " 	AND"
+						+ "          ("
+						+ "               m.user.lastMailSendedDate IS NULL "
+						+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
+						+ "                AND (    (m.user.mailingDelai = 1 AND :dateForDay > m.user.lastMailSendedDate)"
+						+ "                      OR (m.user.mailingDelai = 2 AND :dateForWeek > m.user.lastMailSendedDate)"
+						+ "                    )"
+						+ "              )"
+						+ "          )"
+						+ "     ) ")
+						.setParameter("dateForDay", dateForDay)
+						.setParameter("dateForWeek", dateForWeek)
+						.setMaxResults(1);
+		try{ return  (User)query.getSingleResult();
+		}catch(NoResultException e){
+		return null;	
+		}		
+	}	
+	
+	private List<Mail> getMailsFromUser(boolean isImmediate, User user){
+		if(user !=null){
+		Query query = em.createQuery("SELECT m FROM Mail m WHERE m.user =:user AND m.immediate =:condition" )
+                        .setParameter("user",user)
+		                .setParameter("condition",isImmediate); 
+		return query.getResultList();
+		}else{
 			return null;
 		}
-
-		sql = "SELECT m "
-			+ "FROM Mail m WHERE m.user.id = :GetUserId "
-		+ "ORDER BY immediate DESC";
-
-		query = em.createQuery(sql).setParameter("GetUserId",
-				users.get(0).getId());
-		mails = query.getResultList();
-
-		return mails;
 	}
-
-	//Used for find a mail to delete when this method is not called in a same transaction.
+	
 	public void removeMails(List<Mail> mails) {
-		
-		for (Mail mail : mails) {
-			Mail temp = em.find(Mail.class, mail.getId());
-			em.remove(temp);
+		if(!mails.isEmpty()){
+		Query query = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
+		query.executeUpdate();
 		}
 	}
 	
+	public void updateLastMailSendedDate(User user){	
+		em.createQuery("UPDATE User user SET user.lastMailSendedDate =:todayDate WHERE user.id =:userid")
+		  .setParameter("todayDate", new Date())
+		  .setParameter("userid", user.getId())
+		  .executeUpdate();
+	}
 	
-	public void updateLastMailSendedDate(User user){
+	public void save(Mail mail, Long idUser) {
+		User user = (User) em.find(User.class, idUser);
+		mail.setUser(user);
+		em.persist(mail);
+	}	
+	public List<Mail> findNextMail(){
 		
-		User userToModify;
+		User user;
 		
-		userToModify = em.find(User.class, user.getId());
-		userToModify.setLastMailSendedDate(new Date());
-		em.persist(userToModify);		
+		user = userContainingImmediateMails();
+		if(user!=null){
+			return getMailsFromUser(true, user);
+		}
+		
+		user = userContainingGroupedMails();
+		if(user!=null){
+			return getMailsFromUser(false, user);
+		}
+		
+		return null;
+			
 	}
 }

@@ -27,6 +27,7 @@ public class MailSender extends Thread {
 		while (isAlive()) {
 			
 			List<Mail> nextMailList = extractMail.findNextMail();
+			
 			while (nextMailList != null) {
 				
 				// TODO: given list as param should be for 1 user only....

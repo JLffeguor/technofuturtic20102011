@@ -3,14 +3,15 @@ package blackbelt.mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import blackbelt.dao.InsertionMail;
+import blackbelt.dao.ExtractionMail;
+
 import blackbelt.model.Mail;
 
 @Service
 public class MailService {
 
 	@Autowired
-	private InsertionMail im;
+	private ExtractionMail im;
 	
 //	public static MailService instance = new MailService(); // TODO: replace by being a Spring bean.
 
