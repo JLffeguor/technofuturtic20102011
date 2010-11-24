@@ -287,7 +287,7 @@ public class CourseTextFormatter {
 			//String imageUrl = (new PictureResource(course, srcValue)).getURL();
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
 			addResultTextBlock(  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
-									"<br/><div align='center'><img align='middle' src='"+ imageUrl +"'/></div>");
+									"<div align='center'><br/><img align='middle' src='"+ imageUrl +"'/></div>");
 			
 		} catch (MandatoryParameterNotFoundException e) {
 			// Ok, do nothing. Error message already inserted in output by exception thrower.
