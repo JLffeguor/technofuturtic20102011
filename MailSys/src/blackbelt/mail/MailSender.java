@@ -27,15 +27,19 @@ public class MailSender extends Thread {
 		while (isAlive()) {
 			
 			List<Mail> nextMailList = extractMail.findNextMail();
+			List<Mail> toSend;
 			
 			while (nextMailList != null) {
 				
 				// TODO: given list as param should be for 1 user only....
 				if (nextMailList.get(0).getImmediate()) {
-					List<Mail> toSend = new ArrayList<Mail>();
-					toSend.add(nextMailList.get(0));
-					sendMailList(toSend);
-					extractMail.removeMails(toSend);
+					for (int i=0; i<nextMailList.size() ; i++) {
+						
+						toSend = new ArrayList();
+						toSend.add(nextMailList.get(i));
+						sendMailList(toSend);
+						extractMail.removeMails(toSend);
+					}
 					nextMailList = extractMail.findNextMail();
 				} else {
 					sendMailList(nextMailList);
@@ -64,11 +68,26 @@ public class MailSender extends Thread {
 		}
 	}
 
-	public synchronized void sendMailList(List<Mail> mail) {
-		// Should send the mail to the SMTP server here.
-		// But we just display at the console
-		templateTesting(mail);
+	public void sendMailList(List<Mail> mail) {
+		String content;
 		sendConsoleMail(mail);
+		content = templateTesting(mail);
+		//This code is used to send mails. Here on file, but it should be send to the smtp servder.
+		try {
+			
+			File rep;
+			PrintWriter make;
+			User user;
+			user = mail.get(0).getUser();
+			rep = new File("C:/testing/" + user.getPseudo());
+			rep.mkdirs();
+			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" + mail.size() + "_message(s).html");// apres : le nombbre de message
+			make.println(content);
+			make.close();
+			
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void sendConsoleMail(List<Mail> mail) {
@@ -82,43 +101,26 @@ public class MailSender extends Thread {
 
 	}
 
-	public void templateTesting(List<Mail> mailList) {
-
-		try {
-			
-			// Get user of all these mails from the 1st mail (same user)
-			User user = mailList.get(0).getUser();
-
-			File rep = new File("C:/testing/" + user.getPseudo());
-			rep.mkdirs();
-			PrintWriter make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" + mailList.size() + "_message(s).html");// apres : le nombbre de message
-			String content = new String();
-
-			// head
-			content += "<div align=\"center\"><font face=\"Impact,Verdana\" size=\"7\"><font color=\"#000000\">Black</font><font color=\"#bababa\">Belt</font><br>Factory</font></div><hr>";
-			content += "<div align=\"center\"> to : " + user.getPseudo()
-					+ "  -  <a href=\"C:/testing/users/" + user.getPseudo()
-					+ ".html\">your account here</a></div><br>";
-
-			// content
-			for (Mail mail : mailList) {
-				content += "<div style=\"margin:10;width:70%\"><div style=\"background:#000000;padding:10\"><font face=\"Comic_Sans,Verdana\" color=\"#FFFFFF\" size=\"5\">"
-						+ mail.getSubject()
-						+ "</font><br><font color=\"#FFFFFF\" size=\"2\">"
-						+ mail.getDateMessage()
-						+ "</font></div><div style=\"background:#bababa;padding:15px\">"
-						+ mail.getFormatedText() + "</div></div>";
-			}
-
-			// footage
-			content += "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
-
-			make.println(content);
-			make.close();
-			
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+	public String templateTesting(List<Mail> mailList) {
+		
+		User user;
+		String content;
+		
+		user = mailList.get(0).getUser();
+		content = "<div align=\"center\"><font face=\"Impact,Verdana\" size=\"7\"><font color=\"#000000\">Black</font><font color=\"#bababa\">Belt</font><br>Factory</font></div><hr>"
+				+ "<div align=\"center\"> to : " + user.getPseudo()
+				+ "  -  <a href=\"C:/testing/users/" + user.getPseudo()
+				+ ".html\">your account here</a></div><br>";
+		for (Mail mail : mailList) {
+			content += "<div style=\"margin:10;width:70%\"><div style=\"background:#000000;padding:10\"><font face=\"Comic_Sans,Verdana\" color=\"#FFFFFF\" size=\"5\">"
+					+ mail.getSubject()
+					+ "</font><br><font color=\"#FFFFFF\" size=\"2\">"
+					+ mail.getDateMessage()
+					+ "</font></div><div style=\"background:#bababa;padding:15px\">"
+					+ mail.getFormatedText() + "</div></div>";;
 		}
+		content += "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
+		
+		return content;
 	}
-
 }

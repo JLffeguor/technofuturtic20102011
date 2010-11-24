@@ -99,7 +99,14 @@ public class ExtractionMail {
 		User user = (User) em.find(User.class, idUser);
 		mail.setUser(user);
 		em.persist(mail);
-	}	
+	}
+	
+	/**
+	 * return a list of mail.  If there are a least one mails for a user,
+	 * it return a list of mails immediate of a same user.  The list contains
+	 * mails of a same user and same priorities (immadiate or groupable).
+	 * @return
+	 */
 	public List<Mail> findNextMail(){
 		
 		User user;
