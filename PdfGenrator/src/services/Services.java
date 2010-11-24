@@ -41,12 +41,14 @@ public class Services {
 		StringReader pageHtml = new StringReader(format());
 		createHeader();
 		createFooter();
+		pdf.enableImgSplit(false);
 		pdf.render(pageHtml, outputStream);
 	}
 	
 	public void createHeader(){
 		PD4PageMark head = new PD4PageMark();
-		head.setHtmlTemplate("<img height='30' width='30' align='right' src='http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png'>");
+		head.setPagesToSkip(1);
+		head.setHtmlTemplate("<img height='30' width='45' align='right' src='http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png'>");
 		head.setAreaHeight(40);
 		pdf.setPageHeader(head);
 	}
@@ -54,9 +56,10 @@ public class Services {
 	public void createFooter(){
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
+		foot.setPagesToSkip(1);
 		foot.setInitialPageNumber(1);
 		foot.setPageNumberTemplate("page ${page} ");
-		foot.setPageNumberAlignment(1);
+		foot.setPageNumberAlignment(2);
 		pdf.setPageFooter(foot);
 	}
 		
