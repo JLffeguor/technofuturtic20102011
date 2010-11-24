@@ -2,7 +2,10 @@ package services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 import org.zefer.pd4ml.PD4ML;
@@ -15,10 +18,11 @@ public class Services {
 	
 	private Section section;
 	private final String CSS_URL = ("S:\\DocumentsPourPDF\\stylePDF.css");
-	private PD4ML pdf = new PD4ML();
+	private PD4ML pdf;
 	
 	public Services(Section section){
 		this.section = section;
+		this.pdf = new PD4ML();
 	}
 	
 //	public  void printSection(){
@@ -32,8 +36,12 @@ public class Services {
 //		}
 //	}
 	
-	public void generatePdf(Section rootSection, OutputStream outputStream){
-		format();
+	public void generatePdf(OutputStream outputStream) throws InvalidParameterException, IOException{
+		pdf.addStyle(loadStyleCss(), true);
+		StringReader pageHtml = new StringReader(format());
+		createHeader();
+		createFooter();
+		pdf.render(pageHtml, outputStream);
 	}
 	
 	public void createHeader(){
@@ -51,32 +59,7 @@ public class Services {
 		foot.setPageNumberAlignment(1);
 		pdf.setPageFooter(foot);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	public String format(){
 		String finalResult = new String("");
 		if(this.section.getParent()==null){
