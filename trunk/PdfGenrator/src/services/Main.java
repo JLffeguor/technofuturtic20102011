@@ -18,28 +18,21 @@ import dao.services.DaoServices;
 
 public class Main {
 
-	/**
-	 * @param args
-	 */
 	private static final String DOCUMENT_RESULT = ("C:\\testing\\PDF\\OuhPinaise.pdf");
 	public static void main(String[] args) throws InvalidParameterException, FileNotFoundException, IOException {
 		//define application context for db load
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 		DaoServices been = (DaoServices)applicationContext.getBean("daoServices");
 		//load section by id
-		Section section = been.load(25L);
+		Section section = been.load(1L);
 		
 		//make a service for a section ---> TO DO : parse ....  -_-'
 		Services service = new Services(section);
-		service.printSection();// 4 testing
+//		service.printSection();// 4 testing
 		
 		String css = service.loadStyleCss(); //loading the css file, for inject him in pdf later
 		
 		StringReader maPageHtmlPourave = new StringReader(service.format()); //service.format make the html source and return him, we 'cast' all that to a stringReader
-		
-	
-//		String test1 = new String("<html><head><title>Exemple de titre</title></head><body><h1>mon gros titre</h1><br/><p>blablabla blabla</p></body></html>");
-//		StringReader test= new StringReader(test1);
 			
 		PD4ML pdf = new PD4ML();
 
@@ -59,9 +52,7 @@ public class Main {
 		foot.setPageNumberAlignment(1);
 		pdf.setPageFooter(foot);
 		
-		
-		
-		
+
 		pdf.render(maPageHtmlPourave, new FileOutputStream(DOCUMENT_RESULT));
 	}
 
