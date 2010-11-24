@@ -206,7 +206,7 @@ public class PdfGenerator {
 	}
 	
 	public void generateImageLogo() throws BadElementException, MalformedURLException, IOException{
-		this.imgLogo = Image.getInstance("S:\\DocumentsPourPDF\\images1.jpg");
+		this.imgLogo = Image.getInstance("http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png");
 		this.imgLogo.setAbsolutePosition(555, 800);
 //		this.imgLogo.setWidthPercentage(5); //To modify with the %
 		
