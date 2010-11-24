@@ -68,7 +68,9 @@ public class CourseTextFormatter {
 		}
 		
 		PTagsGenerator pTagsGenerator = new PTagsGenerator();
-		return pTagsGenerator.transformTextBlocksIntoStringWithPTags();
+		String s = pTagsGenerator.transformTextBlocksIntoStringWithPTags();
+		System.out.println(s);
+		return s;
 	}
 	
 
@@ -282,12 +284,11 @@ public class CourseTextFormatter {
 		try {
 			String srcValue = element.getMandatoryValue("src");
 			/** only for data test */
-			String imageUrl = ("S:\\DocumentsPourPDF\\images\\200px-Keristrasza.jpg");
-//			String imageUrl = (new PictureResource(course, srcValue)).getURL();
+			String imageUrl = ("http://www.blackbeltfactory.com/gen/course/11348342/200px-Keristrasza.jpg");
+			//String imageUrl = (new PictureResource(course, srcValue)).getURL();
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
-									"<img align='middle' src='"+ imageUrl +"'/>" + //imageURL
-							   "</div>");
+			addResultTextBlock(  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
+									"<br/><div align='center'><img align='middle' src='"+ imageUrl +"'/></div>");
 			
 		} catch (MandatoryParameterNotFoundException e) {
 			// Ok, do nothing. Error message already inserted in output by exception thrower.
@@ -317,8 +318,8 @@ public class CourseTextFormatter {
 //			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
 //					+element.innerText+"</pre>");
 
-            addResultTextBlock("<br/><table align='right' border='0' bgcolor='#DCDCDC'><tr><td align='left'><pre xml:space='preserve'>"
-                    +element.innerText+"</pre></td></tr></table>");
+            addResultTextBlock("<br/><pre xml:space='preserve'>"
+                    +element.innerText+"</pre>");
 		}
 	}
 	
@@ -368,7 +369,7 @@ public class CourseTextFormatter {
 			boolean shouldWeFormatToPdf = true;
 			if (shouldWeFormatToPdf){
 				//addResultTextBlock("</p></p><img align=\"center\" src = \"S:\\DocumentsPourPDF\\imagesVideo.jpg \">" + "<p align = \"center\"> Look this video : <a href=\""+ browser+ videoId + "\"> JPA wow exemple</a> </p>" );
-				addResultTextBlock("</p></p><div style='overflow:auto' align='center'>Watch this video on "+browser+ videoId+"<br><a href=\""+ browser+ videoId + "\"> <img height=\"80\" width=\"80\" src = \"S:\\DocumentsPourPDF\\logovideo.jpg \"></a></div> ");
+				addResultTextBlock("</p></p><div style='overflow:auto' align='center'>Watch this video on "+browser+ videoId+"<br/><a href=\""+ browser+ videoId + "\"> <img height=\"80\" width=\"80\" src = \"http://www2c.ac-lille.fr/cazin-boulogne/pages/formations/logo_video.jpeg \"></a></div> ");
 
 			}
 //			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
