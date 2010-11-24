@@ -9,6 +9,15 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
+import blackbelt.pdf.PdfGenerator;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+
 
 //import blackbelt.model.Course;
 //import blackbelt.ui.common.PictureResource;
@@ -28,7 +37,7 @@ public class CourseTextFormatter {
 	String course; //Course
 	String input;
     int currentIndex = 0;
-    int errorCount = 0;  // errors detected.
+    int errorCount = 0 ;  // errors detected.
 	boolean instanceUsed = false;
 	
 	List<TextBlock> textBlocks = new ArrayList<TextBlock>();
@@ -227,7 +236,7 @@ public class CourseTextFormatter {
 	}
 
 		
-	protected void insertOutputForElement(Element element) {
+	protected void insertOutputForElement(Element element) throws DocumentException {
 		if ("image".equals(element.name)) {
 			insertImage(element);
 		} else if ("code".equals(element.name)) {
@@ -261,6 +270,7 @@ public class CourseTextFormatter {
 									"<a href='" + srcUrl + "'><img style='border: none;' align='middle' src='"+imageUrl+"'/></a>" +
 									"<br/><span style='font-size: 65%; font-color: #999999;' align='center'>Click to download</span>" + 
 							   "</div>");
+			
 			} else {
 				shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
 				element.innerText = StringEscapeUtils.escapeHtml(element.innerText);
@@ -294,12 +304,12 @@ public class CourseTextFormatter {
 	}
 	
 	
-	protected void insertCode(Element element) {
+	protected void insertCode(Element element) throws DocumentException {
+	
 		if (element.innerText == null) {
 			insertErrorMessage("[code] ... [/code] elements should have text inside.");
 			return;
 		}
-		
 		if ("true".equals(element.getOptionalValue("escape"))) {  // Default is false.
 			element.innerText = StringEscapeUtils.escapeHtml(element.innerText); // Escape any formatting (probably <b> tags that should be writtent "<b>" and not trigger bold).
 		}
@@ -310,8 +320,14 @@ public class CourseTextFormatter {
 		} else { // Here we do not want inline (usual case) 
 			// <pre> creates carriage returns in the browser
 			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
-					+element.innerText+"</pre>");
+			//Rectangle rectangle=new Rectangle(36, element.startPosition, 100, element.endPosition-element.startPosition);
+
+			//PdfGenerator.addRec(element.startPosition,element.endPosition);
+//			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
+//					+element.innerText+"</pre>");
+
+            addResultTextBlock("<br/><table align='right' border='0' bgcolor='#DCDCDC'><tr><td align='left'><pre xml:space='preserve'>"
+                    +element.innerText+"</pre></td></tr></table>");
 		}
 	}
 	
