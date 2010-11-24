@@ -10,6 +10,10 @@ public class MainTest{
 		
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 		
+		
+		
+		
+		
 		MailSender consumer = (MailSender)applicationContext.getBean("mailSender");;
 		consumer.start();
 		
