@@ -71,7 +71,8 @@ public class Services {
 			
 		}
 		else{
-			finalResult+="<br/><br/><h2>"+this.section.getTitle()+"</h2>";
+			finalResult +=  createTitle(section);
+//			finalResult += "<br/><br/><h2>"+this.section.getTitle()+"</h2>";
 		}
 		
 		CourseTextFormatter ctf = new CourseTextFormatter("", this.section.getBody());
@@ -109,6 +110,39 @@ public class Services {
 		intro +="<div align='center' class='logo'><b>Black<span class='grey'>Belt</span><br/>Factory</b></div><br/><br/><div align='center'><img align='middle' src='http://antisosial.free.fr/projet/asianWomanSword.jpg'></div><pd4ml:page.break>";
 		
 		return intro;
+	}
+	
+	public String createTitle(Section currentSection){
+		int size = checkTheTitleSize(currentSection);
+		String title = null;
+		
+		switch(size){
+		case 0:
+			title = "<br/><br/><h1>"+currentSection.getTitle()+"</h1>";
+			break;
+		case 1:
+			title = "<br/><br/><h2>"+currentSection.getTitle()+"</h2>";
+			break;
+		case 2:
+			title = "<br/><br/><h3>"+currentSection.getTitle()+"</h3>";
+			break;
+		default:
+			title = "<br/><br/><h4>"+currentSection.getTitle()+"</h4>";
+			break;
+		}
+		
+		return title;
+	}
+	
+	public int checkTheTitleSize(Section currentSection){
+		int result = 0;
+		
+		while(currentSection.getParent() != null){
+			currentSection = currentSection.getParent();
+			result++;
+		}
+		
+		return result;
 	}
 
 }
