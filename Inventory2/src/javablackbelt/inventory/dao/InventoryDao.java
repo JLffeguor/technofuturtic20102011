@@ -1,7 +1,7 @@
 package javablackbelt.inventory.dao;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javablackbelt.inventory.model.Group;
@@ -21,31 +21,28 @@ public class InventoryDao {
 	private EntityManager em;
 
 	
-	public void getUsersByBirthDate(Date birthDate){
-		Date now = new Date() ; 
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(now);
-//		
-//		int wday  = cal.DAY_OF_MONTH;
-//		int wmonth = cal.MONTH;
-//		cal.getCalendar.DAY_OF_MONTH;
-//		List<User> userList = (List<User>)em.createQuery("select u from User u where u.birthDate <=:birthDate ")
-//		.setParameter("birthDate", birthDate)
-//		.getResultList();
-//	
-//		System.out.println(userList.size());
+	public void getUsersByBirthDate(){
+
+		Calendar calendar = Calendar.getInstance();
+		 
+		int monthOfBirth = calendar.get(Calendar.MONTH);
+		int dayOfBirth = calendar.get(Calendar.DAY_OF_MONTH);
+		monthOfBirth = monthOfBirth + 1 ; 
 		
-//		for(User u : userList){
-//			System.out.println("User name : " + u.getNickName() + "  / birthDate : " + u.getBirthDate());
-//		}
+		System.out.println("month : " + monthOfBirth + " / day : " + dayOfBirth);
+		
+		List<User> userList = (List<User>)em.createQuery("select u from User u where day(u.birthDate) =:dayOfBirth and month(u.birthDate) =:monthOfBirth")
+		.setParameter("dayOfBirth", dayOfBirth).setParameter("monthOfBirth", monthOfBirth)
+		.getResultList();
+//		
+//		List<User> userList = (List<User>)em.createQuery("select u from User u where day(u.birthDate) <30)
+//		.getResultList();
+		
+		for(User u : userList){
+			System.out.println("User name : " + u.getNickName() + "  / birthDate : " + u.getBirthDate());
+		}
 	}
 		
-	
-	
-	
-	
-	
-	
 	public void persist(Object obj){
 		
 		if(obj != null){
