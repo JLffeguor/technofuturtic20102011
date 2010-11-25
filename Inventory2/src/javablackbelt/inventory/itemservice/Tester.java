@@ -1,7 +1,5 @@
 package javablackbelt.inventory.itemservice;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javablackbelt.inventory.dao.InventoryDao;
@@ -142,6 +140,6 @@ public class Tester {
 		// getGlobalActiveItems method  
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.BAKG_NAKED));		
 		
-		itemService.displayUsersByBirthDate(new Date());
+		itemService.displayUsersByBirthDate();
 	}
 }

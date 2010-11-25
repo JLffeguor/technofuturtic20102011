@@ -6,11 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javablackbelt.inventory.dao.InventoryDao;
 import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.ItemType;
@@ -42,36 +37,39 @@ public class ActiveItems {
 	 * thanks to the removal date)
 	 */
 	synchronized public List<Item> getActiveItems(User user) {
-
-		List<Item> tempItemList = new ArrayList<Item>();
+		
+		// given a map of users + a list of items ( loaded hereunder )  , 
+		// we shall check for a given user , whether its items are still active : removal date is before today    
+		// a new list is build with the today-active items , the old one is cleaned and replaced with the new 
+		// if no more active items for this user , the list is cleaned then the user is cleaned from the map . 
+		
+		List<Item> activateItemList = new ArrayList<Item>();
 		Long mapKey = user.getUserId();
 
-		// if no list, return null
+		// if the list in the Map(userListActiveItemsMap) for the specified mapKey(User) is null, return null
 		if (userListActiveItemsMap.get(mapKey) == null) {
 			return null;
-		} else {
+			
+		} 
+		else {
 
-			// List<Item> genericItemList = new ArrayList<Item>();
-			// genericItemList.addAll(userListActiveItemsMap.get(mapKey));
-
-			// get items which are still active
-
-			tempItemList = itemsStillActivated(userListActiveItemsMap
+			// Call to the method itemStillActivated with the user list in parameter
+			activateItemList = itemsStillActivated(userListActiveItemsMap
 					.get(mapKey));
-			userListActiveItemsMap.get(mapKey).clear(); // Wipe the list of the
-														// "mapKey user"
+			
+			// Wipe the list in the Map(userListActiveItemsMap) for the specified mapKey(User)
+			userListActiveItemsMap.get(mapKey).clear(); 
 
-			if (tempItemList != null) {
+			
+			if (activateItemList != null) {
 
-				// add the tempItemList into the userListActiveItemsMap on the
-				// "mapKey user" occurrence
+				// if the activateItemList is not null, add this one in the userListActiveItemsMap on the specified mapKey(User)
+				userListActiveItemsMap.put(mapKey, activateItemList);
+				return activateItemList;
+			} 
+			else {
 
-				userListActiveItemsMap.put(mapKey, tempItemList);
-				return tempItemList;
-			} else {
-
-				// remove the "mapKey user" from the map
-
+				// remove the User with the specified mapKey from the userListActiveItemsMap
 				userListActiveItemsMap.remove(mapKey);
 				return null;
 			}
@@ -85,6 +83,8 @@ public class ActiveItems {
 	 * thanks to the removal date)
 	 */
 	synchronized public List<Item> getActiveItems(Group group) {
+		
+		// same as above for a group 
 
 		List<Item> tempItemList = new ArrayList<Item>();
 		Long mapKey = group.getGroupId();
@@ -123,6 +123,8 @@ public class ActiveItems {
 	
 	/** returns the globally active item. Return null if no list */
 	synchronized public List<Item> getGlobalActiveItems(ItemType itemType) {
+		
+		// same as above for all global items 
 
 		List<Item> tempItemList = new ArrayList<Item>();
 		tempItemList = itemsStillActivated(globalItems);
@@ -137,6 +139,8 @@ public class ActiveItems {
 	
 	/** print active item on the itemTypeGroup (Background or image_home) */
 	synchronized public List<Item> getActiveItems(ItemType.Group itemTypeGroup) {
+		
+		// same as above for all items with a given item-type-group  
 
 		// get the list with the items which are still active
 
@@ -161,17 +165,19 @@ public class ActiveItems {
 	/** returns the items still activated */
 	synchronized public List<Item> itemsStillActivated(List<Item> genericItemList) {
 
-		List<Item> tempItemList = new ArrayList<Item>();
-
+		// Creating a new list to get active items
+		
+		List<Item> activeItemList = new ArrayList<Item>();
+		
 		for (Item i : genericItemList) {
 
-			// if the date of items into the genericList is not exceeded
+			// if the date of today is higher than the removalDate of the items in the genericItemList
 
 			if (!(new Date().after(i.getRemovalDate()))) {
-				tempItemList.add(i);
+				activeItemList.add(i); // add into the activeItemList
 			}
 		}
-		return tempItemList;
+		return activeItemList;
 	}
 	
 	

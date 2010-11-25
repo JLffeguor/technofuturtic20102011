@@ -1,7 +1,6 @@
 package javablackbelt.inventory.itemservice;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javablackbelt.inventory.dao.InventoryDao;
@@ -24,12 +23,22 @@ public class ItemService {
 	
 	// Method to display users with a specified birthDate
 	
-	public void displayUsersByBirthDate(Date birthDate){
+	public void displayUsersByBirthDate(){
 		
-		inventoryDao.getUsersByBirthDate(birthDate);
+		for(User us : inventoryDao.getUsersByBirthDate()){
+					
+			System.out.println("\nUser name : " + us.getNickName() + "  / birthDate : " + us.getBirthDate());
+			dropRandomItem(us,1,"Happy birthday");
+		}
 	}
 	
-	 
+	public void displayUsedItems(){
+		
+		for(Item it : inventoryDao.getUsedItems()){
+			System.out.println("\nItem type : " + it.getItemType() + " is already used");
+		}
+	}
+
 	
 	// Method to display list of active items
 	public void displayListOfActiveItems(List<Item> list) {
@@ -73,7 +82,7 @@ public class ItemService {
 		// TODO: delete me.
 		System.out.println(user.getNickName() + " recieved : "
 				+ userItem.getItemType().getItemName() + " of the type :"
-				+ userItem.getItemType());
+				+ userItem.getItemType() + " for cause : " + userItem.getCause());
 
 		inventoryDao.persist(userItem);
 
