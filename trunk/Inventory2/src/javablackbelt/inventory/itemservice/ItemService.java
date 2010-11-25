@@ -164,6 +164,7 @@ public class ItemService {
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName() + " on the "
 				+ item.getItemType().getItemTypeGroup() + "\n");
+		
 		inventoryDao.merge(item);
 	}
 
