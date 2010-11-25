@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 import blackbelt.dao.ExtractionMail;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
-
+import blackbelt.template.MainTemplate;
+/**
+ *This class checks if there are any mails and sends them
+ */
 @Repository
 public class MailSender extends Thread {
 
@@ -20,6 +23,9 @@ public class MailSender extends Thread {
 	
 	@Autowired
 	private ExtractionMail extractMail;
+	
+	@Autowired
+	private MainTemplate mainTemplate;
 	
 	@Override
 	public void run() {
@@ -31,29 +37,21 @@ public class MailSender extends Thread {
 			
 			while (nextMailList != null) {
 				
-				// TODO: given list as param should be for 1 user only....
-				if (nextMailList.get(0).getImmediate()) {
+				if (nextMailList.get(0).getImmediate()) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
-						
 						toSend = new ArrayList();
 						toSend.add(nextMailList.get(i));
 						sendMailList(toSend);
 						extractMail.removeMails(toSend);
+						this.sleepBetweenSend();
 					}
-					nextMailList = extractMail.findNextMail();
-				} else {
+				} else {// ...here we send a group of mails as one mail
 					sendMailList(nextMailList);
 					extractMail.updateLastMailSendedDate(nextMailList.get(0).getUser());
 					extractMail.removeMails(nextMailList);
-					nextMailList = extractMail.findNextMail();
+					this.sleepBetweenSend();
 				}
-
-				try {
-					// delai entre 2 send
-					sleep(MS_BETWEEN_EACH_MAIL);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				nextMailList = extractMail.findNextMail();
 			}
 			
 			try {
@@ -67,12 +65,30 @@ public class MailSender extends Thread {
 			}
 		}
 	}
-
+	
+	private void sleepBetweenSend(){
+		try {
+			// delai entre 2 send
+			sleep(MS_BETWEEN_EACH_MAIL);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Send mails to a user.
+	 * @param mail
+	 * NB : here we simulate the sending of mails by saving them in a file
+	 */
 	public void sendMailList(List<Mail> mail) {
 		String content;
 		sendConsoleMail(mail);
-		content = templateTesting(mail);
-		//This code is used to send mails. Here on file, but it should be send to the smtp servder.
+		
+		try {
+			content = this.mainTemplate.TemplateMail(mail);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
 		try {
 			
 			File rep;
@@ -89,7 +105,7 @@ public class MailSender extends Thread {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	private void sendConsoleMail(List<Mail> mail) {
 		// TODO: replace this code by SMTP send.
 		System.out.println("************Mailing to:" + mail.get(0).getUser().getPseudo() + "************");
@@ -99,28 +115,5 @@ public class MailSender extends Thread {
 			System.out.println("-----------------");
 		}
 
-	}
-
-	public String templateTesting(List<Mail> mailList) {
-		
-		User user;
-		String content;
-		
-		user = mailList.get(0).getUser();
-		content = "<div align=\"center\"><font face=\"Impact,Verdana\" size=\"7\"><font color=\"#000000\">Black</font><font color=\"#bababa\">Belt</font><br>Factory</font></div><hr>"
-				+ "<div align=\"center\"> to : " + user.getPseudo()
-				+ "  -  <a href=\"C:/testing/users/" + user.getPseudo()
-				+ ".html\">your account here</a></div><br>";
-		for (Mail mail : mailList) {
-			content += "<div style=\"margin:10;width:70%\"><div style=\"background:#000000;padding:10\"><font face=\"Comic_Sans,Verdana\" color=\"#FFFFFF\" size=\"5\">"
-					+ mail.getSubject()
-					+ "</font><br><font color=\"#FFFFFF\" size=\"2\">"
-					+ mail.getDateMessage()
-					+ "</font></div><div style=\"background:#bababa;padding:15px\">"
-					+ mail.getFormatedText() + "</div></div>";;
-		}
-		content += "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
-		
-		return content;
 	}
 }

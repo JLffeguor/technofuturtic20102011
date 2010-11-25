@@ -2,7 +2,9 @@ package blackbelt.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ *It' simulates a sending of mails
+ */
 @Service
 public class DataTest extends Thread{
 	
