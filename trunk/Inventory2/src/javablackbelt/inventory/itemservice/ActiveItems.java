@@ -211,14 +211,22 @@ public class ActiveItems {
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	/** Replace active item by a new active item (background or image_home) */
 	synchronized public void addItemToGloballyActiveItems(Item item) {
+		
 		if(globalItems == null){
 			globalItems.add(item);
 		} 
 		
-		for (Item i : globalItems) {
-			if (i.getItemType().getItemTypeGroup() == item.getItemType()
-					.getItemTypeGroup()) {
-				globalItems.set(globalItems.indexOf(i), item);
+		else{
+			
+			for (Item i : globalItems) {
+				if (i.getItemType().getItemTypeGroup() == item.getItemType()
+						.getItemTypeGroup()) {
+					globalItems.set(globalItems.indexOf(i), item);
+				}
+				
+				else{
+					globalItems.add(i); 
+				}
 			}
 		}
 	}
