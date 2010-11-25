@@ -15,6 +15,8 @@ public class Section {
 	@Id @GeneratedValue
 	Long id;
 	
+	private String categorie;//TODO
+	
 	private String title;
 	@Lob
 	@Column 
@@ -32,6 +34,7 @@ public class Section {
 	}
 	public Section(Section section){
 		this.id=section.getId();
+		this.categorie="JPA/Hibernate Fundamentals";// HARD CODED FOR MOMENT
 		this.title = section.getTitle();
 		this.body = section.getBody();
 		this.sParent = section.getParent();
@@ -56,6 +59,9 @@ public class Section {
 	
 	public Section getParent(){
 		return this.sParent;
+	}
+	public String getCategoryTitle(){
+		return this.categorie;
 	}
 
 }
