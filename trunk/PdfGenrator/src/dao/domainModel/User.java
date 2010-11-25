@@ -8,7 +8,7 @@ public class User {
 	private String privateUrlLogo;
 	
 
-	User(String name,String firstName,int level,String privateLogoUrl){
+	public User(String name,String firstName,int level,String privateLogoUrl){
 		this.name=name;
 		this.firstName=firstName;
 		this.level=level;
