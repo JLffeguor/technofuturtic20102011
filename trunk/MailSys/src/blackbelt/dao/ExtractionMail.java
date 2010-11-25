@@ -25,20 +25,31 @@ public class ExtractionMail {
 	@PersistenceContext
 	private EntityManager em;
 	
+	/**
+	 * returns a user containing immediate mails
+	 * @return a user
+	 */
 	private User userContainingImmediateMails(){
 		Query query = em.createQuery(" SELECT user FROM Mail m join m.user user WHERE m.immediate=true")
 						.setMaxResults(1);
-		try{ return  (User)query.getSingleResult();
+		try{ 
+			return  (User)query.getSingleResult();
 		}catch(NoResultException e){
-		return null;	
+			return null;	
 		}
 	}
-	
+	/**
+	 * returns a user containing grouped mails
+	 * @return a user
+	 */
 	private User userContainingGroupedMails(){
 		/************************/
 		Date dateForDay;
 		Date dateForWeek;		
-		Date now= new Date();
+		Date now;
+		//This code determines the interval used for the grouping mail (day and week).
+		//Actually, for debug, we use : daily = 10 sec and weekly = 40 sec.
+		now = new Date();
 		GregorianCalendar cal= new GregorianCalendar();
 		cal.setTime(now);
 		cal.add(Calendar.SECOND, -10);
@@ -47,6 +58,7 @@ public class ExtractionMail {
 		dateForWeek = cal.getTime();	
 		/************************/
 		
+		//request to get a user containing grouped mails
 		Query query = em.createQuery("SELECT user "
 					+ "FROM Mail m join m.user user"
 						+ " WHERE ("
@@ -64,12 +76,19 @@ public class ExtractionMail {
 						.setParameter("dateForDay", dateForDay)
 						.setParameter("dateForWeek", dateForWeek)
 						.setMaxResults(1);
-		try{ return  (User)query.getSingleResult();
+		try{
+			return  (User)query.getSingleResult();
 		}catch(NoResultException e){
-		return null;	
+			return null;	
 		}		
 	}	
 	
+	/**
+	 * Get mails, immediate or groupable  from a given user.
+	 * @param isImmediate indicates if we want immediate mails or grouped mails.
+	 * @param user the user who we want the mail.
+	 * @return a list of mails 
+	 */
 	private List<Mail> getMailsFromUser(boolean isImmediate, User user){
 		if(user !=null){
 		Query query = em.createQuery("SELECT m FROM Mail m WHERE m.user =:user AND m.immediate =:condition" )
@@ -80,7 +99,10 @@ public class ExtractionMail {
 			return null;
 		}
 	}
-	
+	/**
+	 * remove a list of mails
+	 * @param mails
+	 */
 	public void removeMails(List<Mail> mails) {
 		if(!mails.isEmpty()){
 		Query query = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
@@ -88,6 +110,10 @@ public class ExtractionMail {
 		}
 	}
 	
+	/**
+	 * updates the lastMailSendedDate of a user
+	 * @param user
+	 */
 	public void updateLastMailSendedDate(User user){	
 		em.createQuery("UPDATE User user SET user.lastMailSendedDate =:todayDate WHERE user.id =:userid")
 		  .setParameter("todayDate", new Date())
@@ -95,6 +121,11 @@ public class ExtractionMail {
 		  .executeUpdate();
 	}
 	
+	/**
+	 * saves a mail in the database
+	 * @param mail
+	 * @param idUser
+	 */
 	public void save(Mail mail, Long idUser) {
 		User user = (User) em.find(User.class, idUser);
 		mail.setUser(user);
@@ -102,10 +133,8 @@ public class ExtractionMail {
 	}
 	
 	/**
-	 * return a list of mail.  If there are a least one mails for a user,
-	 * it return a list of mails immediate of a same user.  The list contains
-	 * mails of a same user and same priorities (immadiate or groupable).
-	 * @return
+	 * returns a list of mails which are either immediate or grouped of a user.
+	 * @return a list of mails
 	 */
 	public List<Mail> findNextMail(){
 		

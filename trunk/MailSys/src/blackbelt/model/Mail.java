@@ -37,6 +37,7 @@ public class Mail {
 	// int priority; // 0 = high priority, 1 = normal, 2 = low (as newsletter)
 	private Date creationDate;
 
+	//Constructors
 	public Mail() {}
 	
 	public Mail(User user, String subject, String content, boolean immediate) {
@@ -56,7 +57,8 @@ public class Mail {
 		this.immediate = immediate;
 		this.creationDate = date;
 	}
-
+	
+	//Getters and setters
 	public Long getId() {
 		return this.id;
 	}
@@ -90,7 +92,7 @@ public class Mail {
 	}
 
 	public boolean getImmediate() {
-		return immediate;
+		return this.immediate;
 	}
 
 	public Date getDate() {

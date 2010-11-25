@@ -32,7 +32,10 @@ public class User {
 	@Column(nullable = false)
 	private int mailingDelai;// 0= none 1= weakly 2= daily
 
-	public User() {}
+	//Constructors
+	public User() {
+		
+	}
 	
 	public User(String pseudo, String email, Date lastMailSendedDate, int mailingDelai) {
 		
@@ -43,7 +46,7 @@ public class User {
 		this.mailingDelai = mailingDelai;
 
 		// simulate users file//
-		try {
+		/*try {
 			
 			File rep = new File("C:/testing/users");
 			rep.mkdirs();
@@ -58,9 +61,9 @@ public class User {
 			if (this.mailingDelai == 0) {
 				make.println("your are not grouped</p>");
 			} else if (this.mailingDelai == 1) {
-				make.println("your are weakly-grouped !</p>");
+				make.println("your are weekly-grouped !</p>");
 			} else if (this.mailingDelai == 2) {
-				make.println("your are dayly-grouped !</p>");
+				make.println("your are daily-grouped !</p>");
 			}
 			
 			make.println("</body>\n</html>");
@@ -70,9 +73,10 @@ public class User {
 		
 			throw new RuntimeException(e);
 		
-		}
+		}*/
 	}
-
+	
+	//Getters and setters
 	public Long getId() {
 		return this.id;
 	}

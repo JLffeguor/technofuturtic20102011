@@ -7,17 +7,25 @@ import blackbelt.dao.ExtractionMail;
 
 import blackbelt.model.Mail;
 
+/**
+ * Service of mail.
+ */
 @Service
 public class MailService {
 
 	@Autowired
-	private ExtractionMail im;
+	private ExtractionMail dao;
 	
-//	public static MailService instance = new MailService(); // TODO: replace by being a Spring bean.
-
+	/**
+	 * Save a mail.
+	 * @param subject subject of mail
+	 * @param text text of mail
+	 * @param userID user's id to whom the mail will be send to
+	 * @param isAImmadiateMessage indicates if the mail is send or not
+	 */
 	public void send(String subject, String text,Long userID,boolean isAImmadiateMessage){
 		Mail mail = new Mail(null,subject,text,isAImmadiateMessage);
-		im.save(mail, userID);
+		dao.save(mail, userID);
 	}
 }
 
