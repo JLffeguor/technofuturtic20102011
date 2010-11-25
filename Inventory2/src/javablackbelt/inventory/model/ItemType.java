@@ -8,7 +8,7 @@ public enum ItemType {
 
 	BEER_PINT("Beer", 1, 12, "Refreshing pint of Belgian beer. Attention, it's not alcoohol free.",TargetType.USER,null),
 	BEER_BARREL("Beer Barrel", 2, 12, "Barrel of beer for a group",TargetType.GROUP,null),
-	CHAMPAIN_BLASS("Champain", 2, 24, "Glass of excellent French Champain",TargetType.USER,null),
+	CHAMPAIN_GLASS("Champain", 2, 24, "Glass of excellent French Champain",TargetType.USER,null),
 	CHAMPAIN_BARREL("Champain Barrel", 3, 24, "Barrel of champain for a group",TargetType.GROUP,null),
 	REDUCER("Reducer", 2, 48, "Reduces a user lists and on his page",TargetType.USER,null),
 	ENLARGER("Enlarger", 2, 48,"..... idem reducer but 200%",TargetType.USER,null),
@@ -44,7 +44,7 @@ public enum ItemType {
 			" Image size should be 980x200. A text will mention that you are the author of this, with a link to your profile. " +
 			"Please don't put no hate message.",TargetType.GLOBAL, Group.IMAGE_HOME);
 
-	/** Is an ItemType appliable to a user (as offering a beer), 
+	/** Is an ItemType applicable to a user (as offering a beer), 
 	 * a group (as offering a barrel of beer) 
 	 * or is global (as changing the home page).  */
 	public enum TargetType {
