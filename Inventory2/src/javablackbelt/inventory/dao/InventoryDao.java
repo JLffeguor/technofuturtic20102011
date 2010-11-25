@@ -22,7 +22,8 @@ public class InventoryDao {
 
 	
 	public List<User> getUsersByBirthDate(){
-
+		
+		
 		Calendar calendar = Calendar.getInstance();
 		 
 		int monthOfBirth = calendar.get(Calendar.MONTH);
@@ -35,6 +36,7 @@ public class InventoryDao {
 		.setParameter("dayOfBirth", dayOfBirth).setParameter("monthOfBirth", monthOfBirth)
 		.getResultList();
 		
+		
 		return userList;
 	}
 	
@@ -44,12 +46,13 @@ public class InventoryDao {
 		 
 		int monthOfToday = calendar.get(Calendar.MONTH);
 		int dayOfToday = calendar.get(Calendar.DAY_OF_MONTH);
+		int yearOfToday = calendar.get(Calendar.YEAR);
 		
 		monthOfToday = monthOfToday + 1 ; // for gregorian calendar
 				
 		List<Item> itemList = (List<Item>)em
-		.createQuery("select i from Item i where day(i.removalDate) <=:dayOfToday and month(i.removalDate) <=:monthOfToday")
-		.setParameter("dayOfToday", dayOfToday).setParameter("monthOfToday", monthOfToday)
+		.createQuery("select i from Item i where day(i.removalDate) <=:dayOfToday and month(i.removalDate) <=:monthOfToday and year(i.removalDate) <=:yearOfToday")
+		.setParameter("dayOfToday", dayOfToday).setParameter("monthOfToday", monthOfToday).setParameter("yearOfToday", yearOfToday)
 		.getResultList();		
 		
 		return itemList;
