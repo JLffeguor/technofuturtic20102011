@@ -1,0 +1,16 @@
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
+<persistence-unit name="myPersistenceUnit">
+<provider>org.hibernate.ejb.HibernatePersistence</provider>
+<properties>
+
+<property name="hibernate.archive.autodetection" value="class"/>
+<property name="hibernate.show_sql" value="true"/>
+<property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/jbb_db_utf8"/>
+<property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+<property name="hibernate.connection.password" value="password"/>
+<property name="hibernate.connection.username" value="jbb"/>
+<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+<property name="hibernate.hbm2ddl.auto" value="validate"/>
+</properties>
+</persistence-unit>
+</persistence>
