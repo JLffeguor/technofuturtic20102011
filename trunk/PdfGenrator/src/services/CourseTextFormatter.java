@@ -317,7 +317,7 @@ public class CourseTextFormatter {
 //			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
 //					+element.innerText+"</pre>");
 
-            addResultTextBlock("<br/><pre class='contentProgramListing' xml:space='preserve'>"
+            addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"
                     +element.innerText+"</pre>");
 		}
 	}
