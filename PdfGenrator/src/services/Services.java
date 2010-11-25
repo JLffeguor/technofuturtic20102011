@@ -76,7 +76,7 @@ public class Services {
 		foot.setPagesToSkip(1); //Skip the first page
 		foot.setInitialPageNumber(1);
 		//Add a table with 3 cells : 1. the blackbelt logo, 2. the licence, 3. the page number
-		foot.setHtmlTemplate("<table width='100%'><tr><td><img height='30' width='50' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+licence+"</td><td align='right' class='valignBottom'>${page}<span class='small'>/${total}</span></td></tr></table>");
+		foot.setHtmlTemplate("<table width='100%'><tr><td><img height='30' width='50' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+licence+"</td><td align='right' class='valignBottom'>${page}<span class='grey'> /${total}</span></td></tr></table>");
 		foot.setAreaHeight(45); //Adjust the height
 		pdf.setPageFooter(foot); //Add footer
 	}
