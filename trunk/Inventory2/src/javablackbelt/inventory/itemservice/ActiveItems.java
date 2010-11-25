@@ -6,14 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javablackbelt.inventory.dao.InventoryDao;
 import javablackbelt.inventory.model.Group;
 import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.ItemType;
 import javablackbelt.inventory.model.User;
 
-//
 public class ActiveItems {
-
+	
 	private Map<Long, List<Item>> userListActiveItemsMap;
 	private Map<Long, List<Item>> groupActiveItemsMap;
 	private List<Item> globalItems;
@@ -31,7 +35,6 @@ public class ActiveItems {
 	public static ActiveItems getInstance() {
 		return instance;
 	}
-
 	
 	/**
 	 * returns the active item list for a specific user. Return null if no list
@@ -67,7 +70,7 @@ public class ActiveItems {
 				return tempItemList;
 			} else {
 
-				// removes the "mapKey user" from the map
+				// remove the "mapKey user" from the map
 
 				userListActiveItemsMap.remove(mapKey);
 				return null;
@@ -133,13 +136,14 @@ public class ActiveItems {
 
 	
 	/** print active item on the itemTypeGroup (Background or image_home) */
-	synchronized public void getActiveItems(ItemType.Group itemTypeGroup) {
+	synchronized public List<Item> getActiveItems(ItemType.Group itemTypeGroup) {
 
 		// get the list with the items which are still active
 
 		List<Item> tempItemList = new ArrayList<Item>();
 		tempItemList = itemsStillActivated(globalItems);
 
+		/*
 		for (Item i : tempItemList) {
 
 			// if the type from items in tempItemList is == to the parameter
@@ -149,6 +153,8 @@ public class ActiveItems {
 				System.out.println(i.getItemType().getItemDescription());
 			}
 		}
+		*/
+		return tempItemList;
 	}
 
 	
