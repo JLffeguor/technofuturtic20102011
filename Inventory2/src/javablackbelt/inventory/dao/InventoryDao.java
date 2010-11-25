@@ -46,11 +46,11 @@ public class InventoryDao {
 		int dayOfToday = calendar.get(Calendar.DAY_OF_MONTH);
 		
 		monthOfToday = monthOfToday + 1 ; // for gregorian calendar
-		
+				
 		List<Item> itemList = (List<Item>)em
-		.createQuery("select i from Item i where day(i.removalDate) <:dayOfToday and month(u.removalDate) <:monthOfToday")
+		.createQuery("select i from Item i where day(i.removalDate) <=:dayOfToday and month(i.removalDate) <=:monthOfToday")
 		.setParameter("dayOfToday", dayOfToday).setParameter("monthOfToday", monthOfToday)
-		.getResultList();
+		.getResultList();		
 		
 		return itemList;
 	}
