@@ -19,6 +19,10 @@ public class Services {
 	private Section section;
 	private final String CSS_URL = ("S:\\DocumentsPourPDF\\stylePDF.css");
 	private PD4ML pdf;
+	private final String licence = "If you don't have access to the course in blackbeltfactory, using this pdf is forbiden. " +
+									"If you are witness of an illegal use, please report it to blackbelt website";
+	private String urlLogoUtilisateur;
+	private String urlLogoPdf = "http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-200x127.png";
 	
 	public Services(Section section){
 		this.section = section;
@@ -38,6 +42,8 @@ public class Services {
 	
 	public void generatePdf(OutputStream outputStream) throws InvalidParameterException, IOException{
 		pdf.addStyle(loadStyleCss(), true);
+		String s = format();
+		System.out.println(s);
 		StringReader pageHtml = new StringReader(format());
 		createHeader();
 		createFooter();
@@ -48,18 +54,20 @@ public class Services {
 	public void createHeader(){
 		PD4PageMark head = new PD4PageMark();
 		head.setPagesToSkip(1);
-		head.setHtmlTemplate("<img height='30' width='45' align='right' src='http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png'>");
-		head.setAreaHeight(40);
+		head.setHtmlTemplate("<img height='50' width='90' align='right' src='"+urlLogoPdf+"'>");
+		head.setAreaHeight(45);
 		pdf.setPageHeader(head);
 	}
 	
 	public void createFooter(){
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
-		foot.setPagesToSkip(1);
+		foot.setPagesToSkip(1); //Skip the first page
 		foot.setInitialPageNumber(1);
-		foot.setPageNumberTemplate("page ${page} ");
-		foot.setPageNumberAlignment(2);
+		foot.setPageNumberTemplate("${page} "); //Add the number of the page
+		foot.setPageNumberAlignment(2); //Align the page left
+		foot.setHtmlTemplate("<img height='50' width='90' align='left' src='"+urlLogoPdf+"'>");
+		foot.setAreaHeight(45);
 		pdf.setPageFooter(foot);
 	}
 		
