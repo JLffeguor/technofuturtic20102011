@@ -89,7 +89,9 @@ public class Tester {
 		itemService.dropItem(inventoryDao.findUser(3L), ItemType.BEER_BARREL, ""); // for activeGroup		  
 		itemService.dropItem(inventoryDao.findUser(5L),ItemType.BEER_PINT,"Congratulations for you green belt"); // for activeOnUser // 		
 		
-		Item specificItemGlobal = itemService.dropItem(inventoryDao.findUser(4L), ItemType.BAKG_NAKED, "Happy birthday !"); // for activeGlobally
+		Item specificItemGlobal = itemService.dropItem(inventoryDao.findUser(4L), ItemType.BAKG_NAKED, "Japan girl naked !"); // for activeGlobally
+		Item specificItemGlobal2 = itemService.dropItem(inventoryDao.findUser(5L), ItemType.IMAGE_HOME_24, "Home page for 24h!"); // for activeGlobally
+		
 		Item specificItemUser = itemService.dropItem(inventoryDao.findUser(6L),ItemType.BEER_PINT, "I just felt like it"); // for activeOnUser 
 		Item specificItemGroup = itemService.dropItem(inventoryDao.findUser(7L),ItemType.CHAMPAIN_BARREL,"Congratulations for you green belt"); // for activeOnGroup 
 		Item specificItemUser2 = itemService.dropItem(inventoryDao.findUser(7L), ItemType.BEER_PINT, "Happy birthday !"); // for activeOnUser
@@ -110,17 +112,32 @@ public class Tester {
 		itemService.sendItemTo(inventoryDao.findUser(2L),randomItem1,inventoryDao.findUser(4L));
 		itemService.activateItemOnUser(inventoryDao.findUser(2L),specificItemUser,inventoryDao.findUser(5L));
 		itemService.activateItemOnGroup(inventoryDao.findUser(2L),specificItemGroup,inventoryDao.findGroup(9L)); 
+		
 		itemService.activateItemGlobally(inventoryDao.findUser(2L),specificItemGlobal);
+		itemService.activateItemGlobally(inventoryDao.findUser(3L),specificItemGlobal2);
 			  
 	
 		// getActiveItems methods 
 		System.out.println("Active Items of user : " +inventoryDao.findUser(2L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
 		itemService.activateItemOnUser(inventoryDao.findUser(1L),specificItemUser2,inventoryDao.findUser(2L));
+		
+		System.out.println("Active Items of user : " +inventoryDao.findUser(2L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
+		
+		System.out.println("Active Items of user : "+inventoryDao.findUser(1L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(1L)));
+		
+		System.out.println("Active Items of user : "+inventoryDao.findUser(3L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(3L)));
 		System.out.println("Active Items of user : "+inventoryDao.findUser(4L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(4L)));
-		  
+		System.out.println("Active Items of user : "+inventoryDao.findUser(5L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(5L)));
+		System.out.println("Active Items of user : "+inventoryDao.findUser(6L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(6L)));
+		System.out.println("Active Items of user : "+inventoryDao.findUser(7L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(7L)));
 		// Groups ActiveItems
 		System.out.println("Active Items of group : "+inventoryDao.findGroup(9L).getGroupName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findGroup(9L)));
@@ -133,6 +150,7 @@ public class Tester {
 		
 		// getGlobalActiveItems method  
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.BAKG_NAKED));		
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.IMAGE_HOME_24));		
 		
 		itemService.dropItemForBirthDay();
 		itemService.displayUsedItems();
