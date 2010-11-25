@@ -1,10 +1,10 @@
 package javablackbelt.inventory.dao;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javablackbelt.inventory.model.Group;
+import javablackbelt.inventory.model.Item;
 import javablackbelt.inventory.model.User;
 
 import javax.persistence.EntityManager;
@@ -21,26 +21,38 @@ public class InventoryDao {
 	private EntityManager em;
 
 	
-	public void getUsersByBirthDate(){
+	public List<User> getUsersByBirthDate(){
 
 		Calendar calendar = Calendar.getInstance();
 		 
 		int monthOfBirth = calendar.get(Calendar.MONTH);
 		int dayOfBirth = calendar.get(Calendar.DAY_OF_MONTH);
-		monthOfBirth = monthOfBirth + 1 ; 
 		
-		System.out.println("month : " + monthOfBirth + " / day : " + dayOfBirth);
+		monthOfBirth = monthOfBirth + 1 ; // for gregorian calendar
 		
-		List<User> userList = (List<User>)em.createQuery("select u from User u where day(u.birthDate) =:dayOfBirth and month(u.birthDate) =:monthOfBirth")
+		List<User> userList = (List<User>)em
+		.createQuery("select u from User u where day(u.birthDate) =:dayOfBirth and month(u.birthDate) =:monthOfBirth")
 		.setParameter("dayOfBirth", dayOfBirth).setParameter("monthOfBirth", monthOfBirth)
 		.getResultList();
-//		
-//		List<User> userList = (List<User>)em.createQuery("select u from User u where day(u.birthDate) <30)
-//		.getResultList();
 		
-		for(User u : userList){
-			System.out.println("User name : " + u.getNickName() + "  / birthDate : " + u.getBirthDate());
-		}
+		return userList;
+	}
+	
+	public List<Item> getUsedItems(){
+
+		Calendar calendar = Calendar.getInstance();
+		 
+		int monthOfToday = calendar.get(Calendar.MONTH);
+		int dayOfToday = calendar.get(Calendar.DAY_OF_MONTH);
+		
+		monthOfToday = monthOfToday + 1 ; // for gregorian calendar
+		
+		List<Item> itemList = (List<Item>)em
+		.createQuery("select i from Item i where day(i.removalDate) <:dayOfToday and month(u.removalDate) <:monthOfToday")
+		.setParameter("dayOfToday", dayOfToday).setParameter("monthOfToday", monthOfToday)
+		.getResultList();
+		
+		return itemList;
 	}
 		
 	public void persist(Object obj){
