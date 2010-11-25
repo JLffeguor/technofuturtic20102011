@@ -23,7 +23,7 @@ public class ItemService {
 	
 	// Method to display users with a specified birthDate
 	
-	public void displayUsersByBirthDate(){
+	public void dropItemForBirthDay(){
 		
 		for(User us : inventoryDao.getUsersByBirthDate()){
 					
@@ -33,9 +33,9 @@ public class ItemService {
 	}
 	
 	public void displayUsedItems(){
-		
+				
 		for(Item it : inventoryDao.getUsedItems()){
-			System.out.println("\nItem type : " + it.getItemType() + " is already used");
+			System.out.println("\nItem type : " + it.getItemType() + " is used / removalDate : " + it.getRemovalDate());
 		}
 	}
 
@@ -47,7 +47,8 @@ public class ItemService {
 			for (Item it : list) {
 				System.out.println("ItemType : " + it.getItemType());
 			}
-		} else {
+		} 
+		else {
 			System.out.println("Empty List ");
 		}
 

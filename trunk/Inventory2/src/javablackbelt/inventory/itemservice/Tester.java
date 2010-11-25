@@ -37,13 +37,7 @@ public class Tester {
 					
 			GregorianCalendar cal = new GregorianCalendar(2010,10,25);		
 			GregorianCalendar cal1 = new GregorianCalendar(1953,10,24);			
-			GregorianCalendar cal2 = new GregorianCalendar(1998,10,26);
-			
-//			SimpleDateFormat dformat = new SimpleDateFormat("yyyy/MM/dd");
-//			dformat.format(cal.getTime());
-			
-			//cal.get(Calendar.DAY_OF_MONTH);
-			
+			GregorianCalendar cal2 = new GregorianCalendar(1998,10,26);	
 			
 			User pierre = new User("Pierre",cal.getTime());
 			User mat = new User("Mat",cal.getTime());
@@ -140,6 +134,7 @@ public class Tester {
 		// getGlobalActiveItems method  
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.BAKG_NAKED));		
 		
-		itemService.displayUsersByBirthDate();
+		itemService.dropItemForBirthDay();
+		itemService.displayUsedItems();
 	}
 }
