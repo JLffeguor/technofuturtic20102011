@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.security.InvalidParameterException;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 import org.zefer.pd4ml.PD4ML;
@@ -18,6 +19,7 @@ public class Services {
 	
 	private Section section;
 	private final String CSS_URL = ("S:\\DocumentsPourPDF\\stylePDF.css");
+	private final String ASIAN_WOMAN_IMG_URL="http://nsa20.casimages.com/img/2010/11/25/101125090148934844.jpg";
 	private PD4ML pdf;
 	private final String licence = "If you don't have access to the course in blackbeltfactory, using this pdf is forbiden. <br />" +
 									"If you are witness of an illegal use, please report it to blackbelt website";
@@ -119,8 +121,9 @@ public class Services {
 	}
 	public String addIntro(){
 		String intro = new String("");
-		intro +="<div align='center' class='logo'><b>Black<span class='grey'>Belt</span><br/>Factory</b></div><br/><br/><div align='center'><img align='middle' src='http://antisosial.free.fr/projet/asianWomanSword.jpg'></div><pd4ml:page.break>";
-		
+		intro +="<div align='center' class='logo'><br/><br/><img src='"+urlLogoPdf+"'></div><br/><br/><h1 align='center'>"+this.section.getCategoryTitle()+"</h1><br/><h2 align='center'>"+this.section.getTitle()+"</h2><br/><br/><br/><br/><div align='center'><img align='middle' width='300' height='300' src='"+ASIAN_WOMAN_IMG_URL+"'></div><br/><br/>";
+		//intro+="<div align='left' class='coverPageLog'><img align='left' src='"+this.user.getLevelUrl()+"'><span>"+this.user.getFirstName()+"</span><br/><span>"+this.user.getName()+"</span></div><pd4ml:page.break>";
+		intro+="<table width='100%'><tr><td width='90px'><img align='left' src='"+this.user.getLevelUrl()+"'></td><td class='valignMiddle'>Download by :<br/><i>"+this.user.getFirstName()+"<br/>"+this.user.getName()+"</i></td><td align='right'>"+this.getCurentDate()+"</td></tr></table><pd4ml:page.break>";
 		return intro;
 	}
 	
@@ -155,6 +158,13 @@ public class Services {
 		}
 		
 		return result;
+	}
+	public String getCurentDate(){
+		String sDate="";
+		GregorianCalendar gc= new GregorianCalendar();
+		
+		sDate=gc.get(GregorianCalendar.MONTH)+"/"+gc.get(GregorianCalendar.DAY_OF_MONTH)+"/"+gc.get(GregorianCalendar.YEAR);
+		return sDate;
 	}
 
 }
