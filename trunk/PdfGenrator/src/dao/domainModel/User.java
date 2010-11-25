@@ -6,7 +6,7 @@ public class User {
 	private int level;
 	private String levelUrl;
 	private String privateUrlLogo;
-	
+	private boolean customLogo=false;
 
 	public User(String name,String firstName,int level,String privateLogoUrl){
 		this.name=name;
@@ -41,6 +41,7 @@ public class User {
 		}
 		if(privateLogoUrl!=null){
 			this.privateUrlLogo=privateLogoUrl;
+			this.customLogo=true;
 		}
 		else{
 			this.privateUrlLogo="http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-200x127.png";
@@ -61,5 +62,8 @@ public class User {
 	}
 	public String getLogoUrl(){
 		return this.privateUrlLogo;
+	}
+	public boolean useCustomLogo(){
+		return this.customLogo;
 	}
 }
