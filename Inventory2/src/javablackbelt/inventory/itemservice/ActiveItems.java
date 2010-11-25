@@ -38,12 +38,12 @@ public class ActiveItems {
 	 */
 	synchronized public List<Item> getActiveItems(User user) {
 		
-		// given a map of users + a list of items ( loaded hereunder )  , 
+		// given a map of users + a list of items (loaded below)  , 
 		// we shall check for a given user , whether its items are still active : removal date is before today    
 		// a new list is build with the today-active items , the old one is cleaned and replaced with the new 
 		// if no more active items for this user , the list is cleaned then the user is cleaned from the map . 
 		
-		List<Item> activateItemList = new ArrayList<Item>();
+		List<Item> activeItemList = new ArrayList<Item>();
 		Long mapKey = user.getUserId();
 
 		// if the list in the Map(userListActiveItemsMap) for the specified mapKey(User) is null, return null
@@ -54,18 +54,18 @@ public class ActiveItems {
 		else {
 
 			// Call to the method itemStillActivated with the user list in parameter
-			activateItemList = itemsStillActivated(userListActiveItemsMap
+			activeItemList = itemsStillActivated(userListActiveItemsMap
 					.get(mapKey));
 			
 			// Wipe the list in the Map(userListActiveItemsMap) for the specified mapKey(User)
 			userListActiveItemsMap.get(mapKey).clear(); 
 
 			
-			if (activateItemList != null) {
+			if (activeItemList != null) {
 
-				// if the activateItemList is not null, add this one in the userListActiveItemsMap on the specified mapKey(User)
-				userListActiveItemsMap.put(mapKey, activateItemList);
-				return activateItemList;
+				// if the activeItemList is not null, add this one in the userListActiveItemsMap on the specified mapKey(User)
+				userListActiveItemsMap.put(mapKey, activeItemList);
+				return activeItemList;
 			} 
 			else {
 
@@ -86,34 +86,30 @@ public class ActiveItems {
 		
 		// same as above for a group 
 
-		List<Item> tempItemList = new ArrayList<Item>();
+		List<Item> activeItemList = new ArrayList<Item>();
 		Long mapKey = group.getGroupId();
 
-		// if no list, return null
+		// if the list in the Map(groupActiveItemsMap) for the specified mapKey(Group) is null, return null
 		if (groupActiveItemsMap.get(group.getGroupId()) == null) {
 			return null;
-		} else {
+		}	
+		else {
 			List<Item> genericItemList = new ArrayList<Item>();
 			genericItemList.addAll(groupActiveItemsMap.get(mapKey));
 
-			// get the list with the items which are still active
+			// Wipe the list in the Map(groupActiveItemsMap) for the specified mapKey(Group)
+			activeItemList = itemsStillActivated(genericItemList);
+			groupActiveItemsMap.get(mapKey).clear();
 
-			tempItemList = itemsStillActivated(genericItemList);
-			groupActiveItemsMap.get(mapKey).clear(); // Wipe the map of the
-														// "mapKey user"
+			if (activeItemList != null) {
 
-			if (tempItemList != null) {
+				// if the activeItemList is not null, add this one in the groupActiveItemsMap on the specified mapKey(Group)
+				groupActiveItemsMap.put(mapKey, activeItemList);
+				return activeItemList;
+			} 
+			else {
 
-				// add the list(tempItemList) with active items into the
-				// map(groupActiveItemsMap) on the specified key
-
-				groupActiveItemsMap.put(mapKey, tempItemList);
-				return tempItemList;
-			} else {
-
-				// delete the key associated with the list(tempItemList) if this
-				// one is null
-
+				// remove the Group with the specified mapKey from the groupActiveItemsMap
 				groupActiveItemsMap.remove(mapKey);
 				return null;
 			}
@@ -126,13 +122,13 @@ public class ActiveItems {
 		
 		// same as above for all global items 
 
-		List<Item> tempItemList = new ArrayList<Item>();
-		tempItemList = itemsStillActivated(globalItems);
+		List<Item> activeItemList = new ArrayList<Item>();
+		activeItemList = itemsStillActivated(globalItems);
 
-		if (tempItemList == null) {
+		if (activeItemList == null) {
 			return null;
 		} else {
-			return tempItemList;
+			return activeItemList;
 		}
 	}
 
@@ -144,37 +140,26 @@ public class ActiveItems {
 
 		// get the list with the items which are still active
 
-		List<Item> tempItemList = new ArrayList<Item>();
-		tempItemList = itemsStillActivated(globalItems);
-
-		/*
-		for (Item i : tempItemList) {
-
-			// if the type from items in tempItemList is == to the parameter
-			// type
-
-			if (i.getItemType().getItemTypeGroup() == itemTypeGroup) {
-				System.out.println(i.getItemType().getItemDescription());
-			}
-		}
-		*/
-		return tempItemList;
+		List<Item> activeItemList = new ArrayList<Item>();
+		activeItemList = itemsStillActivated(globalItems);
+		
+		return activeItemList;
 	}
 
 	
 	/** returns the items still activated */
-	synchronized public List<Item> itemsStillActivated(List<Item> genericItemList) {
+	synchronized public List<Item> itemsStillActivated(List<Item> ListOfItemsFromMap) {
 
 		// Creating a new list to get active items
 		
 		List<Item> activeItemList = new ArrayList<Item>();
 		
-		for (Item i : genericItemList) {
+		for (Item i : ListOfItemsFromMap) {
 
-			// if the date of today is higher than the removalDate of the items in the genericItemList
+			// if the date of today is higher than the removalDate of the items in the ListOfItemsFromMap
 
 			if (!(new Date().after(i.getRemovalDate()))) {
-				activeItemList.add(i); // add into the activeItemList
+				activeItemList.add(i);
 			}
 		}
 		return activeItemList;
