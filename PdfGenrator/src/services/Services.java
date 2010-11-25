@@ -21,12 +21,14 @@ public class Services {
 	private PD4ML pdf;
 	private final String licence = "If you don't have access to the course in blackbeltfactory, using this pdf is forbiden. " +
 									"If you are witness of an illegal use, please report it to blackbelt website";
-	private String urlLogoUtilisateur;
+	private String urlLogoUtilisateur = "http://medlem.spray.se/iso/pikachu.jpg";
 	private String urlLogoPdf = "http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-200x127.png";
+	private User user;
 	
-	public Services(Section section){
+	public Services(Section section, User user){
 		this.section = section;
 		this.pdf = new PD4ML();
+		this.user = user;
 	}
 	
 //	public  void printSection(){
@@ -53,22 +55,21 @@ public class Services {
 	
 	public void createHeader(){
 		PD4PageMark head = new PD4PageMark();
-		head.setPagesToSkip(1);
-		head.setHtmlTemplate("<img height='50' width='90' align='right' src='"+urlLogoPdf+"'>");
-		head.setAreaHeight(45);
-		pdf.setPageHeader(head);
+		head.setPagesToSkip(1); //Skip the first page
+		head.setHtmlTemplate("<img height='50' width='50' align='right' src='"+urlLogoUtilisateur+"'>"); //Add the logo of the user company
+		head.setAreaHeight(45); //Adjust the height
+		pdf.setPageHeader(head); //Add header
 	}
 	
 	public void createFooter(){
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
-		foot.setPagesToSkip(1); //Skip the first page
 		foot.setInitialPageNumber(1);
 		foot.setPageNumberTemplate("${page} "); //Add the number of the page
 		foot.setPageNumberAlignment(2); //Align the page left
-		foot.setHtmlTemplate("<img height='50' width='90' align='left' src='"+urlLogoPdf+"'>");
-		foot.setAreaHeight(45);
-		pdf.setPageFooter(foot);
+		foot.setHtmlTemplate("<img height='50' width='90' align='left' src='"+urlLogoPdf+"'>"); //Add the Blackbelt logo
+		foot.setAreaHeight(45); //Adjust the height
+		pdf.setPageFooter(foot); //Add footer
 	}
 		
 	public String format(){
@@ -93,7 +94,7 @@ public class Services {
 		
 		
 		for(Section s : this.section.getSubSections()){
-			Services serv = new Services(s);
+			Services serv = new Services(s, this.user);
 			finalResult+=serv.format();
 		}
 		if(this.section.getParent()==null){
