@@ -51,14 +51,15 @@ public class Services {
 //	}
 	
 	public void generatePdf(OutputStream outputStream) throws InvalidParameterException, IOException{
+		//Load and add the CSS styles
 		pdf.addStyle(loadStyleCss(), true);
 		String s = format();
-		System.out.println(s);
+		System.out.println(s); //Show generated HTML on console
 		StringReader pageHtml = new StringReader(format());
 		createHeader();
 		createFooter();
-		pdf.enableImgSplit(false);
-		pdf.render(pageHtml, outputStream);
+		pdf.enableImgSplit(false); //Do not split an image
+		pdf.render(pageHtml, outputStream); //Start creating PDF
 	}
 	
 	public void createHeader(){
@@ -72,10 +73,10 @@ public class Services {
 	public void createFooter(){
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
+		foot.setPagesToSkip(1); //Skip the first page
 		foot.setInitialPageNumber(1);
-		foot.setPageNumberTemplate("${page} "); //Add the number of the page
-		foot.setPageNumberAlignment(2); //Align the page left
-		foot.setHtmlTemplate("<table><tr><td><img height='40' width='75' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+licence+"</td></tr></table>"); //Add the Blackbelt logo
+		//Add a table with 3 cells : 1. the blackbelt logo, 2. the licence, 3. the page number
+		foot.setHtmlTemplate("<table width='100%'><tr><td><img height='30' width='50' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+licence+"</td><td align='right' class='valignBottom'>${page}<span class='small'>/${total}</span></td></tr></table>");
 		foot.setAreaHeight(45); //Adjust the height
 		pdf.setPageFooter(foot); //Add footer
 	}
@@ -134,9 +135,10 @@ public class Services {
 	}
 	
 	public String createTitle(Section currentSection){
-		int size = checkTheTitleSize(currentSection);
+		int size = checkTheTitleSize(currentSection); //Check the title importance
 		String title = null;
 		
+		//And define the title size.
 		switch(size){
 		case 0:
 			title = "<br/><h1>"+currentSection.getTitle()+"</h1>";
@@ -158,6 +160,7 @@ public class Services {
 	public int checkTheTitleSize(Section currentSection){
 		int result = 0;
 		
+		//See how much parent have a section. With this number we can see the importance of a title and defined its size.
 		while(currentSection.getParent() != null){
 			currentSection = currentSection.getParent();
 			result++;
