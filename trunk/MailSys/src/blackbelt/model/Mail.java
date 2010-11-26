@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,19 +35,20 @@ public class Mail {
 	@Column(nullable = false)
 	private String content;
 	
-	private boolean immediate; // true => Non groupable
-	// int priority; // 0 = high priority, 1 = normal, 2 = low (as newsletter)
+	@Enumerated(EnumType.STRING)
+	private MailType mailType;
+	
 	private Date creationDate;
 
 	//Constructors
 	public Mail() {}
 	
-	public Mail(User user, String subject, String content, boolean immediate) {
+	public Mail(User user, String subject, String content, MailType mailType) {
 		////this.id = -1;
 		this.user = user;
 		this.subject = subject;
 		this.content = content;
-		this.immediate = immediate;
+		this.mailType=mailType;
 		this.creationDate = new Date();
 	}
 
@@ -54,7 +57,7 @@ public class Mail {
 		this.user = user;
 		this.subject = subject;
 		this.content = text;
-		this.immediate = immediate;
+		this.mailType=mailType;
 		this.creationDate = date;
 	}
 	
@@ -91,8 +94,8 @@ public class Mail {
 		return result;
 	}
 
-	public boolean getImmediate() {
-		return this.immediate;
+	public MailType getMailType() {
+		return this.mailType;
 	}
 
 	public Date getDate() {

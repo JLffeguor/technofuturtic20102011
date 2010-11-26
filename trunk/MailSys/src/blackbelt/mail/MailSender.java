@@ -9,58 +9,62 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import blackbelt.dao.ExtractionMail;
+import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
+import blackbelt.model.MailType;
 import blackbelt.model.User;
-import blackbelt.template.MainTemplate;
+import blackbelt.template.MainTemplateService;
 /**
  *This class checks if there are any mails and sends them
  */
 @Repository
 public class MailSender extends Thread {
 
-	public final static int MS_BETWEEN_EACH_MAIL = 100;
+	  // FIXME : put this value: ???????????????
+	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // ms. 
+	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep ?
 	
-	@Autowired
-	private ExtractionMail extractMail;
+	@Autowired	private MailDao mailDao;
 	
-	@Autowired
-	private MainTemplate mainTemplate;
+	@Autowired	private MainTemplateService mainTemplate;
 	
 	@Override
 	public void run() {
 		
 		while (isAlive()) {
 			
-			List<Mail> nextMailList = extractMail.findNextMail();
+			List<Mail> nextMailList = this.findNextMail();
 			List<Mail> toSend;
 			
-			while (nextMailList != null) {
+			while (nextMailList != null && nextMailList.size()>0) {
 				
-				if (nextMailList.get(0).getImmediate()) { // if there are immediate mails, we send one after one... 
+				if (nextMailList.get(0).getMailType()==MailType.IMMEDIATE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
+						// Send the mail and remove it from the DB.
 						toSend = new ArrayList();
 						toSend.add(nextMailList.get(i));
 						sendMailList(toSend);
-						extractMail.removeMails(toSend);
+						mailDao.removeMails(toSend);
 						this.sleepBetweenSend();
 					}
 				} else {// ...here we send a group of mails as one mail
+					// Send all these mails grouped as one mail and remove them from the DB.
 					sendMailList(nextMailList);
-					extractMail.updateLastMailSendedDate(nextMailList.get(0).getUser());
-					extractMail.removeMails(nextMailList);
+					mailDao.updateLastMailSendedDate(nextMailList.get(0).getUser());
+					mailDao.removeMails(nextMailList);
 					this.sleepBetweenSend();
 				}
-				nextMailList = extractMail.findNextMail();
+				nextMailList = this.findNextMail();
 			}
 			
 			try {
+				// FIXME --- remove these prints.
 				System.out.println("******************************************************************");
 				System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
 				System.out.println("******************************************************************");
-				//sleep(MS_BETWEEN_EACH_MAIL * 15);
-				sleep(15000);
+				sleep(WAKE_UP_DELAY_WHEN_NO_MAIL);
 			} catch (InterruptedException e) {
+				// FIXME new RTE
 				e.printStackTrace();
 			}
 		}
@@ -69,9 +73,9 @@ public class MailSender extends Thread {
 	private void sleepBetweenSend(){
 		try {
 			// delai entre 2 send
-			sleep(MS_BETWEEN_EACH_MAIL);
+			sleep(DELAY_BETWEEN_EACH_MAIL);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 	/**
@@ -80,27 +84,29 @@ public class MailSender extends Thread {
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
 	public void sendMailList(List<Mail> mail) {
-		String content;
+		String content = this.mainTemplate.TemplateMail(mail);
+		
+		// FIXME: really send the mail via SMTP instead of saving it on the file system.
+		// sendSmtpMail(mail.get(0).getUser(), content);
 		sendConsoleMail(mail);
-		
+		sendFileMail(mail.get(0).getUser(), content);
+	}
+
+	
+	private void sendSmtpMail(User user, String content) {
+		throw new UnsupportedOperationException();
+	}
+	
+	
+	private void sendFileMail(User user, String content) {
 		try {
-			content = this.mainTemplate.TemplateMail(mail);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		try {
-			
 			File rep;
 			PrintWriter make;
-			User user;
-			user = mail.get(0).getUser();
 			rep = new File("C:/testing/" + user.getPseudo());
 			rep.mkdirs();
-			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" + mail.size() + "_message(s).html");// apres : le nombbre de message
+			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" + "_message(s).html");// apres : le nombbre de message
 			make.println(content);
 			make.close();
-			
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -115,5 +121,30 @@ public class MailSender extends Thread {
 			System.out.println("-----------------");
 		}
 
+	}
+	
+	
+	/**
+	 * returns a list of mails which are either immediate or grouped of a user.
+	 * @return a list of mails
+	 */
+	public List<Mail> findNextMail(){
+		
+		User user;
+		
+		// 1. Send non groupables mails (i.e: user creation activation mail).
+		user = mailDao.userHavingImmediateMails();
+		if(user!=null){
+			return mailDao.getMailsFromUser(MailType.IMMEDIATE, user);
+		}
+		
+		// 2. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
+		user = mailDao.userHavingGroupedMails();
+		if(user!=null){
+			return mailDao.getMailsFromUser(MailType.GOUPABLE, user);
+		}
+		
+		// 3. There is no next mail to be sent.
+		return new ArrayList<Mail>();  // Empty list, no mail to send.
 	}
 }

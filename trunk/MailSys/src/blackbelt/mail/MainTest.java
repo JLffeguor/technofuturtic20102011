@@ -9,9 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class MainTest{
 	
 	public static void main(String[] args) {
-		
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-		
 		MailSender consumer = (MailSender)applicationContext.getBean("mailSender");;
 		consumer.start();
 		

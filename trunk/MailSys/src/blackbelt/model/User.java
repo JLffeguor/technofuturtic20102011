@@ -38,42 +38,10 @@ public class User {
 	}
 	
 	public User(String pseudo, String email, Date lastMailSendedDate, int mailingDelai) {
-		
-		/////this.id = id;
 		this.pseudo = pseudo;
 		this.email = email;
 		this.lastMailSendedDate = lastMailSendedDate;
 		this.mailingDelai = mailingDelai;
-
-		// simulate users file//
-		/*try {
-			
-			File rep = new File("C:/testing/users");
-			rep.mkdirs();
-			PrintWriter make = new PrintWriter("C:/testing/users/" + this.pseudo + ".html");
-			make.println("<html>\n<head>\n<title>" + this.pseudo + "</title>\n</head>");
-			make.println("<body>\n<p>user : " + this.pseudo + "</p>\n<p>your email : " + this.email + "</p>\n<p>your news letter groupe : ");
-			
-			if (this.mailingDelai > 2) {
-				this.mailingDelai = 0;
-			}
-			
-			if (this.mailingDelai == 0) {
-				make.println("your are not grouped</p>");
-			} else if (this.mailingDelai == 1) {
-				make.println("your are weekly-grouped !</p>");
-			} else if (this.mailingDelai == 2) {
-				make.println("your are daily-grouped !</p>");
-			}
-			
-			make.println("</body>\n</html>");
-			make.close();
-		
-		} catch (IOException e) {
-		
-			throw new RuntimeException(e);
-		
-		}*/
 	}
 	
 	//Getters and setters

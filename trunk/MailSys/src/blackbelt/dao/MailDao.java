@@ -1,6 +1,7 @@
 package blackbelt.dao;
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import blackbelt.model.Mail;
+import blackbelt.model.MailType;
 import blackbelt.model.User;
 
 @Transactional
 @Repository
-public class ExtractionMail {
+public class MailDao {
 	
 	
 	@PersistenceContext
@@ -29,58 +31,63 @@ public class ExtractionMail {
 	 * returns a user containing immediate mails
 	 * @return a user
 	 */
-	private User userContainingImmediateMails(){
-		Query query = em.createQuery(" SELECT user FROM Mail m join m.user user WHERE m.immediate=true")
-						.setMaxResults(1);
-		try{ 
-			return  (User)query.getSingleResult();
-		}catch(NoResultException e){
+	public User userHavingImmediateMails(){
+		List<User> list = em.createQuery("SELECT m.user FROM Mail m WHERE m.mailType=:MailType")
+						.setParameter("MailType", MailType.IMMEDIATE)
+						.setMaxResults(1)  // Because we don't need all the users, just one.
+				 		.getResultList();
+
+		if (list.size() == 0) {
 			return null;	
+		} else {
+			return list.get(0);  // We just want one user, we'll execute this query again later to get the next user.
 		}
 	}
 	/**
 	 * returns a user containing grouped mails
 	 * @return a user
 	 */
-	private User userContainingGroupedMails(){
+	public User userHavingGroupedMails(){
 		/************************/
-		Date dateForDay;
-		Date dateForWeek;		
+		Date yesterday;
+		Date lastWeek;		
 		Date now;
 		//This code determines the interval used for the grouping mail (day and week).
 		//Actually, for debug, we use : daily = 10 sec and weekly = 40 sec.
 		now = new Date();
 		GregorianCalendar cal= new GregorianCalendar();
 		cal.setTime(now);
-		cal.add(Calendar.SECOND, -10);
-		dateForDay = cal.getTime();
-		cal.add(Calendar.SECOND, -30);
-		dateForWeek = cal.getTime();	
+		cal.add(Calendar.SECOND, -10);   // FIXME Change that to ....... XXXXXXXXXXXXXXXXXXXXXXXX
+		yesterday = cal.getTime();
+		cal.add(Calendar.SECOND, -30);   // FIXME Change that to ....... XXXXXXXXXXXXXXXXXXXXXXXX
+		lastWeek = cal.getTime();	
 		/************************/
 		
 		//request to get a user containing grouped mails
-		Query query = em.createQuery("SELECT user "
-					+ "FROM Mail m join m.user user"
+		List<User> list = em.createQuery("SELECT m.user "
+					+ "FROM Mail m "
 						+ " WHERE ("
-						+ "         m.immediate=false"
+						+ "         m.mailType=:MailType"
 						+ " 	AND"
 						+ "          ("
-						+ "               m.user.lastMailSendedDate IS NULL "
+						+ "               m.user.lastMailSendedDate IS NULL "   // Not sent yet
 						+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
-						+ "                AND (    (m.user.mailingDelai = 1 AND :dateForDay > m.user.lastMailSendedDate)"
-						+ "                      OR (m.user.mailingDelai = 2 AND :dateForWeek > m.user.lastMailSendedDate)"
+						+ "                AND (    (m.user.mailingDelai = 1 AND :yesterday > m.user.lastMailSendedDate)"
+						+ "                      OR (m.user.mailingDelai = 2 AND :lastWeek > m.user.lastMailSendedDate)"
 						+ "                    )"
 						+ "              )"
 						+ "          )"
 						+ "     ) ")
-						.setParameter("dateForDay", dateForDay)
-						.setParameter("dateForWeek", dateForWeek)
-						.setMaxResults(1);
-		try{
-			return  (User)query.getSingleResult();
-		}catch(NoResultException e){
+						.setParameter("MailType", MailType.GOUPABLE)
+						.setParameter("yesterday", yesterday)
+						.setParameter("lastWeek", lastWeek)
+						.setMaxResults(1)
+						.getResultList();
+		if (list.size() == 0) {
 			return null;	
-		}		
+		} else {
+			return list.get(0);  // We just want one user, we'll execute this query again later to get the next user.
+		}	
 	}	
 	
 	/**
@@ -89,16 +96,13 @@ public class ExtractionMail {
 	 * @param user the user who we want the mail.
 	 * @return a list of mails 
 	 */
-	private List<Mail> getMailsFromUser(boolean isImmediate, User user){
-		if(user !=null){
-		Query query = em.createQuery("SELECT m FROM Mail m WHERE m.user =:user AND m.immediate =:condition" )
-                        .setParameter("user",user)
-		                .setParameter("condition",isImmediate); 
+	public List<Mail> getMailsFromUser(MailType mailType, User user){
+		Query query = em.createQuery("SELECT m FROM Mail m WHERE m.user =:user AND m.mailType =:mailType" )
+		.setParameter("user",user)
+		.setParameter("mailType",mailType); 
 		return query.getResultList();
-		}else{
-			return null;
-		}
 	}
+	
 	/**
 	 * remove a list of mails
 	 * @param mails
@@ -132,25 +136,18 @@ public class ExtractionMail {
 		em.persist(mail);
 	}
 	
-	/**
-	 * returns a list of mails which are either immediate or grouped of a user.
-	 * @return a list of mails
-	 */
-	public List<Mail> findNextMail(){
-		
-		User user;
-		
-		user = userContainingImmediateMails();
-		if(user!=null){
-			return getMailsFromUser(true, user);
+	public String getGroupOtionFromUser(User user){
+		List<MailType> list = em.createQuery("SELECT m.mailType FROM Mail m WHERE m.user =:user")
+		              	.setParameter("user", user)
+		              	.setMaxResults(1)  // Because we don't need all the mails, just one.
+		              	.getResultList();
+
+		if (list.size() == 0) {
+			return null;	
+		} else {
+			String groupOption = list.get(0).toString();
+			return groupOption;  // We just want one user, we'll execute this query again later to get the next user.
 		}
-		
-		user = userContainingGroupedMails();
-		if(user!=null){
-			return getMailsFromUser(false, user);
-		}
-		
-		return null;
-			
 	}
+	
 }

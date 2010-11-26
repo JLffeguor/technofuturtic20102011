@@ -7,20 +7,20 @@ import org.springframework.stereotype.Service;
 import blackbelt.model.Mail;
 import blackbelt.model.User;
 /**
- * 
+ * Generates a Html string based on a mail
  */
 @Service
-public final class MainTemplate {
+public final class MainTemplateService {
 	
-	public MainTemplate() {
+	public MainTemplateService() {
 		
 	}
 	
 	private String templateHeader(User user) {
 		return "<div align=\"center\"><font face=\"Impact,Verdana\" size=\"7\"><font color=\"#000000\">Black</font><font color=\"#bababa\">Belt</font><br>Factory</font></div><hr>"
 			+  "<div align=\"center\"> to : " + user.getPseudo()
-			+  "  -  <a href=\"C:/testing/users/" + user.getPseudo() //To review: the Link
-			+  ".html\">your account here</a></div><br>";
+			+  "  -  <a href=\"C:/testing/users/user.html\">your account here</a>"
+			+  "</div><br>";
 	}
 	
 	private String templateBody(Mail mail) {
@@ -36,24 +36,25 @@ public final class MainTemplate {
 		return "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
 	}
 	
-	public final String TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
-		String content;
-		User user;
-		if (mails == null){
-			throw new NullPointerException("No list defined for 'mails'.");
-		} else if (mails.size() == 0){
-			throw new Exception("No mail define for template.");
-		} else if (mails.get(0).getUser() == null){
-			throw new NullPointerException("No user defined (the user is obtained by the first mail in the list).");
+	/** Produces a mail body from a list of groupable mail (or a list with a single mail).
+	 * All the given mails must be sent to the same user.
+	 */
+	public final String TemplateMail(List<Mail> mails) {
+		if (mails == null) {
+			throw new IllegalArgumentException("Bug: Cannot give a null list.");
+		} else if (mails.size() == 0) {
+			throw new IllegalArgumentException("Bug: Cannot give an empty list.");
+		} else if (mails.get(0).getUser() == null) {
+			throw new RuntimeException("Bug: No user defined (the user is obtained by the first mail in the list).");
 		}
-		
-		user = mails.get(0).getUser();
-		content = this.templateHeader(user);
-		
+
+		User user = mails.get(0).getUser();
+
+		// Build content text.
+		String content = this.templateHeader(user);;
 		for (Mail mail : mails) {
 			content += this.templateBody(mail);
 		}
-		
 		content += this.templateFooter();
 		
 		return content;
