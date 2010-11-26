@@ -65,7 +65,6 @@ public class InventoryDao {
 		}
 	}
 	
-	
 	public void persist(Object obj){
 		
 		if(obj != null){
