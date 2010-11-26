@@ -33,12 +33,12 @@ public class MailSender extends Thread {
 		
 		while (isAlive()) {
 			
-			List<Mail> nextMailList = this.findNextMail();
 			List<Mail> toSend;
+			List<Mail> nextMailList = this.findNextMail();
 			
 			while (nextMailList != null && nextMailList.size()>0) {
 				
-				if (nextMailList.get(0).getMailType()==MailType.IMMEDIATE) { // if there are immediate mails, we send one after one... 
+				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
 						toSend = new ArrayList();
@@ -84,6 +84,7 @@ public class MailSender extends Thread {
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
 	public void sendMailList(List<Mail> mail) {
+		
 		String content = this.mainTemplate.TemplateMail(mail);
 		
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
@@ -116,7 +117,7 @@ public class MailSender extends Thread {
 		// TODO: replace this code by SMTP send.
 		System.out.println("************Mailing to:" + mail.get(0).getUser().getPseudo() + "************");
 		for (Mail i : mail) {
-			System.out.println(i.getSubject() + "       " + i.getDateMessage());
+			System.out.println(i.getMailSubject().toString() + "       " + i.getDateMessage());
 			System.out.println(i.getText());
 			System.out.println("-----------------");
 		}

@@ -29,8 +29,8 @@ public class Mail {
 	@JoinColumn(nullable = false, name = "user_id")
 	private User user;
 	
-	@Column(nullable = false)
-	private String subject;
+	@Enumerated(EnumType.STRING)
+	private MailSubject mailSubject;
 	
 	@Column(nullable = false)
 	private String content;
@@ -43,19 +43,19 @@ public class Mail {
 	//Constructors
 	public Mail() {}
 	
-	public Mail(User user, String subject, String content, MailType mailType) {
+	public Mail(User user, MailSubject mailSubject, String content, MailType mailType) {
 		////this.id = -1;
 		this.user = user;
-		this.subject = subject;
+		this.mailSubject = mailSubject;
 		this.content = content;
 		this.mailType=mailType;
 		this.creationDate = new Date();
 	}
 
-	public Mail(User user, String subject, String text, boolean immediate, Date date) {
+	public Mail(User user, MailSubject mailSubject, String text, boolean immediate, Date date) {
 		////this.id = id;
 		this.user = user;
-		this.subject = subject;
+		this.mailSubject = mailSubject;
 		this.content = text;
 		this.mailType=mailType;
 		this.creationDate = date;
@@ -73,8 +73,8 @@ public class Mail {
 		this.user = user;
 	}
 
-	public String getSubject() {
-		return this.subject;
+	public MailSubject getMailSubject() {
+		return this.mailSubject;
 	}
 
 	public String getText() {
