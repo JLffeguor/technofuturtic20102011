@@ -167,7 +167,9 @@ public class CoursePdfGenerator {
 	public void createFooter(){
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
-		foot.setPagesToSkip(1); //Skip the first page
+		if(doTheUserWantACoverPage){ //If the user want a cover page
+			foot.setPagesToSkip(1); //Skip the header at the first page
+		}
 		foot.setInitialPageNumber(1);
 		//Add a table with 3 cells : 1. the blackbelt logo, 2. the licence, 3. the page number
 		foot.setHtmlTemplate("<table width='100%'><tr><td><img height='30' width='50' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+FOOTER_TEXT+"</td><td align='right' class='valignBottom'>${page}<span class='grey'> /${total}</span></td></tr></table>");
