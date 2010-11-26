@@ -258,7 +258,7 @@ public class CoursePdfGenerator {
 		String title = null;
 
 		int level = Math.min(size+1, 4);  // TODO: when integrating with BBF, see how this has already been developped and reuse.
-		title = "<br/><h"+level+">"+section.getTitle()+"</h"+level+">";
+		title = "<br/><pd4ml:page.break ifSpaceBelowLessThan=\"120\"><h"+level+">"+section.getTitle()+"</h"+level+">";
 
 		return title;
 	}
