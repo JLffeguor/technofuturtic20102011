@@ -330,6 +330,8 @@ public class CourseTextFormatter {
 		
 		shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
 		//addResultTextBlock("<div class='contentQuote'>"+element.innerText+"</div>");
+        addResultTextBlock("<table width='100%'><tr><td width='20px'><img align='top' src='http://www.blackbeltfactory.com/VAADIN/themes/blackbelt/image/quote-icon.jpg'></td><td><div class='contentQuote'>"
+                +element.innerText+"</div></td></tr></table>");
 	}	
 
 	protected void insertVideo(Element element) {

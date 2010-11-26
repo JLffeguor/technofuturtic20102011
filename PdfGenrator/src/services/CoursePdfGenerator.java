@@ -87,13 +87,13 @@ public class CoursePdfGenerator {
 		"overflow: auto; /* scroll bar if too wide */"+
 	"}"+
 	".contentQuote {"+
-	"background-color: #EEE;"+
-	"margin-bottom: 14px;"+
-	"margin-left: 2px;"+
-	"padding: 14px;"+
-	"font-size: 12px; /* smaller to have longer lines */"+
-	"overflow: auto; /* scroll bar if too wide */"+
-"}"+
+		"background-color: #EEE;"+
+		"margin-bottom: 14px;"+
+		"margin-left: 2px;"+
+		"padding: 14px;"+
+		"font-size: 12px; /* smaller to have longer lines */"+
+		"overflow: auto; /* scroll bar if too wide */"+
+	"}"+
 	".licence{"+
 		"font-size:8px;"+
 		"color: #9E9E9E;"+
