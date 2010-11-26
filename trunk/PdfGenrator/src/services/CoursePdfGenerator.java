@@ -20,12 +20,14 @@ public class CoursePdfGenerator {
 	private final String ASIAN_WOMAN_IMG_URL="http://www.blackbeltfactory.com/VAADIN/themes/blackbelt/image/bgphoto/asianWomanSword.jpg";
 	private final String BBF_LOGO="http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-950x602.png";
 	private PD4ML pd4ml;
-	private final String FOOTER_TEXT = "If you don't have access to the course in blackbeltfactory, using this pdf is forbiden. <br />" +
-									"If you are witness of an illegal use, please report it to blackbelt website";
+	//TODO when integrating with BBF, change the url
+	private final String FOOTER_TEXT = "See the on-line version to get videos, translations, downloads... http://www.blackbeltfactory.com"
+										+" <br />If you don't have access, please contact us: http://www.blackbeltfactory.com/ui#!Document/ContactUs"
+										+"<br />(c) 2010 BlackBeltFactory";
 	private String urlLogoPdf;
 	private User user;
 	
-	private boolean doTheUserWantACoverPage;;
+	private boolean doTheUserWantACoverPage;
 	
 	private final String CSS = "h1,h2,h3,h4 {" +
 	"	color: #AA0000; /* #AA0000 = blackbelt_dark_red  */" +
@@ -122,6 +124,7 @@ public class CoursePdfGenerator {
 		this.doTheUserWantACoverPage = coverPageOrNot;
 		
 		this.urlLogoPdf = logoUrl;
+		this.user.changeTheFuckingValueOfTheBooleanOfTheUseCustomLogo(true);
 	}
 	
 //	public  void printSection(){
@@ -154,7 +157,9 @@ public class CoursePdfGenerator {
 		if(doTheUserWantACoverPage){ //If the user want a cover page
 			head.setPagesToSkip(1); //Skip the header at the first page
 		}
-		head.setHtmlTemplate("<img height='50' width='50' align='right' src='"+user.getLogoUrl()+"'>"); //Add the logo of the user company
+		if(this.user.useCustomLogo()){ //If the user want his logo
+			head.setHtmlTemplate("<img height='50' width='50' align='right' src='"+urlLogoPdf+"'>"); //Add the logo of the user company
+		}
 		head.setAreaHeight(45); //Adjust the height
 		pd4ml.setPageHeader(head); //Add header
 	}
@@ -163,7 +168,7 @@ public class CoursePdfGenerator {
 		//footerPages
 		PD4PageMark foot = new PD4PageMark();
 		foot.setPagesToSkip(1); //Skip the first page
-		foot.setInitialPageNumber(0);
+		foot.setInitialPageNumber(1);
 		//Add a table with 3 cells : 1. the blackbelt logo, 2. the licence, 3. the page number
 		foot.setHtmlTemplate("<table width='100%'><tr><td><img height='30' width='50' align='left' src='"+BBF_LOGO+"'></td><td class='licence'>"+FOOTER_TEXT+"</td><td align='right' class='valignBottom'>${page}<span class='grey'> /${total}</span></td></tr></table>");
 		foot.setAreaHeight(45); //Adjust the height
