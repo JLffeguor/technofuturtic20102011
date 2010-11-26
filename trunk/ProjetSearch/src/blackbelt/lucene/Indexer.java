@@ -39,7 +39,10 @@ public class Indexer {
 		System.out.println("*****************Begin Indexing hotel*****************");
 		
 		// Make an writer to create the index
-		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,new HashSet<String>()), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		
+		Set<String> stopWord=new HashSet<String>();
+		
+		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,stopWord), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries
 		//Hotel[] hotels = HotelDatabase.getHotels();
