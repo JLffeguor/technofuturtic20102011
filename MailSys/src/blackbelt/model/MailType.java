@@ -2,5 +2,6 @@ package blackbelt.model;
 
 public enum MailType {
 	IMMEDIATE,
-	GOUPABLE;
+	GOUPABLE,
+	Slow_NOT_Groupable;
 }

@@ -16,7 +16,6 @@
 	<context:annotation-config />
 	<context:component-scan base-package="blackbelt" />
 
-
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="BlackBeltUnit" />
