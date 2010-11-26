@@ -27,6 +27,8 @@ public class CoursePdfGenerator {
 	private String urlLogoPdf;
 	private User user;
 	
+	private boolean doTheUserWantACoverPage;;
+	
 //	private final String CSS = "h1,h2,h3,h4 {" +
 //			"	color: #AA0000; /* #AA0000 = blackbelt_dark_red  */" +
 //			"	font-weight: bold;" +
@@ -104,12 +106,11 @@ public class CoursePdfGenerator {
 //	font-size:10px;
 //}";
 	
-	// TODO: param: logo custom (nullable)
-	// TODO: param boolean for cover page
-	public CoursePdfGenerator(Section startSection, User user){
+	public CoursePdfGenerator(Section startSection, User user, boolean coverPageOrNot){
 		this.startSection = startSection;
 		this.pd4ml = new PD4ML();
 		this.user = user;
+		this.doTheUserWantACoverPage = coverPageOrNot;
 		
 		if(this.user.useCustomLogo()){
 			this.urlLogoPdf=this.user.getLogoUrl();
@@ -117,6 +118,16 @@ public class CoursePdfGenerator {
 		else{
 			urlLogoPdf= ASIAN_WOMAN_IMG_URL;
 		}
+	}
+	
+	//If the user want a specific logo (not those in his profile)
+	public CoursePdfGenerator(Section startSection, User user, boolean coverPageOrNot, String logoUrl){
+		this.startSection = startSection;
+		this.pd4ml = new PD4ML();
+		this.user = user;
+		this.doTheUserWantACoverPage = coverPageOrNot;
+		
+		this.urlLogoPdf = logoUrl;
 	}
 	
 //	public  void printSection(){
@@ -192,7 +203,7 @@ public class CoursePdfGenerator {
 		// Sub-sections
 		for(Section subSection : this.startSection.getSubSections()){
 			//This line is important to avoid making a static method.
-			CoursePdfGenerator test = new CoursePdfGenerator(subSection, this.user);
+			CoursePdfGenerator test = new CoursePdfGenerator(subSection, this.user, this.doTheUserWantACoverPage);
 			finalResult += test.generateHtmlForSection(subSection);
 		}
 		
@@ -208,7 +219,7 @@ public class CoursePdfGenerator {
 				css+=scanner.nextLine();
 			}
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException ("erreur lors du chargement de la feuille de style");  // TODO : FRANCAIS ?
+			throw new RuntimeException ("ERROR when dowlnoad the CSS sheet");
 		}
 		
 		return css;
@@ -225,7 +236,7 @@ public class CoursePdfGenerator {
 				"<h1 align='center'>"+this.startSection.getCategoryTitle()+"</h1><br/>" +
 				"<h2 align='center'>"+this.startSection.getTitle()+"</h2><br/><br/><br/>" +
 				
-				// TODO comment: We put the logo in a table because ..... XXXXXXXXXXXXXXXxx
+				// The logo is in a table to not deforme the logo
 				"<table align='center'><tr><td>" +
 				"  <img width='280' height='320' align='middle' src='"+this.urlLogoPdf+"'>" +
 				"</td></tr></table><br/><br/>";
