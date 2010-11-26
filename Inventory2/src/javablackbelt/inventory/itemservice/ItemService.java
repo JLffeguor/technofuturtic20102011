@@ -45,7 +45,6 @@ public class ItemService {
 			}
 		}
 	}
-
 	
 	// Method to display list of active items
 	public void displayListOfActiveItems(List<Item> list) {

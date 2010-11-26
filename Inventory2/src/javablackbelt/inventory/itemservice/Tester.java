@@ -81,13 +81,13 @@ public class Tester {
 	
 	
 	public void performTests() {
-		
+				
 		// dropItem method
-		itemService.dropItem(inventoryDao.findUser(1L),ItemType.BEER_BARREL,"Congratulations for you green belt");	
-		itemService.dropItem(inventoryDao.findUser(2L),ItemType.CHAMPAIN_GLASS,"Congratulations for you green belt");	
+		Item specificItem1 = itemService.dropItem(inventoryDao.findUser(1L),ItemType.BEER_BARREL,"Congratulations for you green belt");	
+		Item specificItem2 = itemService.dropItem(inventoryDao.findUser(2L),ItemType.CHAMPAIN_GLASS,"Congratulations for you green belt");	
 		
-		itemService.dropItem(inventoryDao.findUser(3L), ItemType.BEER_BARREL, ""); // for activeGroup		  
-		itemService.dropItem(inventoryDao.findUser(5L),ItemType.BEER_PINT,"Congratulations for you green belt"); // for activeOnUser // 		
+		Item specificItem3 = itemService.dropItem(inventoryDao.findUser(3L), ItemType.BEER_BARREL, ""); // for activeGroup		  
+		Item specificItem4 = itemService.dropItem(inventoryDao.findUser(5L),ItemType.BEER_PINT,"Congratulations for you green belt"); // for activeOnUser // 		
 		
 		Item specificItemGlobal = itemService.dropItem(inventoryDao.findUser(4L), ItemType.BAKG_NAKED, "Japan girl naked !"); // for activeGlobally
 		Item specificItemGlobal2 = itemService.dropItem(inventoryDao.findUser(5L), ItemType.IMAGE_HOME_24, "Home page for 24h!"); // for activeGlobally
@@ -99,13 +99,13 @@ public class Tester {
 		
 		//dropRandomItem method 
 		Item randomItem1 = itemService.dropRandomItem(inventoryDao.findUser(2L), 1,"Welcome to BlackBeltFactory"); 
-		itemService.dropRandomItem(inventoryDao.findUser(3L), 2, "Exam succeeded...");
+		Item randomItem2 = itemService.dropRandomItem(inventoryDao.findUser(3L), 2, "Exam succeeded...");
 		 
-		itemService.dropRandomItem(inventoryDao.findUser(4L), 3, "Exam succeeded..."); 
-		itemService.dropRandomItem(inventoryDao.findUser(5L), 4, "Welcome ...");
+		Item randomItem3 = itemService.dropRandomItem(inventoryDao.findUser(4L), 3, "Exam succeeded..."); 
+		Item randomItem4 = itemService.dropRandomItem(inventoryDao.findUser(5L), 4, "Welcome ...");
 		  
 		// dropRandomItem method (with % of chance to get an item)
-		itemService.dropRandomItem(inventoryDao.findUser(3L), 1, 0, "Happy birthday");
+		Item randomItemWithPerc = itemService.dropRandomItem(inventoryDao.findUser(3L), 1, 0, "Happy birthday");
 		  
 				  
 		// Send and activate methods 
@@ -152,6 +152,16 @@ public class Tester {
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.IMAGE_HOME_24));		
 		
 		itemService.dropItemForBirthDay();
-		itemService.displayItemsUsedOrNot(false);
+		itemService.displayItemsUsedOrNot(true);
+		
+		
+		// new item activation 
+		
+		itemService.activateItemOnUser(inventoryDao.findUser(2L),specificItem2,inventoryDao.findUser(2L));
+		
+		// display again
+		
+		System.out.println("Active Items of user : "+inventoryDao.findUser(2L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
 	}
 }
