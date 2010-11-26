@@ -38,47 +38,35 @@ public class ActiveItems {
 	 */
 	synchronized public List<Item> getActiveItems(User user) {
 
-		// given a map of users + a list of items (loaded below) ,
-		// we shall check for a given user , whether its items are still active
-		// : removal date is before today
-		// a new list is build with the today-active items , the old one is
-		// cleaned and replaced with the new
-		// if no more active items for this user , the list is cleaned then the
-		// user is cleaned from the map .
-
 		List<Item> activeItemList = new ArrayList<Item>();
 		Long mapKey = user.getUserId();
 
-		// if the list in the Map(userListActiveItemsMap) for the specified
-		// mapKey(User) is null, return null
+		// if the list in the Map(userListActiveItemsMap) for the specified mapKey(User) is null, return null
 		if (userListActiveItemsMap.get(mapKey) == null) {
-			System.out.println("getActiveItems output is null");
 			return null;
+		} 
+		
+		else {
 
-		} else {
-
-			// Call to the method itemStillActivated with the user list in
-			// parameter
-			activeItemList = itemsStillActivated(userListActiveItemsMap
-					.get(mapKey));
-
-			// Code to clean the userListActiveItemsMap from old items
+			// Call to the method itemStillActivated which will return a cleaned list (only active items)
+			// with the user list(userListActiveItemsMap.get(mapKey)) in parameter
+			activeItemList = itemsStillActivated(userListActiveItemsMap.get(mapKey));
+			
+			// if the list returned is not empty
 			if(!(activeItemList.isEmpty())){
+
 				
-				 // loop on the list of the specified user (userListActiveItemsMap.get(mapKey))
-				for(Item usact : userListActiveItemsMap.get(mapKey)){
-	
-					// if the activeItemList does not contains an item which is in the userListActiveItemsMap, remove it from the Map						
-					if(!(activeItemList.contains(usact))){
-						userListActiveItemsMap.get(mapKey).remove(usact);
-					}
-				}
-				
-				// return the cleaned list
+				// clear the list in the Map and add into this one the activeItemList
+				userListActiveItemsMap.get(mapKey).clear();
+				userListActiveItemsMap.get(mapKey).addAll(activeItemList);
+
+				// return the list
 				return userListActiveItemsMap.get(mapKey);
 			}
-			
+
 			else{
+				
+				// remove the user's mapKey from the Map (remove the user)
 				userListActiveItemsMap.remove(mapKey);
 				System.out.println("getActiveItems output is null");
 				return null;
@@ -93,40 +81,35 @@ public class ActiveItems {
 	 */
 	synchronized public List<Item> getActiveItems(Group group) {
 
-		// same as above for a group
-
+		// Instantiate the list is not useful but better for reading
 		List<Item> activeItemList = new ArrayList<Item>();
 		Long mapKey = group.getGroupId();
 
-		// if the list in the Map(groupActiveItemsMap) for the specified
-		// mapKey(Group) is null, return null
-		if (groupActiveItemsMap.get(group.getGroupId()) == null) {
+		// if the list in the Map(groupActiveItemsMap) for the specified mapKey(Group) is null, return null
+		if (groupActiveItemsMap.get(mapKey) == null) {
 			return null;
 		} 
 		
 		else {
-			List<Item> groupActiveItemsListMap = new ArrayList<Item>();
-			groupActiveItemsListMap.addAll(groupActiveItemsMap.get(mapKey));
-
-			activeItemList = itemsStillActivated(groupActiveItemsListMap);
 			
-			// Code to clean the groupActiveItemsMap from old items
+			// Call to the method itemStillActivated which will return a cleaned list (only active items)
+			// with the group list(groupActiveItemsMap(mapKey)) in parameter
+			activeItemList = itemsStillActivated(groupActiveItemsMap.get(mapKey));
+			
+			// if the list is not empty
 			if(!(activeItemList.isEmpty())){
 				
-				 // loop on the list of the specified user (userListActiveItemsMap.get(mapKey))
-				for(Item usact : groupActiveItemsMap.get(mapKey)){
-	
-					// if the activeItemList does not contains an item which is in the userListActiveItemsMap, remove it from the Map						
-					if(!(activeItemList.contains(usact))){
-						groupActiveItemsMap.get(mapKey).remove(usact);
-					}
-				}
+				// clear the list in the Map and add into this one the activeItemList
+				groupActiveItemsMap.get(mapKey).clear();
+				groupActiveItemsMap.get(mapKey).addAll(activeItemList);
 				
 				// return the cleaned list
 				return groupActiveItemsMap.get(mapKey);
 			}
 			
 			else{
+				
+				// remove the group's mapKey from the Map (remove the user)
 				groupActiveItemsMap.remove(mapKey);
 				System.out.println("getActiveItems output is null");
 				return null;
@@ -144,16 +127,15 @@ public class ActiveItems {
 					+ g.getCreationDate());
 
 		}
-
-		List<Item> activeItemList = new ArrayList<Item>();
-		activeItemList = itemsStillActivated(globalItems);
-
-		if (activeItemList == null) {
+		
+		// if the list returned by the itemsStillActivated method is null, return null
+		if (itemsStillActivated(globalItems) == null) {
 			return null;
 		} 
 		
+		// else return the global list cleaned
 		else {
-			return activeItemList;
+			return itemsStillActivated(globalItems);
 		}
 	}
 
@@ -170,10 +152,8 @@ public class ActiveItems {
 					+ g.getCreationDate());
 		}
 
-		List<Item> activeItemList = new ArrayList<Item>();
-		activeItemList = itemsStillActivated(globalItems);
-
-		return activeItemList;
+		// return the global list cleaned
+		return itemsStillActivated(globalItems);
 	}
 
 	/** returns the items still activated */
@@ -186,10 +166,9 @@ public class ActiveItems {
 
 		for (Item i : ListOfItemsFromMap) {
 
-			// if the date of today is higher than the removalDate of the items
-			// in the ListOfItemsFromMap
+			// if the date of today is higher than the removalDate of the items in the ListOfItemsFromMap
 
-			if (!(new Date().after(i.getRemovalDate()))) {
+			if ((new Date().before(i.getRemovalDate()))) {
 				activeItemList.add(i);
 			}
 		}
@@ -202,8 +181,8 @@ public class ActiveItems {
 	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
-	synchronized public void addItemToUserListActiveItemsMap(Item item,
-			User user) {
+	synchronized public void addItemToUserListActiveItemsMap(Item item,	User user) {
+		
 		Long userId = user.getUserId();
 
 		List<Item> userItemsList = new ArrayList<Item>();
