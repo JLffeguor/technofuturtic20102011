@@ -317,8 +317,8 @@ public class CourseTextFormatter {
 //			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
 //					+element.innerText+"</pre>");
 
-            addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"
-                    +element.innerText+"</pre>");
+            addResultTextBlock("<table width='100%'><tr><td width='20px'><img align='top' src='http://www.blackbeltfactory.com/VAADIN/themes/blackbelt/image/src-icon.jpg'></td><td><pre class='contentProgramListing' xml:space='preserve'>"
+                    +element.innerText+"</pre></td></tr></table>");
 		}
 	}
 	
@@ -329,7 +329,7 @@ public class CourseTextFormatter {
 		}
 		
 		shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-		addResultTextBlock("<div class='contentQuote'>"+element.innerText+"</div>");
+		//addResultTextBlock("<div class='contentQuote'>"+element.innerText+"</div>");
 	}	
 
 	protected void insertVideo(Element element) {
