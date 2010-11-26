@@ -235,10 +235,6 @@ public class CoursePdfGenerator {
 		
 		// User who printed.
 		result+="<table width='100%'><tr><td width='45px'><img width='45px' height='35' align='left' src='"+this.user.getLevelUrl()+"'></td><td class='valignMiddle'><span class='small'>Download by :</span><br/><i>"+this.user.getFirstName()+" "+this.user.getName()+"</i><br/><span class='small'>"+this.getCurentDate()+"</span></td></tr></table><pd4ml:page.break>";
-		
-		//toc
-		result+="<br/><br/><table><tr><td class='valignMiddle'><pd4ml:toc></td></tr></table><pd4ml:page.break>";
-		
 		return result;
 	}
 	
