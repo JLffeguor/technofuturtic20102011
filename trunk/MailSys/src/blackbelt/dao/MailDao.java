@@ -1,14 +1,12 @@
 package blackbelt.dao;
 
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import blackbelt.model.Mail;
 import blackbelt.model.MailType;
+import blackbelt.model.MailingDelayType;
 import blackbelt.model.User;
 
 @Transactional
@@ -65,24 +64,28 @@ public class MailDao {
 		
 		//request to get a user containing grouped mails
 		List<User> list = em.createQuery("SELECT m.user "
-					+ "FROM Mail m "
-						+ " WHERE ("
-						+ "         m.mailType=:MailType"
-						+ " 	AND"
-						+ "          ("
-						+ "               m.user.lastMailSendedDate IS NULL "   // Not sent yet
-						+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
-						+ "                AND (    (m.user.mailingDelai = 1 AND :yesterday > m.user.lastMailSendedDate)"
-						+ "                      OR (m.user.mailingDelai = 2 AND :lastWeek > m.user.lastMailSendedDate)"
-						+ "                    )"
-						+ "              )"
-						+ "          )"
-						+ "     ) ")
-						.setParameter("MailType", MailType.GOUPABLE)
-						.setParameter("yesterday", yesterday)
-						.setParameter("lastWeek", lastWeek)
-						.setMaxResults(1)
-						.getResultList();
+				+ "FROM Mail m "
+					+ " WHERE ("
+					+ "         m.mailType=:MailType"
+					+ " 	AND"
+					+ "          ("
+					+ "               m.user.lastMailSendedDate IS NULL "   // Not sent yet
+					+ "           OR  (     m.user.lastMailSendedDate IS NOT NULL"
+					+ "                AND (    (m.user.mailingDelai = :dailytype AND :yesterday > m.user.lastMailSendedDate)"
+					+ "                      OR (m.user.mailingDelai = :weeklytype AND :lastWeek > m.user.lastMailSendedDate)"
+					+ "                      OR  m.user.mailingDelai = :immediatetype"
+					+ "                    )"
+					+ "              )"
+					+ "          )"
+					+ "     ) ")
+					.setParameter("MailType", MailType.GOUPABLE)
+					.setParameter("yesterday", yesterday)
+					.setParameter("lastWeek", lastWeek)
+					.setParameter("dailytype", MailingDelayType.DAILY)
+					.setParameter("weeklytype", MailingDelayType.WEEKLY)
+					.setParameter("immediatetype", MailingDelayType.IMMEDIATELY)
+					.setMaxResults(1)
+					.getResultList();
 		if (list.size() == 0) {
 			return null;	
 		} else {

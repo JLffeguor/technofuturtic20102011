@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,15 +31,15 @@ public class User {
 	
 	private Date lastMailSendedDate;
 	
-	@Column(nullable = false)
-	private int mailingDelai;// 0= none 1= weakly 2= daily
+	@Enumerated(EnumType.STRING)
+	private MailingDelayType mailingDelai;// 0= immediately 1=daily 2= weakly
 
 	//Constructors
 	public User() {
 		
 	}
 	
-	public User(String pseudo, String email, Date lastMailSendedDate, int mailingDelai) {
+	public User(String pseudo, String email, Date lastMailSendedDate, MailingDelayType mailingDelai) {
 		this.pseudo = pseudo;
 		this.email = email;
 		this.lastMailSendedDate = lastMailSendedDate;
@@ -65,11 +67,11 @@ public class User {
 		return this.lastMailSendedDate;
 	}
 
-	public int getMailingDelai() {
+	public MailingDelayType getMailingDelai() {
 		return this.mailingDelai;
 	}
 
-	public void setMailingDelai(int newLetterGroupe) {
-		this.mailingDelai = newLetterGroupe;
+	public void setMailingDelai(MailingDelayType mailingDelay) {
+		this.mailingDelai = mailingDelay;
 	}
 }
