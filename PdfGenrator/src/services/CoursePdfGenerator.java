@@ -1,13 +1,12 @@
 package services;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.security.InvalidParameterException;
 import java.util.GregorianCalendar;
-import java.util.Scanner;
+
 
 import org.zefer.pd4ml.PD4ML;
 import org.zefer.pd4ml.PD4PageMark;
@@ -18,7 +17,6 @@ import dao.domainModel.*;
 public class CoursePdfGenerator {
 	
 	private Section startSection;
-	private final String CSS_URL = ("S:\\DocumentsPourPDF\\stylePDF.css");
 	private final String ASIAN_WOMAN_IMG_URL="http://www.blackbeltfactory.com/VAADIN/themes/blackbelt/image/bgphoto/asianWomanSword.jpg";
 	private final String BBF_LOGO="http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-950x602.png";
 	private PD4ML pd4ml;
@@ -29,82 +27,78 @@ public class CoursePdfGenerator {
 	
 	private boolean doTheUserWantACoverPage;;
 	
-//	private final String CSS = "h1,h2,h3,h4 {" +
-//			"	color: #AA0000; /* #AA0000 = blackbelt_dark_red  */" +
-//			"	font-weight: bold;" +
-//			"}";
-////			"
-//h1 { 
-//	font-size: 30px;
-//}
-//h2 { 
-//	font-size: 24px; 
-//}
-//h3 {
-//	font-size: 18px;
-//}
-//h4 {
-//	font-size: 15px;
-//}
-//#gardeTitle{
-//	font-size:32;
-//}
-//body{
-//	font-family:arial, helvetica, verdana, sans-serif;
-//	font-size:12px;
-//
-//}
-//p{
-//	line-height:17px;
-//}
-//
-//a {
-//	text-decoration: none;
-//	color: #AA0000;
-//}
-//
-//.titre{
-//	font-size:26px;
-//	font-family:helvetica,Times_New_Roman;
-//}
-//.logo{
-//	font-size:32;
-//	font-family:helvetica,Aharoni,Impact;
-//}
-//.grey{
-//	color:#787878;
-//}
-//.contentQuote {
-//	background-color: #EEE;
-//	margin-left: 25px;
-//	padding: 14px;
-//	font-family: Times;
-//	font-style: italic;
-//}
-//
-//pre.contentProgramListing {
-//	background-color: #EEE;
-//	margin-bottom: 14px;
-//	margin-left: 25px;
-//	padding: 14px;
-//	font-size: 12px; /* smaller to have longer lines */
-//	overflow: auto; /* scroll bar if too wide */
-//}
-//.licence{
-//	font-size:8px;
-//	color: #9E9E9E;
-//	vertical-align: bottom;
-//	padding-left: 15px;
-//}
-//.valignBottom{
-//	vertical-align: bottom;
-//}
-//.valignMiddle{
-//	vertical-align:middle;
-//}
-//.small{
-//	font-size:10px;
-//}";
+	private final String CSS = "h1,h2,h3,h4 {" +
+	"	color: #AA0000; /* #AA0000 = blackbelt_dark_red  */" +
+	"	font-weight: bold;" +
+	"}"+
+	"h1 { "+
+		"font-size: 30px;"+
+	"}"+
+	"h2 { "+
+		"font-size: 24px; "+
+	"}"+
+	"h3 {"+
+		"font-size: 18px;"+
+	"}"+
+	"h4 {"+
+		"font-size: 15px;"+
+	"}"+
+	"#gardeTitle{"+
+		"font-size:32;"+
+	"}"+
+	"body{"+
+		"font-family:arial, helvetica, verdana, sans-serif;"+
+		"font-size:12px;"+
+	"}"+
+	"p{"+
+		"line-height:17px;"+
+	"}"+
+	"a {"+
+		"text-decoration: none;"+
+		"color: #AA0000;"+
+	"}"+
+
+	".titre{"+
+		"font-size:26px;"+
+		"font-family:helvetica,Times_New_Roman;"+
+	"}"+
+	".logo{"+
+		"font-size:32;"+
+		"font-family:helvetica,Aharoni,Impact;"+
+	"}"+
+	".grey{"+
+		"color:#787878;"+
+	"}"+
+	".contentQuote {"+
+		"background-color: #EEE;"+
+		"margin-left: 25px;"+
+		"padding: 14px;"+
+		"font-family: Times;"+
+		"font-style: italic;"+
+	"}"+
+	"pre.contentProgramListing {"+
+		"background-color: #EEE;"+
+		"margin-bottom: 14px;"+
+		"margin-left: 25px;"+
+		"padding: 14px;"+
+		"font-size: 12px; /* smaller to have longer lines */"+
+		"overflow: auto; /* scroll bar if too wide */"+
+	"}"+
+	".licence{"+
+		"font-size:8px;"+
+		"color: #9E9E9E;"+
+		"vertical-align: bottom;"+
+		"padding-left: 15px;"+
+	"}"+
+	".valignBottom{"+
+		"vertical-align: bottom;"+
+	"}"+
+	".valignMiddle{"+
+		"vertical-align:middle;"+
+	"}"+
+	".small{"+
+		"font-size:10px;"+
+	"}";
 	
 	public CoursePdfGenerator(Section startSection, User user, boolean coverPageOrNot){
 		this.startSection = startSection;
@@ -146,7 +140,7 @@ public class CoursePdfGenerator {
 		System.out.println(html); // FIXME: remove at integration
 
 		// PDF document setting
-		pd4ml.addStyle(loadStyleCss(), true);
+		pd4ml.addStyle( CSS, true);
 		createHeader();
 		createFooter();
 		pd4ml.enableImgSplit(false); //Do not split an image
@@ -179,9 +173,10 @@ public class CoursePdfGenerator {
 		String finalResult = "<html><head><title>"+this.startSection.getTitle()+"</title></head>" +
 		// Html body start
 				"<body>";
-		
-		// Cover page
-		finalResult+=createCoverHtml();
+		//Cover page
+		if (doTheUserWantACoverPage){
+			finalResult+=createCoverHtml();
+		}
 
 		// Main content (all sub sections of startSection)
 		finalResult += generateHtmlForSection(this.startSection);
@@ -210,20 +205,6 @@ public class CoursePdfGenerator {
 		return finalResult;
 	}
 	
-	public String loadStyleCss(){
-		String css = "";
-		File file = new File(CSS_URL);
-		try {
-			Scanner scanner = new Scanner(file);
-			while(scanner.hasNext()){
-				css+=scanner.nextLine();
-			}
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException ("ERROR when dowlnoad the CSS sheet");
-		}
-		
-		return css;
-	}
 	public String createCoverHtml(){
 		String result = new String("");
 		result +=
