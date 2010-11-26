@@ -56,8 +56,10 @@ public class MyLuceneTest {
 
 		try {
 
-			// Build a Query object			
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30,new HashSet<String>()));
+			// Build a Query object
+			Set<String> stopWords=new HashSet<String>();
+			
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30,stopWords));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;
@@ -92,9 +94,6 @@ public class MyLuceneTest {
 					// that this Field was not indexed, but (unlike the
 					// "contents" field) was stored verbatim and can be
 					// retrieved.
-					// System.out.println("  " + (i + 1) + ". " +
-					// doc.get("title"));
-					// System.out.println("Content: " + doc.get("content"));
 					System.out.println("Content N°" + (i + 1) + ": "
 							+ doc.get("language") + " (" + doc.get("id") + ")");
 				}
