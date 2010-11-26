@@ -177,13 +177,22 @@ public class CoursePdfGenerator {
 		if (doTheUserWantACoverPage){
 			finalResult+=createCoverHtml();
 		}
-
+		
+		//add the table of contents
+		finalResult+=createToc();
+		
 		// Main content (all sub sections of startSection)
 		finalResult += generateHtmlForSection(this.startSection);
 		
 		// Html close
 		finalResult+="</body></html>";
 		return finalResult;
+	}
+	
+	//TOC
+	public String createToc(){
+		String result="<br/><br/><table><tr><td class='valignMiddle'><pd4ml:toc></td></tr></table><pd4ml:page.break>";
+		return result;
 	}
 	
 	/** Recursive generation of html for given section and all sub-sections */
@@ -214,8 +223,8 @@ public class CoursePdfGenerator {
 				"</div><br/><br/>" +
 				
 				// Titles
-				"<h1 align='center'>"+this.startSection.getCategoryTitle()+"</h1><br/>" +
-				"<h2 align='center'>"+this.startSection.getTitle()+"</h2><br/><br/><br/>" +
+				"<div align='center' style='font-size:30px;color: #AA0000;font-weight: bold;'>"+this.startSection.getCategoryTitle()+"</div><br/>" +
+				"<div align='center' style='font-size:24px;color: #AA0000;font-weight: bold;'>"+this.startSection.getTitle()+"</div><br/>" +
 				
 				// The logo is in a table to not deforme the logo
 				"<table align='center'><tr><td>" +
@@ -224,6 +233,10 @@ public class CoursePdfGenerator {
 		
 		// User who printed.
 		result+="<table width='100%'><tr><td width='45px'><img width='45px' height='35' align='left' src='"+this.user.getLevelUrl()+"'></td><td class='valignMiddle'><span class='small'>Download by :</span><br/><i>"+this.user.getFirstName()+" "+this.user.getName()+"</i><br/><span class='small'>"+this.getCurentDate()+"</span></td></tr></table><pd4ml:page.break>";
+		
+		//toc
+		result+="<br/><br/><table><tr><td class='valignMiddle'><pd4ml:toc></td></tr></table><pd4ml:page.break>";
+		
 		return result;
 	}
 	
