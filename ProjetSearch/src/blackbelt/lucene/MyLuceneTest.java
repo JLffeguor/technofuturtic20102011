@@ -98,6 +98,7 @@ public class MyLuceneTest {
 							+ doc.get("language") + " (" + doc.get("id") + ")");
 				}
 			}
+			
 			System.out.println();
 		} catch (Exception e) {
 			// TODO: handle exception
