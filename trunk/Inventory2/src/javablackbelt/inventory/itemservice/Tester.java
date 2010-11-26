@@ -110,7 +110,10 @@ public class Tester {
 				  
 		// Send and activate methods 
 		itemService.sendItemTo(inventoryDao.findUser(2L),randomItem1,inventoryDao.findUser(4L));
+		
 		itemService.activateItemOnUser(inventoryDao.findUser(2L),specificItemUser,inventoryDao.findUser(5L));
+		itemService.activateItemOnUser(inventoryDao.findUser(1L),specificItemUser2,inventoryDao.findUser(2L));
+		
 		itemService.activateItemOnGroup(inventoryDao.findUser(2L),specificItemGroup,inventoryDao.findGroup(9L)); 
 		
 		itemService.activateItemGlobally(inventoryDao.findUser(2L),specificItemGlobal);
@@ -118,10 +121,6 @@ public class Tester {
 			  
 	
 		// getActiveItems methods 
-		System.out.println("Active Items of user : " +inventoryDao.findUser(2L).getNickName());
-		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
-		itemService.activateItemOnUser(inventoryDao.findUser(1L),specificItemUser2,inventoryDao.findUser(2L));
-		
 		System.out.println("Active Items of user : " +inventoryDao.findUser(2L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
 		

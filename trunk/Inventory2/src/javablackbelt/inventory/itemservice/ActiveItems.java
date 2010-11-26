@@ -62,26 +62,27 @@ public class ActiveItems {
 			activeItemList = itemsStillActivated(userListActiveItemsMap
 					.get(mapKey));
 
-			// Wipe the list in the Map(userListActiveItemsMap) for the
-			// specified mapKey(User)
-			userListActiveItemsMap.get(mapKey).clear();
-
-			if (activeItemList != null) {
-
-				// if the activeItemList is not null, add this one in the
-				// userListActiveItemsMap on the specified mapKey(User)
-				userListActiveItemsMap.put(mapKey, activeItemList);
-				System.out.println("getActiveItems output is NOT null");
-				return activeItemList;
-			} else {
-
-				// remove the User with the specified mapKey from the
-				// userListActiveItemsMap
+			// Code to clean the userListActiveItemsMap from old items
+			if(!(activeItemList.isEmpty())){
+				
+				 // loop on the list of the specified user (userListActiveItemsMap.get(mapKey))
+				for(Item usact : userListActiveItemsMap.get(mapKey)){
+	
+					// if the activeItemList does not contains an item which is in the userListActiveItemsMap, remove it from the Map						
+					if(!(activeItemList.contains(usact))){
+						userListActiveItemsMap.get(mapKey).remove(usact);
+					}
+				}
+				
+				// return the cleaned list
+				return userListActiveItemsMap.get(mapKey);
+			}
+			
+			else{
 				userListActiveItemsMap.remove(mapKey);
 				System.out.println("getActiveItems output is null");
 				return null;
 			}
-
 		}
 	}
 
@@ -101,26 +102,33 @@ public class ActiveItems {
 		// mapKey(Group) is null, return null
 		if (groupActiveItemsMap.get(group.getGroupId()) == null) {
 			return null;
-		} else {
-			List<Item> genericItemList = new ArrayList<Item>();
-			genericItemList.addAll(groupActiveItemsMap.get(mapKey));
+		} 
+		
+		else {
+			List<Item> groupActiveItemsListMap = new ArrayList<Item>();
+			groupActiveItemsListMap.addAll(groupActiveItemsMap.get(mapKey));
 
-			// Wipe the list in the Map(groupActiveItemsMap) for the specified
-			// mapKey(Group)
-			activeItemList = itemsStillActivated(genericItemList);
-			groupActiveItemsMap.get(mapKey).clear();
-
-			if (activeItemList != null) {
-
-				// if the activeItemList is not null, add this one in the
-				// groupActiveItemsMap on the specified mapKey(Group)
-				groupActiveItemsMap.put(mapKey, activeItemList);
-				return activeItemList;
-			} else {
-
-				// remove the Group with the specified mapKey from the
-				// groupActiveItemsMap
+			activeItemList = itemsStillActivated(groupActiveItemsListMap);
+			
+			// Code to clean the groupActiveItemsMap from old items
+			if(!(activeItemList.isEmpty())){
+				
+				 // loop on the list of the specified user (userListActiveItemsMap.get(mapKey))
+				for(Item usact : groupActiveItemsMap.get(mapKey)){
+	
+					// if the activeItemList does not contains an item which is in the userListActiveItemsMap, remove it from the Map						
+					if(!(activeItemList.contains(usact))){
+						groupActiveItemsMap.get(mapKey).remove(usact);
+					}
+				}
+				
+				// return the cleaned list
+				return groupActiveItemsMap.get(mapKey);
+			}
+			
+			else{
 				groupActiveItemsMap.remove(mapKey);
+				System.out.println("getActiveItems output is null");
 				return null;
 			}
 		}
@@ -142,7 +150,9 @@ public class ActiveItems {
 
 		if (activeItemList == null) {
 			return null;
-		} else {
+		} 
+		
+		else {
 			return activeItemList;
 		}
 	}
