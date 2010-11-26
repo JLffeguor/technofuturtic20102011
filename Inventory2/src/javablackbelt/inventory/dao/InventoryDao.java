@@ -1,6 +1,7 @@
 package javablackbelt.inventory.dao;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javablackbelt.inventory.model.Group;
@@ -36,28 +37,35 @@ public class InventoryDao {
 		.setParameter("dayOfBirth", dayOfBirth).setParameter("monthOfBirth", monthOfBirth)
 		.getResultList();
 		
-		
 		return userList;
 	}
 	
-	public List<Item> getUsedItems(){
+	
+	public List<Item> getUsedItems(boolean usedOrNot){
 
-		Calendar calendar = Calendar.getInstance();
-		 
-		int monthOfToday = calendar.get(Calendar.MONTH);
-		int dayOfToday = calendar.get(Calendar.DAY_OF_MONTH);
-		int yearOfToday = calendar.get(Calendar.YEAR);
+		// Calendar to get the date of today
+		Calendar calendar = Calendar.getInstance();		
+		Date dateOfToday = calendar.getTime();
 		
-		monthOfToday = monthOfToday + 1 ; // for gregorian calendar
-				
-		List<Item> itemList = (List<Item>)em
-		.createQuery("select i from Item i where day(i.removalDate) <=:dayOfToday and month(i.removalDate) <=:monthOfToday and year(i.removalDate) <=:yearOfToday")
-		.setParameter("dayOfToday", dayOfToday).setParameter("monthOfToday", monthOfToday).setParameter("yearOfToday", yearOfToday)
-		.getResultList();		
+		// if the choice is to get used items
+		if(usedOrNot == false){
+								
+			List<Item> itemList = (List<Item>)em.createQuery("select i from Item i where i.removalDate <=:dateOfToday")
+			.setParameter("dateOfToday", dateOfToday).getResultList();
+			
+			return itemList;
+		}
 		
-		return itemList;
+		else {
+		
+			List<Item> itemList = (List<Item>)em.createQuery("select i from Item i where i.removalDate >:dateOfToday")
+			.setParameter("dateOfToday", dateOfToday).getResultList();
+			
+			return itemList;
+		}
 	}
-		
+	
+	
 	public void persist(Object obj){
 		
 		if(obj != null){
@@ -65,10 +73,12 @@ public class InventoryDao {
 		}
 	}
 	
+	
 	public Object merge(Object obj) {
 		
 		return em.merge(obj);
 	}	
+	
 	
 	public User findUser(Long id){
 		
@@ -76,6 +86,7 @@ public class InventoryDao {
 		
 		return theUser;
 	}
+	
 	
 	public Group findGroup(Long id){
 		
