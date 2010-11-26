@@ -66,4 +66,7 @@ public class User {
 	public boolean useCustomLogo(){
 		return this.customLogo;
 	}
+	public void changeTheFuckingValueOfTheBooleanOfTheUseCustomLogo(boolean bool){
+		this.customLogo=bool;
+	}
 }
