@@ -32,10 +32,17 @@ public class ItemService {
 		}
 	}
 	
-	public void displayUsedItems(){
+	public void displayItemsUsedOrNot(boolean usedOrNot){
 				
-		for(Item it : inventoryDao.getUsedItems()){
-			System.out.println("\nItem type : " + it.getItemType() + " is used / removalDate : " + it.getRemovalDate());
+		for(Item it : inventoryDao.getUsedItems(usedOrNot)){
+			
+			if(usedOrNot == true){
+				System.out.println("\nItem type : " + it.getItemType() + " is not used / removalDate : " + it.getRemovalDate());
+			}
+			
+			else{
+				System.out.println("\nItem type : " + it.getItemType() + " is used / removalDate : " + it.getRemovalDate());
+			}
 		}
 	}
 

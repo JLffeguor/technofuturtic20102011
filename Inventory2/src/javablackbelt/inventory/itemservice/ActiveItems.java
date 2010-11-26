@@ -186,14 +186,10 @@ public class ActiveItems {
 		return activeItemList;
 	}
 
-	// /////////// Methods to add an item in a Map (User or Group) or in the
-	// globalList ////////
-	// /////////// Methods to add an item in a Map (User or Group) or in the
-	// globalList ////////
-	// /////////// Methods to add an item in a Map (User or Group) or in the
-	// globalList ////////
-	// /////////// Methods to add an item in a Map (User or Group) or in the
-	// globalList ////////
+	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	synchronized public void addItemToUserListActiveItemsMap(Item item,

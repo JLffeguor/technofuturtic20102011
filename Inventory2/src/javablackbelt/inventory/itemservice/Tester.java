@@ -153,6 +153,6 @@ public class Tester {
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.IMAGE_HOME_24));		
 		
 		itemService.dropItemForBirthDay();
-		itemService.displayUsedItems();
+		itemService.displayItemsUsedOrNot(false);
 	}
 }
