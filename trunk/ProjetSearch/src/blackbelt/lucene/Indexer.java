@@ -44,10 +44,7 @@ public class Indexer {
 		
 		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,stopWord), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
-		//Index all Accommodation entries
-		//Hotel[] hotels = HotelDatabase.getHotels();
-		//List<Section> sections=dao.myQuerry("SELECT s FROM Section s");
-		
+		//Index all Accommodation entries		
 		List<Section> sections=dao.myQuerry("select s1 from Section s1 where s1.version=(" +
 				"select max(s2.version) from Section s2 where s2.sectionid=s1.sectionid and s2.language=s1.language " +
 				"group by s2.sectionid)" +
@@ -67,7 +64,4 @@ public class Indexer {
         System.out.println("*****************End Indexing hotel*****************");
 	}
 	
-	public List myQuerry(String querry){
-		return dao.myQuerry(querry);
-	}
 }
