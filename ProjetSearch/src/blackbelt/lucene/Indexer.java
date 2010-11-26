@@ -37,11 +37,9 @@ public class Indexer {
 
 	public void createIndexes(Directory directory) throws IOException {
 		System.out.println("*****************Begin Indexing hotel*****************");
-
-		Set<String> stopWords=new HashSet<String>();
 		
 		// Make an writer to create the index
-		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,stopWords), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,new HashSet<String>()), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries
 		//Hotel[] hotels = HotelDatabase.getHotels();
