@@ -56,10 +56,8 @@ public class MyLuceneTest {
 
 		try {
 
-			// Build a Query object
-			Set<String> stopWords=new HashSet<String>();
-			
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30,stopWords));
+			// Build a Query object			
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30,new HashSet<String>()));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;
