@@ -11,15 +11,15 @@ import javax.persistence.Table;
 public class Section {
 
 	@Id
-	long id;
+	private long id;
 	@Column(name = "language")
-	String language;
+	private String language;
 	@Column(name = "text")
-	String text;
+	private String text;
 	@Column(name = "version")
-	int version;
+	private int version;
 	@Column(name = "sectionid")
-	long sectionid;
+	private long sectionid;
 
 	public String getLanguage() {
 		return language;
