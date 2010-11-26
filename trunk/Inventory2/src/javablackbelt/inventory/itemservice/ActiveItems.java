@@ -224,7 +224,7 @@ public class ActiveItems {
 
 		// if the global list is empty, add the first item
 		
-		if (globalItems.isEmpty()) {
+		if (globalItems == null) {
 			globalItems.add(item);
 		}
 
