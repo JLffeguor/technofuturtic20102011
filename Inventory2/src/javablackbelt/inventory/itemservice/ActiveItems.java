@@ -184,34 +184,41 @@ public class ActiveItems {
 	synchronized public void addItemToUserListActiveItemsMap(Item item,	User user) {
 		
 		Long userId = user.getUserId();
-
-		List<Item> userItemsList = new ArrayList<Item>();
-		userItemsList = userListActiveItemsMap.get(userId);
-
+		
 		// Create list if no list yet.
-		if (userItemsList == null) {
+		if (userListActiveItemsMap.get(userId) == null) {
 
 			// ... /** creation of userId in the Map */
 
-			userItemsList = new ArrayList<Item>();
+			List<Item> userItemsList = new ArrayList<Item>();
+			userItemsList.add(item);
+			
 			userListActiveItemsMap.put(userId, userItemsList);
 		}
-		userItemsList.add(item);
-
+		
+		else{
+			userListActiveItemsMap.get(userId).add(item);
+		}
 	}
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	synchronized public void addItemToGroupActiveItemsMap(Item item, Group group) {
+		
 		long groupId = group.getGroupId();
-		List<Item> groupItemsList = groupActiveItemsMap.get(groupId);
-		if (groupItemsList == null) {
+		
+		if (groupActiveItemsMap.get(groupId) == null) {
 
 			/** creation of userId in the Map */
 
-			groupItemsList = new ArrayList<Item>();
+			List<Item> groupItemsList = new ArrayList<Item>();
+			groupItemsList.add(item);
+			
 			groupActiveItemsMap.put(groupId, groupItemsList);
 		}
-		groupItemsList.add(item);
+		
+		else{
+			groupActiveItemsMap.get(groupId).add(item);
+		}
 	}
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
