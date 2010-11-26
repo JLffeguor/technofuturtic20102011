@@ -10,9 +10,9 @@ CREATE SEQUENCE seq_user_id  INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775
 CREATE TABLE mails (
   id                BIGINT  NOT NULL DEFAULT (nextval('seq_mails_id')),
   User_Id           BIGINT  NOT NULL,
-  Subject           TEXT    NOT NULL,
   Content           TEXT    NOT NULL,
-  immediate         BOOLEAN NOT NULL,
+  MailSubject       TEXT    NOT NULL,
+  MailType          TEXT    NOT NULL,
   creationdate      TIMESTAMP WITH TIME ZONE NOT NULL,
   PRIMARY KEY (id)
 );
@@ -22,7 +22,7 @@ CREATE TABLE users (
   pseudo             TEXT    NOT NULL,
   email              TEXT    NOT NULL,
   lastMailSendedDate TIMESTAMP WITH TIME ZONE NULL DEFAULT NULL,
-  mailingDelai       INT NOT NULL,
+  mailingDelai       TEXT NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -31,11 +31,11 @@ ALTER TABLE mails ADD CONSTRAINT fk_mailhaveuser FOREIGN KEY (User_Id) REFERENCE
 -- Records of user
 -- ----------------------------
 INSERT INTO users (pseudo, email, mailingDelai	)
-                  VALUES ('toto', 'toto@hotmail.com', '1'),
-                         ('mami', 'mami@hotmail.com', '1'),
-                         ('alain', 'alain@hotmail.com', '2'),
-                         ('eric', 'eric@hotmail.com', '2'),
-                         ('steph', 'steph@hotmail.com', '1'),
-                         ('john', 'john@hotmail.com', '1'),
-                         ('tati', 'tati@hotmail.com', '2');
+                  VALUES ('toto', 'toto@hotmail.com', 'DAILY'),
+                         ('mami', 'mami@hotmail.com', 'DAILY'),
+                         ('alain', 'alain@hotmail.com', 'WEEKLY'),
+                         ('eric', 'eric@hotmail.com', 'WEEKLY'),
+                         ('steph', 'steph@hotmail.com', 'DAILY'),
+                         ('john', 'john@hotmail.com', 'DAILY'),
+                         ('tati', 'tati@hotmail.com', 'WEEKLY');
 

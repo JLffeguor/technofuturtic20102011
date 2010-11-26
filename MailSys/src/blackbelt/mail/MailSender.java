@@ -84,8 +84,16 @@ public class MailSender extends Thread {
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
 	public void sendMailList(List<Mail> mail) {
-		
-		String content = this.mainTemplate.TemplateMail(mail);
+		String content = "";
+		try {
+			content = this.mainTemplate.TemplateMail(mail);
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);

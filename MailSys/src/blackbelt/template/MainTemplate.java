@@ -7,18 +7,17 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
-import blackbelt.model.MailSubject;
 import blackbelt.model.User;
 /**
- * Generates a Html string based on a mail
+ * 
  */
 @Service
-public final class MainTemplateService {
+public final class MainTemplate {
 	
 	@Autowired
 	MailDao dao;
 	
-	public MainTemplateService() {
+	public MainTemplate() {
 		
 	}
 	
@@ -33,7 +32,7 @@ public final class MainTemplateService {
 		
 		return "<div style=\"margin:10;width:70%\">"
 			+ "<div style=\"background:#000000;padding:10\">"
-			+ "<font face=\"Arial\" color=\"#FFFFFF\" size=\"5\">"
+			+ "<font face=\"Arial\" color=\"#FFFFFF\" size=\"3\">"
 			+  mail.getMailSubject()
 			+ "</font><br><font color=\"#FFFFFF\" size=\"1\">"
 			+  mail.getDateMessage()
@@ -43,21 +42,20 @@ public final class MainTemplateService {
 			+ "</div></div><br>";
 		
 		/*return "<div style=\"margin:10;width:70%\"><div style=\"background:#000000;padding:10\"><font face=\"Comic_Sans,Verdana\" color=\"#FFFFFF\" size=\"5\">"
-			+  mail.getMailSubject().toString()
+			+  mail.getSubject()
 			+  "</font><br><font color=\"#FFFFFF\" size=\"2\">"
 			+  mail.getDateMessage()
 			+  "</font></div><div style=\"background:#ffffff;padding:15px\">"
 			+  mail.getFormatedText() + "</div></div>";*/
 	}
 	
-	private String templateFooter(User user) {
-		String groupOption = dao.getGroupOtionFromUser(user);
+	private String templateFooter(Mail mail) {
+		String groupOption = dao.getGroupOtionFromUser(mail.getUser());
 		
 		
-		return "<br><hr><br><div align=\"justify\"> your account : <a href=\"http://www.blackbeltfactory.com/ui#!User/d&d\"> http://www.blackbeltfactory.com/ui#!</a>"
+		return "<br><hr><br><div align=\"center\"> your account : <a href=\"http://www.blackbeltfactory.com/ui#!User/d&d\"> http://www.blackbeltfactory.com/ui#!</a>"
 			+ "<br>group option is "
-			+ groupOption
-			+ "<div align=\"center\">"
+			+ groupOption 
 			+ "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
 			+ "<br><br><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>";
 		
@@ -65,6 +63,7 @@ public final class MainTemplateService {
 		
 		//return "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
 	}
+	
 	public final String TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
 		String content = "";
 		User user;
@@ -83,35 +82,8 @@ public final class MainTemplateService {
 			content += this.templateBody(mail);
 		}
 		
-		content += this.templateFooter(user);
+		//content += this.templateFooter();
 		
 		return content;
 	}
-	
-//	public String MainSubjectOfGroupedMails(List<Mail> mails){
-//		for(MailSubject mailSubject : MailSubject.values()) {
-//			List
-//			for(Mail mail : mails){
-//				if (mail.getMailSubject() == mailSubject) {
-//				    list.add	together....
-//				}
-//
-//				switch(mail.getMailSubject()){
-//				case SUBJECT_1 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_2 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_3 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_4 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case CONGRATULATION : IncrementVariableMailsOfSameSubject(mail); break;
-//				default:break;
-//				}
-//			}
-//		}
-//		
-//	}
-//	
-//	public void IncrementVariableMailsOfSameSubject(Mail mail){
-//		int i = 0;
-//		i=mail.getMailSubject().getMailsOfSameSubject()+1;
-//		mail.getMailSubject().setMailsOfSameSubject(i);
-//	}
 }
