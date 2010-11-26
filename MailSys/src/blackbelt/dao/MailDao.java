@@ -136,17 +136,22 @@ public class MailDao {
 		em.persist(mail);
 	}
 	
+	/**
+	 * Returns user's group option
+	 * @param user
+	 * @return a string
+	 */
 	public String getGroupOtionFromUser(User user){
 		List<MailType> list = em.createQuery("SELECT m.mailType FROM Mail m WHERE m.user =:user")
 		              	.setParameter("user", user)
-		              	.setMaxResults(1)  // Because we don't need all the mails, just one.
+		              	.setMaxResults(1)  // Because we need one user.
 		              	.getResultList();
 
 		if (list.size() == 0) {
 			return null;	
 		} else {
 			String groupOption = list.get(0).toString();
-			return groupOption;  // We just want one user, we'll execute this query again later to get the next user.
+			return groupOption;  // We just want a user's group option.
 		}
 	}
 	
