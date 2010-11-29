@@ -27,10 +27,10 @@ public class Indexer {
 
 		CourseTextFormatter courseTextFormatter = new CourseTextFormatter(null, section.getText());
 		String text = courseTextFormatter.format();
-//		text = parseSectionText(text);
 		
 		Document doc = new Document();
 		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.NO));
+		doc.add(new Field("sectionid", String.valueOf(section.getSectionid()), Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("language", section.getLanguage(), Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("version", String.valueOf(section.getVersion()), Field.Store.YES, Field.Index.ANALYZED));
@@ -72,7 +72,9 @@ public class Indexer {
 	}
 	
 	private String parseSectionText(String textToFormat){
-		String result = "s";
+		String result = "";
+		
+		
 		
 		return result;
 	}
