@@ -83,7 +83,7 @@ public final class MainTemplateService {
 			content += this.templateBody(mail);
 		}
 		
-		content += this.templateFooter(user);
+		content  += this.templateFooter(user);
 		
 		return content;
 	}
@@ -104,9 +104,14 @@ public final class MainTemplateService {
         
         for(MainSubject mailSubject : MainSubject.values()){
             if (mailSubject.getMailsHavingSameSubject()>0){
-            mainSubjectOfGroupedMails=mainSubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject()+" "+mailSubject.toString());
+            mainSubjectOfGroupedMails+=mainSubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject()+" "+mailSubject.toString()+" ");
             }
         }
+        
+        for(MainSubject mailSubject : MainSubject.values()){
+        	mailSubject.setMailsHavingSameSubject(0);
+        }
+        
         
         return mainSubjectOfGroupedMails;
     }
