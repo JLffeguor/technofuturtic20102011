@@ -27,13 +27,6 @@ public class Indexer {
 	
 	public Document indexSection(Section section) throws IOException {
 
-		//remove BBT (BlackBeltTag) and HTML tag
-//		MyCourseTextFormatter ctf=new MyCourseTextFormatter(section.getText());
-//		String newText=ctf.format();
-//		System.out.println(newText);
-		
-		//System.out.println("\t"+section);
-		
 		CourseTextFormatter courseTextFormatter=new CourseTextFormatter(null, section.getText());
 		String text=courseTextFormatter.format();
 		
@@ -54,26 +47,6 @@ public class Indexer {
 		System.out.println("*****************Begin Indexing hotel*****************");
 		
 		// Make an writer to create the index
-		
-		Set<String> stopWord=new HashSet<String>();
-		stopWord.add("<acronym>");stopWord.add("</acronym>");
-		stopWord.add("<sup>");stopWord.add("</sup>");
-		stopWord.add("<sub>");stopWord.add("</sub>");
-		stopWord.add("<strong>");stopWord.add("</strong>");
-		stopWord.add("<em> ");stopWord.add("</em>");
-		stopWord.add("<b>");stopWord.add("</b>");
-		stopWord.add("<ul>");stopWord.add("</ul>");
-		stopWord.add("<ol>");stopWord.add("</ol>");
-		stopWord.add("<li>");stopWord.add("</li>");
-		stopWord.add("<table>");stopWord.add("</table>");
-		stopWord.add("<caption>");stopWord.add("</caption>");
-		stopWord.add("<tr>");stopWord.add("</tr>");
-		stopWord.add("<td>");stopWord.add("</td>");
-		stopWord.add("<a href");stopWord.add("</a>");
-		stopWord.add("<i>");stopWord.add("</i>");
-		stopWord.add("<br />");
-		stopWord.add("<br>");
-		stopWord.add("<br/>");		
 		
 		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,new File("stopword/stopword.txt")), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
