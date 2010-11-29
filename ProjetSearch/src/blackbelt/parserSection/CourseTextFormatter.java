@@ -1,4 +1,4 @@
-package lucene.demo.main;
+package blackbelt.parserSection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 
@@ -34,7 +33,7 @@ public class CourseTextFormatter {
 	List<TextBlock> textBlocks = new ArrayList<TextBlock>();
 	boolean shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
     
-	public MyCourseTextFormatter(String courseParam, String inputParam) {//Course
+	public CourseTextFormatter(String courseParam, String inputParam) {//Course
 		this.course = courseParam;
 		if (inputParam == null) {
 		    input = "";
