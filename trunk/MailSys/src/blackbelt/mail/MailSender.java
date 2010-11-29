@@ -43,8 +43,11 @@ public class MailSender extends Thread {
 				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE || nextMailList.get(0).getMailType()== MailType.SLOW_NOT_GROUPABLE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
-						sendMail(nextMailList.get(i));
-						mailDao.removeMail(nextMailList.get(i));
+						List<Mail> mails;
+						mails=new ArrayList<Mail>();
+						mails.add(nextMailList.get(i));
+						sendMailList(mails);
+						mailDao.removeMails(mails);
 						this.sleepBetweenSend();
 					}
 				} else {// ...here we send a group of mails as one mail
@@ -64,8 +67,7 @@ public class MailSender extends Thread {
 				System.out.println("******************************************************************");
 				sleep(WAKE_UP_DELAY_WHEN_NO_MAIL);
 			} catch (InterruptedException e) {
-				// FIXME new RTE
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		}
 	}
@@ -85,9 +87,9 @@ public class MailSender extends Thread {
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
 	public void sendMailList(List<Mail> mails) {
-		String content = "";
+		MainTemplateService.MailPackage mp;
 		try {
-			content = this.mainTemplate.TemplateMail(mails);
+			mp = this.mainTemplate.TemplateMail(mails);
 		} catch (NullPointerException e) {
 			throw new RuntimeException(e);
 		} catch (Exception e) {
@@ -97,28 +99,7 @@ public class MailSender extends Thread {
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);
 		sendConsoleMail(mails);
-		sendFileMail(mails.get(0).getUser(), content, mainTemplate.MainSubjectOfGroupedMails(mails));
-	}
-	
-	public void sendMail(Mail mail) {
-		String content = "";
-		List<Mail> mails;
-		
-		mails=new ArrayList<Mail>();
-		mails.add(mail);
-		
-		try {
-			content = this.mainTemplate.TemplateMail(mails);
-		} catch (NullPointerException e) {
-			throw new RuntimeException(e);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		// FIXME: really send the mail via SMTP instead of saving it on the file system.
-		// sendSmtpMail(mail.get(0).getUser(), content);
-		
-		sendConsoleMail(mails);
-		sendFileMail(mails.get(0).getUser(), content, mail.getSubject());
+		sendFileMail(mails.get(0).getUser(), mp.getContent(), mp.getSubject());
 	}
 	
 	private void sendSmtpMail(User user, String content, String subject) {
