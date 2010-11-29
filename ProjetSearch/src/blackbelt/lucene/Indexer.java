@@ -2,7 +2,6 @@ package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +9,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,9 @@ public class Indexer {
 	
 	public Document indexSection(Section section) throws IOException {
 
-		CourseTextFormatter courseTextFormatter=new CourseTextFormatter(null, section.getText());
-		String text=courseTextFormatter.format();
+		CourseTextFormatter courseTextFormatter = new CourseTextFormatter(null, section.getText());
+		String text = courseTextFormatter.format();
+//		text = parseSectionText(text);
 		
 		Document doc = new Document();
 		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.NO));
@@ -48,7 +47,9 @@ public class Indexer {
 		
 		// Make an writer to create the index
 		
-		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,new File("stopword/stopword.txt")), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		Set<String> stopWords =new java.util.HashSet<String>(); 
+		
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,stopWords), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries		
 		List<Section> sections=dao.myQuerry("select s1 from Section s1 where s1.version=(" +
@@ -70,4 +71,9 @@ public class Indexer {
         System.out.println("*****************End Indexing hotel*****************");
 	}
 	
+	private String parseSectionText(String textToFormat){
+		String result = "s";
+		
+		return result;
+	}
 }
