@@ -78,7 +78,7 @@ public class MailDao {
 					+ "              )"
 					+ "          )"
 					+ "     ) ")
-					.setParameter("MailType", MailType.GOUPABLE)
+					.setParameter("MailType", MailType.GROUPABLE)
 					.setParameter("yesterday", yesterday)
 					.setParameter("lastWeek", lastWeek)
 					.setParameter("dailytype", MailingDelayType.DAILY)
@@ -112,8 +112,19 @@ public class MailDao {
 	 */
 	public void removeMails(List<Mail> mails) {
 		if(!mails.isEmpty()){
-		Query query = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
-		query.executeUpdate();
+			Query query = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
+			query.executeUpdate();
+		}
+	}
+	
+	/**
+	 * remove a mail
+	 * @param mail
+	 */
+	public void removeMail(Mail mail) {
+		if(mail!=null){
+			Query query = em.createQuery("DELETE FROM Mail m WHERE m = :mailToRemove").setParameter("mailToRemove",mail);
+			query.executeUpdate();
 		}
 	}
 	

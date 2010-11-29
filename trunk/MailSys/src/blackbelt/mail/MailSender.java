@@ -43,10 +43,8 @@ public class MailSender extends Thread {
 				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
-						toSend = new ArrayList();
-						toSend.add(nextMailList.get(i));
-						sendMailList(toSend);
-						mailDao.removeMails(toSend);
+						sendMail(nextMailList.get(i));
+						mailDao.removeMail(nextMailList.get(i));
 						this.sleepBetweenSend();
 					}
 				} else {// ...here we send a group of mails as one mail
@@ -85,31 +83,49 @@ public class MailSender extends Thread {
 	 * @param mail
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
-	public void sendMailList(List<Mail> mail) {
+	public void sendMailList(List<Mail> mails) {
 		String content = "";
 		try {
-			content = this.mainTemplate.TemplateMail(mail);
+			content = this.mainTemplate.TemplateMail(mails);
 		} catch (NullPointerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);
-		sendConsoleMail(mail);
-		sendFileMail(mail.get(0).getUser(), content);
+		sendConsoleMail(mails);
+		sendFileMail(mails.get(0).getUser(), content, mainTemplate.MainSubjectOfGroupedMails(mails));
+	}
+	
+	public void sendMail(Mail mail) {
+		String content = "";
+		List<Mail> mails;
+		mails=new ArrayList<Mail>();
+		mails.add(mail);
+		try {
+			content = this.mainTemplate.TemplateMail(mails);
+		} catch (NullPointerException e) {
+			throw new RuntimeException(e);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		// FIXME: really send the mail via SMTP instead of saving it on the file system.
+		// sendSmtpMail(mail.get(0).getUser(), content);
+		
+		sendConsoleMail(mails);
+		sendFileMail(mails.get(0).getUser(), content, mail.getSubject());
 	}
 
 	
-	private void sendSmtpMail(User user, String content) {
+	private void sendSmtpMail(User user, String content, String subject) {
 		throw new UnsupportedOperationException();
 	}
 	
 	
-	private void sendFileMail(User user, String content) {
+	private void sendFileMail(User user, String content, String subject) {
 		try {
 			File rep;
 			Date date;
@@ -119,8 +135,9 @@ public class MailSender extends Thread {
 			rep = new File("C:/testing/" + user.getPseudo());
 			rep.mkdirs();
 			date=new Date();
-			fileName = date.getYear()+"_"+date.getMonth()+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+"_message(s).html";
+			fileName = date.getYear()+"_"+date.getMonth()+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+subject+"_message(s).html";
 			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" +fileName);// apres : le nombbre de message
+			make.println("<div>subject: "+subject+"</div>");
 			make.println(content);
 			make.close();
 		} catch (IOException e) {
@@ -157,7 +174,7 @@ public class MailSender extends Thread {
 		// 2. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
 		user = mailDao.userHavingGroupedMails();
 		if(user!=null){
-			return mailDao.getMailsFromUser(MailType.GOUPABLE, user);
+			return mailDao.getMailsFromUser(MailType.GROUPABLE, user);
 		}
 		
 		// 3. There is no next mail to be sent.
