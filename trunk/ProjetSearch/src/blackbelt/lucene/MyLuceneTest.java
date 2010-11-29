@@ -15,11 +15,14 @@ public class MyLuceneTest {
 		Indexer indexer = (Indexer) applicationContext.getBean("indexer");
 		
 		SearchInCours searchInCours = new SearchInCours();
+		
+		String keyWord="hibernate";
+		String language="fr";
 
 		try {
 			
 			indexer.createIndexes();			
-			searchInCours.search("hibernate","fr");
+			searchInCours.search(keyWord,language);
 
 		} catch (Exception e) {
 			System.out.println("Exception caught.\n" + e);
