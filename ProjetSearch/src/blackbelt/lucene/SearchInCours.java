@@ -16,7 +16,7 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
 public class SearchInCours implements PathIndex{
-	public static void search(String queryString) throws ParseException, IOException {
+	public void search(String queryString) throws ParseException, IOException {
 
 		try {
 			
