@@ -43,10 +43,12 @@ public class Mail {
 	
 	private Date creationDate;
 	
+	private boolean useTemplate;
+	
 	//Constructors
 	public Mail() {}
 	
-	public Mail(User user,String subject, MainSubject mailSubject, String content, MailType mailType) {
+	public Mail(User user,String subject, MainSubject mailSubject, String content, MailType mailType, boolean useTemplate) {
 		////this.id = -1;
 		this.user = user;
 		this.mainSubject = mailSubject;
@@ -54,15 +56,17 @@ public class Mail {
 		this.mailType=mailType;
 		this.creationDate = new Date();
 		this.subject=subject;
+		this.useTemplate = useTemplate;
 	}
 
-	public Mail(User user, MainSubject mailSubject, String text, boolean immediate, Date date) {
+	public Mail(User user, MainSubject mailSubject, String text, boolean immediate, Date date, boolean useTemplate) {
 		////this.id = id;
 		this.user = user;
 		this.mainSubject = mailSubject;
 		this.content = text;
 		this.mailType=mailType;
 		this.creationDate = date;
+		this.useTemplate = useTemplate;
 	}
 	
 	//Getters and setters
@@ -100,6 +104,10 @@ public class Mail {
 
 	public MailType getMailType() {
 		return this.mailType;
+	}
+	
+	public boolean getUseTemplate() {
+		return this.useTemplate;
 	}
 
 	public Date getDate() {
