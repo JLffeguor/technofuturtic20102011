@@ -30,7 +30,10 @@ public class Mail {
 	private User user;
 	
 	@Enumerated(EnumType.STRING)
-	private MailSubject mailSubject;
+	private MainSubject mainSubject;
+	
+	@Column(nullable = false)
+	private String subject;
 	
 	@Column(nullable = false)
 	private String content;
@@ -43,19 +46,20 @@ public class Mail {
 	//Constructors
 	public Mail() {}
 	
-	public Mail(User user, MailSubject mailSubject, String content, MailType mailType) {
+	public Mail(User user,String subject, MainSubject mailSubject, String content, MailType mailType) {
 		////this.id = -1;
 		this.user = user;
-		this.mailSubject = mailSubject;
+		this.mainSubject = mailSubject;
 		this.content = content;
 		this.mailType=mailType;
 		this.creationDate = new Date();
+		this.subject=subject;
 	}
 
-	public Mail(User user, MailSubject mailSubject, String text, boolean immediate, Date date) {
+	public Mail(User user, MainSubject mailSubject, String text, boolean immediate, Date date) {
 		////this.id = id;
 		this.user = user;
-		this.mailSubject = mailSubject;
+		this.mainSubject = mailSubject;
 		this.content = text;
 		this.mailType=mailType;
 		this.creationDate = date;
@@ -73,8 +77,8 @@ public class Mail {
 		this.user = user;
 	}
 
-	public MailSubject getMailSubject() {
-		return this.mailSubject;
+	public MainSubject getMailSubject() {
+		return this.mainSubject;
 	}
 
 	public String getText() {
@@ -100,6 +104,10 @@ public class Mail {
 
 	public Date getDate() {
 		return this.creationDate;
+	}
+	
+	public String getSubject(){
+		return subject;
 	}
 
 	public String getDateMessage() {
