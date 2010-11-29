@@ -42,6 +42,7 @@ public class MailDao {
 			return list.get(0);  // We just want one user, we'll execute this query again later to get the next user.
 		}
 	}
+	
 	/**
 	 * returns a user containing grouped mails
 	 * @return a user
@@ -92,6 +93,23 @@ public class MailDao {
 			return list.get(0);  // We just want one user, we'll execute this query again later to get the next user.
 		}	
 	}	
+	
+	/**
+	 * returns a user containing slow not groupable mails
+	 * @return a user
+	 */
+	public User userHavingSlowMails(){
+		List<User> list = em.createQuery("SELECT m.user FROM Mail m WHERE m.mailType=:MailType")
+						.setParameter("MailType", MailType.SLOW_NOT_GROUPABLE)
+						.setMaxResults(1)  // Because we don't need all the users, just one.
+				 		.getResultList();
+
+		if (list.size() == 0) {
+			return null;	
+		} else {
+			return list.get(0);  // We just want one user, we'll execute this query again later to get the next user.
+		}
+	}
 	
 	/**
 	 * Get mails, immediate or groupable  from a given user.
@@ -149,24 +167,4 @@ public class MailDao {
 		mail.setUser(user);
 		em.persist(mail);
 	}
-	
-	/**
-	 * Returns user's group option
-	 * @param user
-	 * @return a string
-	 */
-	public String getGroupOtionFromUser(User user){
-		List<MailType> list = em.createQuery("SELECT m.mailType FROM Mail m WHERE m.user =:user")
-		              	.setParameter("user", user)
-		              	.setMaxResults(1)  // Because we need one user.
-		              	.getResultList();
-
-		if (list.size() == 0) {
-			return null;	
-		} else {
-			String groupOption = list.get(0).toString();
-			return groupOption;  // We just want a user's group option.
-		}
-	}
-	
 }

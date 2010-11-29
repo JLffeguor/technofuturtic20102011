@@ -42,7 +42,7 @@ public class Mail {
 	private MailType mailType;
 	
 	private Date creationDate;
-
+	
 	//Constructors
 	public Mail() {}
 	
