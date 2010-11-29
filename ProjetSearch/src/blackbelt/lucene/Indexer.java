@@ -27,6 +27,7 @@ public class Indexer {
 
 		CourseTextFormatter courseTextFormatter = new CourseTextFormatter(null, section.getText());
 		String text = courseTextFormatter.format();
+		text = parseSectionText(text);
 		
 		Document doc = new Document();
 		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.NO));
@@ -36,6 +37,8 @@ public class Indexer {
         doc.add(new Field("version", String.valueOf(section.getVersion()), Field.Store.YES, Field.Index.ANALYZED));
         String fullSearchableText = text + " " + section.getLanguage() + " " + section.getVersion();
         doc.add(new Field("content", fullSearchableText, Field.Store.YES, Field.Index.ANALYZED));
+        
+//      System.out.println(doc.toString());
 		return doc;
 	}
 
@@ -74,7 +77,7 @@ public class Indexer {
 	private String parseSectionText(String textToFormat){
 		String result = "";
 		
-		
+		result = textToFormat.replaceAll("\\<.*?>","\n");
 		
 		return result;
 	}
