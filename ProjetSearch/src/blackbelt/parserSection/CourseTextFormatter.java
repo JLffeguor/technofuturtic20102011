@@ -1,4 +1,4 @@
-package blackbelt.parserSection;
+package lucene.demo.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
  * @author John
  *
  */
-public class CourseTextFormatter {
+public class MyCourseTextFormatter {
 	String course; //Course
 	String input;
     int currentIndex = 0;
@@ -34,7 +34,7 @@ public class CourseTextFormatter {
 	List<TextBlock> textBlocks = new ArrayList<TextBlock>();
 	boolean shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
     
-	public CourseTextFormatter(String courseParam, String inputParam) {//Course
+	public MyCourseTextFormatter(String courseParam, String inputParam) {//Course
 		this.course = courseParam;
 		if (inputParam == null) {
 		    input = "";
@@ -114,8 +114,6 @@ public class CourseTextFormatter {
         	element.params.put(param.name, param.value);
         	param = findNextParam(tagWithParams, param.endIndexWithinTag + 1);
         }
-
-
         
         currentIndex = nextCloseBracketIndex +1;  // we are after the opening tag.
 
@@ -244,115 +242,46 @@ public class CourseTextFormatter {
 	}
 
 	protected void insertAttachment(Element element) {
-		try {
-			String srcValue = element.getMandatoryValue("src");
-//			String srcUrl = (new PictureResource(course, srcValue)).getURL();
-			
-			String imageValue = element.getOptionalValue("image");
-//			String imageUrl = (new PictureResource(course, imageValue)).getURL();
-
-			if(imageValue != null){
-			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-//			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
-//									"<a href='" + srcUrl + "'><img style='border: none;' align='middle' src='"+imageUrl+"'/></a>" +
-//									"<br/><span style='font-size: 65%; font-color: #999999;' align='center'>Click to download</span>" + 
-//							   "</div>");
-			} else {
-				shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
-				element.innerText = StringEscapeUtils.escapeHtml(element.innerText);
-				if(element.innerText == null || element.innerText.isEmpty()){
-					insertErrorMessage("Tag name \""+ element.name + "\" must have a body when no image attribute is specified.");
-				} else {
-//					addResultTextBlock("<a href='" + srcUrl + "'>" + element.innerText + "</a>");	
-				}
-			}
-			
-		} catch (MandatoryParameterNotFoundException e) {
-			// Ok, do nothing. Error message already inserted in output by exception thrower.
-		}
+			addResultTextBlock(" ");
 	}
 	
 	
 	protected void insertImage(Element element) {
-		try {
-			String srcValue = element.getMandatoryValue("src");
-			/* only for data test */
-			String imageUrl = ("C:\\Eclipse\\eclipse-jee-galileo-SR2-win32\\workspace\\BlackBeltPdf\\imagesTestForPdf.gif");
-//			String imageUrl = (new PictureResource(course, srcValue)).getURL();
-			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-			addResultTextBlock("<div style='overflow:auto' align='center'>" +  // Copied from Vaadin book layout. overflow:auto -> scrollbar if too wide.
-									"<img align='middle' src='"+ imageUrl +"'/>" + //imageURL
-							   "</div>");
-			
-		} catch (MandatoryParameterNotFoundException e) {
-			// Ok, do nothing. Error message already inserted in output by exception thrower.
-		}
+			addResultTextBlock(" ");
 	}
 	
 	
 	protected void insertCode(Element element) {
 		if (element.innerText == null) {
-			insertErrorMessage("[code] ... [/code] elements should have text inside.");
+			addResultTextBlock(" ");
 			return;
 		}
 		
 		if ("true".equals(element.getOptionalValue("escape"))) {  // Default is false.
-			element.innerText = StringEscapeUtils.escapeHtml(element.innerText); // Escape any formatting (probably <b> tags that should be writtent "<b>" and not trigger bold).
+//			element.innerText = StringEscapeUtils.escapeHtml(element.innerText); // Escape any formatting (probably <b> tags that should be writtent "<b>" and not trigger bold).
+			addResultTextBlock(element.innerText);
 		}
 
 		if ("true".equals(element.getOptionalValue("inline"))) {  // Default is false.
-			addResultTextBlock("<code>"+element.innerText+"</code>");
+//			addResultTextBlock("<code>"+element.innerText+"</code>");
+			addResultTextBlock(element.innerText);
 			
 		} else { // Here we do not want inline (usual case) 
 			// <pre> creates carriage returns in the browser
-			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
-					+element.innerText+"</pre>");
+//			shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
+//			addResultTextBlock("<pre class='contentProgramListing' xml:space='preserve'>"   // Copied from Vaadin book layout.
+//					+element.innerText+"</pre>");
+			addResultTextBlock(element.innerText);
 		}
+		
 	}
 	
 	protected void insertQuote(Element element) {
-		if (element.innerText == null) {
-			insertErrorMessage("[quote] ... [/quote] elements should have text inside.");
-			return;
-		}
-		
-		shouldWePutParagraphTagsInsideTheCurrentTextBlock = false;
-		addResultTextBlock("<div class='contentQuote'>"+element.innerText+"</div>");
+		addResultTextBlock(element.innerText);
 	}	
 
 	protected void insertVideo(Element element) {
-		try {
-			int width = element.getOptionalIntValue("width", 500);
-			int height = element.getOptionalIntValue("height", width*9/16);
-			String videoId = element.getMandatoryValue("id");
-			
-			// Video object creation (to get the html).
-//			Video video;
-			String typeValue = element.getMandatoryValue("type").toLowerCase();
-			
-			if ("youtube".equals(typeValue)) {
-//				video = new YoutubeVideo(videoId, width, height, false);
-
-			} else if ("vimeo".equals(typeValue)) {
-				try {
-					Long videoIdL = Long.parseLong(videoId);
-//					video = new VimeoVideo(videoIdL, width, height);
-				} catch(NumberFormatException e) {
-					insertErrorMessage("Paramter id is supposed to be a number for Vimeo videos. Current value is ["+videoId+"]");
-					return;
-				}
-
-			} else {
-				insertErrorMessage("[video] element with unsupported type value '"+typeValue+"'. Should be 'youtube' or 'vimeo'");
-				return;
-			}
-			
-//			addResultTextBlock("<div style='overflow:auto' align='center'>" + video.getHtml() + "</div>");
-			
-		} catch (MandatoryParameterNotFoundException e) {
-			// Ok, do nothing. Error message already inserted in output by exception thrower.
-		}
+		addResultTextBlock("");
 	}
 	
 	
@@ -381,15 +310,15 @@ public class CourseTextFormatter {
 
 							// Means that the user does not want us to add a paragraph around, but simply wants a line break inside another paragraph.
 							if (! openPHasNotBeenClosed) { // It's a new paragraph (usual case)
-								output.append("<p>");
+								output.append("");
 								openPHasNotBeenClosed = true;  // Should be closed later.
 							}
 							output.append(line + "\n");
 						} else { // Usual case
 							if (! openPHasNotBeenClosed) { // It's a new paragraph (usual case)
-								output.append("<p>");
+								output.append("");
 							}
-							output.append(line + "</p>\n");
+							output.append(line + "");
 							openPHasNotBeenClosed = false;  // Should be closed later.
 						}
 					}
