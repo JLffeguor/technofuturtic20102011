@@ -2,6 +2,7 @@ package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -16,15 +17,18 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
 public class SearchInCours implements PathIndex{
-	public void search(String queryString) throws ParseException, IOException {
+	public void search(String keyWord,String language) throws ParseException, IOException {
 
 		try {
+			String queryString=keyWord + " AND language:" +language;
 			
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
+			
+			Set<String> stopWords =new java.util.HashSet<String>(); 
 
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, new File("stopword/stopword.txt")));
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, stopWords));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;

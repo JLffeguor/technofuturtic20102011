@@ -19,7 +19,7 @@ public class MyLuceneTest {
 		try {
 			
 			indexer.createIndexes();			
-			searchInCours.search("hibernate AND language:fr");
+			searchInCours.search("hibernate","fr");
 
 		} catch (Exception e) {
 			System.out.println("Exception caught.\n" + e);
