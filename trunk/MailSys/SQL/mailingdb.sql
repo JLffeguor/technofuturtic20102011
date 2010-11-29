@@ -11,8 +11,9 @@ CREATE TABLE mails (
   id                BIGINT  NOT NULL DEFAULT (nextval('seq_mails_id')),
   User_Id           BIGINT  NOT NULL,
   Content           TEXT    NOT NULL,
-  MailSubject       TEXT    NOT NULL,
+  MainSubject       TEXT    NOT NULL,
   MailType          TEXT    NOT NULL,
+  Subject			TEXT	NOT NULL,
   creationdate      TIMESTAMP WITH TIME ZONE NOT NULL,
   PRIMARY KEY (id)
 );

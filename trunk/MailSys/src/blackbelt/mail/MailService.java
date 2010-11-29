@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
-import blackbelt.model.MailSubject;
+import blackbelt.model.MainSubject;
 import blackbelt.model.MailType;
 
 /**
@@ -24,8 +24,8 @@ public class MailService {
 	 * @param userID user's id to whom the mail will be send to
 	 * @param isAImmadiateMessage indicates if the mail is send or not
 	 */
-	public void send(MailSubject mailSubject, String text, Long userID, MailType mailType){
-		Mail mail = new Mail(null,mailSubject,text,mailType);
+	public void send(String subject,MainSubject mailSubject, String text, Long userID, MailType mailType){
+		Mail mail = new Mail(null,subject,mailSubject,text,mailType);
 		dao.save(mail, userID);
 	}
 	

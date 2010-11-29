@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +112,15 @@ public class MailSender extends Thread {
 	private void sendFileMail(User user, String content) {
 		try {
 			File rep;
+			Date date;
 			PrintWriter make;
+			GregorianCalendar gc;
+			String fileName;
 			rep = new File("C:/testing/" + user.getPseudo());
 			rep.mkdirs();
-			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" + "_message(s).html");// apres : le nombbre de message
+			date=new Date();
+			fileName = date.getYear()+"_"+date.getMonth()+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+"_message(s).html";
+			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" +fileName);// apres : le nombbre de message
 			make.println(content);
 			make.close();
 		} catch (IOException e) {
@@ -125,7 +132,7 @@ public class MailSender extends Thread {
 		// TODO: replace this code by SMTP send.
 		System.out.println("************Mailing to:" + mail.get(0).getUser().getPseudo() + "************");
 		for (Mail i : mail) {
-			System.out.println(i.getMailSubject().toString() + "       " + i.getDateMessage());
+			System.out.println(i.getSubject().toString() + "       " + i.getDateMessage());
 			System.out.println(i.getText());
 			System.out.println("-----------------");
 		}

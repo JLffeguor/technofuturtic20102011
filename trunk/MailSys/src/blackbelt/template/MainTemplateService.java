@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
-import blackbelt.model.MailSubject;
+import blackbelt.model.MainSubject;
 import blackbelt.model.User;
 /**
  * Generates a Html string based on a mail
@@ -34,7 +34,7 @@ public final class MainTemplateService {
 		return "<div style=\"margin:10;width:70%\">"
 			+ "<div style=\"background:#000000;padding:10\">"
 			+ "<font face=\"Arial\" color=\"#FFFFFF\" size=\"5\">"
-			+  mail.getMailSubject()
+			+  mail.getSubject()
 			+ "</font><br><font color=\"#FFFFFF\" size=\"1\">"
 			+  mail.getDateMessage()
 			+ "</font></div>"
@@ -88,30 +88,26 @@ public final class MainTemplateService {
 		return content;
 	}
 	
-//	public String MainSubjectOfGroupedMails(List<Mail> mails){
-//		for(MailSubject mailSubject : MailSubject.values()) {
-//			List
-//			for(Mail mail : mails){
-//				if (mail.getMailSubject() == mailSubject) {
-//				    list.add	together....
-//				}
-//
-//				switch(mail.getMailSubject()){
-//				case SUBJECT_1 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_2 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_3 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case SUBJECT_4 : IncrementVariableMailsOfSameSubject(mail); break;
-//				case CONGRATULATION : IncrementVariableMailsOfSameSubject(mail); break;
-//				default:break;
-//				}
-//			}
-//		}
-//		
-//	}
-//	
-//	public void IncrementVariableMailsOfSameSubject(Mail mail){
-//		int i = 0;
-//		i=mail.getMailSubject().getMailsOfSameSubject()+1;
-//		mail.getMailSubject().setMailsOfSameSubject(i);
-//	}
+	public String MainSubjectOfGroupedMails(List<Mail> mails){    
+        int i;
+        
+        for(Mail mail : mails){
+            for(MainSubject mailSubject : MainSubject.values()){
+                if (mail.getMailSubject() == mailSubject) {
+                    i=mailSubject.getMailsHavingSameSubject()+1;
+                    mailSubject.setMailsHavingSameSubject(i);
+                }
+            }
+        }
+        
+        String mainSubjectOfGroupedMails="";
+        
+        for(MainSubject mailSubject : MainSubject.values()){
+            if (mailSubject.getMailsHavingSameSubject()>0){
+            mainSubjectOfGroupedMails=mainSubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject()+" "+mailSubject.toString());
+            }
+        }
+        
+        return mainSubjectOfGroupedMails;
+    }
 }
