@@ -1,7 +1,7 @@
 package blackbelt.lucene;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,38 +11,71 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import blackbelt.parserSection.CourseTextFormatter;
+
 @Service
 @Transactional
 public class Indexer {
 	@Autowired
-	CenterDao dao;
+	private CenterDao dao;
 	
 	public Document indexSection(Section section) throws IOException {
 
+		//remove BBT (BlackBeltTag) and HTML tag
+//		MyCourseTextFormatter ctf=new MyCourseTextFormatter(section.getText());
+//		String newText=ctf.format();
+//		System.out.println(newText);
+		
 		//System.out.println("\t"+section);
+		
+		CourseTextFormatter courseTextFormatter=new CourseTextFormatter(null, section.getText());
+		String text=courseTextFormatter.format();
+		
 		Document doc = new Document();
 		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.NO));
-        doc.add(new Field("text", section.getText(), Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("language", section.getLanguage(), Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("version", String.valueOf(section.getVersion()), Field.Store.YES, Field.Index.ANALYZED));
-        String fullSearchableText = section.getText() + " " + section.getLanguage() + " " + section.getVersion();
+        String fullSearchableText = text + " " + section.getLanguage() + " " + section.getVersion();
         doc.add(new Field("content", fullSearchableText, Field.Store.YES, Field.Index.ANALYZED));
 		return doc;
 	}
 
-	public void createIndexes(Directory directory) throws IOException {
+	public void createIndexes() throws IOException {
+		
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(PathIndex.DIRECTORY));
+		
 		System.out.println("*****************Begin Indexing hotel*****************");
 		
 		// Make an writer to create the index
 		
 		Set<String> stopWord=new HashSet<String>();
+		stopWord.add("<acronym>");stopWord.add("</acronym>");
+		stopWord.add("<sup>");stopWord.add("</sup>");
+		stopWord.add("<sub>");stopWord.add("</sub>");
+		stopWord.add("<strong>");stopWord.add("</strong>");
+		stopWord.add("<em> ");stopWord.add("</em>");
+		stopWord.add("<b>");stopWord.add("</b>");
+		stopWord.add("<ul>");stopWord.add("</ul>");
+		stopWord.add("<ol>");stopWord.add("</ol>");
+		stopWord.add("<li>");stopWord.add("</li>");
+		stopWord.add("<table>");stopWord.add("</table>");
+		stopWord.add("<caption>");stopWord.add("</caption>");
+		stopWord.add("<tr>");stopWord.add("</tr>");
+		stopWord.add("<td>");stopWord.add("</td>");
+		stopWord.add("<a href");stopWord.add("</a>");
+		stopWord.add("<i>");stopWord.add("</i>");
+		stopWord.add("<br />");
+		stopWord.add("<br>");
+		stopWord.add("<br/>");		
 		
-		IndexWriter writer = new IndexWriter(directory, new StandardAnalyzer(Version.LUCENE_30,stopWord), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,new File("stopword/stopword.txt")), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries		
 		List<Section> sections=dao.myQuerry("select s1 from Section s1 where s1.version=(" +
