@@ -15,7 +15,5 @@ public class MainTest{
 		
 		DataTest dataTest = (DataTest)applicationContext.getBean("dataTest");
 		dataTest.run();
-		
 	}
-	
 }

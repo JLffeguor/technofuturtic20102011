@@ -40,6 +40,7 @@ public class DataTest extends Thread{
 		mailService.send(" message 3 - 2",MainSubject.CONGRATULATION, "deuxieme contenu de la mort qui tue 2, plusieur fois.", 1L,MailType.GROUPABLE);
 		mailService.send(" message 3 - 3",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue 3, plusieur fois.", 1L,MailType.GROUPABLE);
 		mailService.send(" message 3 - 4",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.GROUPABLE);
+		mailService.send(" message 10",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.SLOW_NOT_GROUPABLE);
 		
 		mailService.send(" message 4 ",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue.encore.", 2L,MailType.GROUPABLE);
 		mailService.send(" message 5 ",MainSubject.CONGRATULATION, "contenu de la mort qui tue.", 2L,MailType.IMMEDIATE);
@@ -48,6 +49,5 @@ public class DataTest extends Thread{
 		mailService.send(" message 7 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE);
 		mailService.send(" message 8 ",MainSubject.CONGRATULATION,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.IMMEDIATE);
 		mailService.send(" message 9 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE);
-
 	}
 }

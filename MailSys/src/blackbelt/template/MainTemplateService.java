@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
+import blackbelt.model.MailingDelayType;
 import blackbelt.model.MainSubject;
 import blackbelt.model.User;
 /**
@@ -18,16 +19,7 @@ public final class MainTemplateService {
 	@Autowired
 	MailDao dao;
 	
-	public MainTemplateService() {
-		
-	}
-	
-	/*private String templateHeader(User user) {
-		return "<div align=\"center\"><font face=\"Impact,Verdana\" size=\"7\"><font color=\"#000000\">Black</font><font color=\"#bababa\">Belt</font><br>Factory</font></div><hr>"
-			+  "<div align=\"center\"> to : " + user.getPseudo()
-			+  "  -  <a href=\"C:/testing/users/" + user.getPseudo() //To review: the Link
-			+  ".html\">your account here</a></div><br>";
-	}*/
+	public MainTemplateService() {}
 	
 	private String templateBody(Mail mail) {
 		
@@ -41,30 +33,42 @@ public final class MainTemplateService {
 			+ "<div style=\"background:#ffffff;padding:2px\">"
 			+ mail.getFormatedText()
 			+ "</div></div><br>";
-		
-		/*return "<div style=\"margin:10;width:70%\"><div style=\"background:#000000;padding:10\"><font face=\"Comic_Sans,Verdana\" color=\"#FFFFFF\" size=\"5\">"
-			+  mail.getMailSubject().toString()
-			+  "</font><br><font color=\"#FFFFFF\" size=\"2\">"
-			+  mail.getDateMessage()
-			+  "</font></div><div style=\"background:#ffffff;padding:15px\">"
-			+  mail.getFormatedText() + "</div></div>";*/
 	}
 	
 	private String templateFooter(User user) {
-		String groupOption = dao.getGroupOtionFromUser(user);
 		
+		String mailDelayOption = "";
+		String secondDelayOption = "";
+		String thirdDelayOption = "";
+		
+		if(user.getMailingDelai() == MailingDelayType.DAILY) {
+			mailDelayOption = user.getMailingDelai().toString();
+			secondDelayOption = MailingDelayType.IMMEDIATELY.toString();
+			thirdDelayOption = MailingDelayType.WEEKLY.toString();
+		} else if(user.getMailingDelai() == MailingDelayType.WEEKLY) {
+			mailDelayOption = user.getMailingDelai().toString();
+			secondDelayOption = MailingDelayType.IMMEDIATELY.toString();
+			thirdDelayOption = MailingDelayType.DAILY.toString();
+		} else {
+			mailDelayOption = user.getMailingDelai().toString();
+			secondDelayOption = MailingDelayType.DAILY.toString();
+			thirdDelayOption = MailingDelayType.WEEKLY.toString();
+		}
 		
 		return "<br><hr><br><div align=\"justify\"> your account : <a href=\"http://www.blackbeltfactory.com/ui#!User/d&d\"> http://www.blackbeltfactory.com/ui#!</a>"
 			+ "<br>group option is "
-			+ groupOption
-			+ "<div align=\"center\">"
+			+ mailDelayOption
+			+ "  change to : "
+			+ "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
+			+ secondDelayOption
+			+ "</a> or "
+			+ "<a href=\"http://imstars.aufeminin.com/stars/fan/jessica-alba/jessica-alba-20070817-299693.jpg\">"
+			+ thirdDelayOption
+			+ "</a><div align=\"center\">"
 			+ "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
 			+ "<br><br><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>";
-		
-		
-		
-		//return "<br><hr><br><div align=\"center\"><a href=\"http://www.blackbeltfactory.com/ui#!\"><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>www.blackbeltfactory.com</a></div>";
 	}
+	
 	public final String TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
 		String content = "";
 		User user;
@@ -111,8 +115,7 @@ public final class MainTemplateService {
         for(MainSubject mailSubject : MainSubject.values()){
         	mailSubject.setMailsHavingSameSubject(0);
         }
-        
-        
+                
         return mainSubjectOfGroupedMails;
     }
 }

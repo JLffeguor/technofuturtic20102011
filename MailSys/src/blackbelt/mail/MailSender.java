@@ -78,6 +78,7 @@ public class MailSender extends Thread {
 			throw new RuntimeException(e);
 		}
 	}
+	
 	/**
 	 * Send mails to a user.
 	 * @param mail
@@ -118,13 +119,11 @@ public class MailSender extends Thread {
 		sendConsoleMail(mails);
 		sendFileMail(mails.get(0).getUser(), content, mail.getSubject());
 	}
-
 	
 	private void sendSmtpMail(User user, String content, String subject) {
 		throw new UnsupportedOperationException();
 	}
-	
-	
+		
 	private void sendFileMail(User user, String content, String subject) {
 		try {
 			File rep;
@@ -153,9 +152,7 @@ public class MailSender extends Thread {
 			System.out.println(i.getText());
 			System.out.println("-----------------");
 		}
-
 	}
-	
 	
 	/**
 	 * returns a list of mails which are either immediate or grouped of a user.
@@ -177,7 +174,13 @@ public class MailSender extends Thread {
 			return mailDao.getMailsFromUser(MailType.GROUPABLE, user);
 		}
 		
-		// 3. There is no next mail to be sent.
+		// 3. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
+		user = mailDao.userHavingSlowMails();
+		if(user!=null){
+			return mailDao.getMailsFromUser(MailType.SLOW_NOT_GROUPABLE, user);
+		}
+	
+		// 4. There is no next mail to be sent.
 		return new ArrayList<Mail>();  // Empty list, no mail to send.
 	}
 }
