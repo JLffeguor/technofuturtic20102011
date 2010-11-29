@@ -84,7 +84,7 @@ public final class MainTemplateService {
 		//content = this.templateHeader(user);
 		
 		for (Mail mail : mails) {
-			content += this.templateBody(mail);
+			content += (mail.getUseTemplate()) ? this.templateBody(mail) : mail.getText();
 		}
 		
 		content  += this.templateFooter(user);

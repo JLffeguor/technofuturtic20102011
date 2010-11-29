@@ -15,6 +15,7 @@ CREATE TABLE mails (
   MailType          TEXT    NOT NULL,
   Subject			TEXT	NOT NULL,
   creationdate      TIMESTAMP WITH TIME ZONE NOT NULL,
+  useTemplate       BOOLEAN NOT NULL,
   PRIMARY KEY (id)
 );
 

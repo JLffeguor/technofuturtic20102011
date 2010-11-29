@@ -40,7 +40,7 @@ public class MailSender extends Thread {
 			
 			while (nextMailList != null && nextMailList.size()>0) {
 				
-				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE) { // if there are immediate mails, we send one after one... 
+				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE || nextMailList.get(0).getMailType()== MailType.SLOW_NOT_GROUPABLE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
 						sendMail(nextMailList.get(i));
@@ -103,8 +103,10 @@ public class MailSender extends Thread {
 	public void sendMail(Mail mail) {
 		String content = "";
 		List<Mail> mails;
+		
 		mails=new ArrayList<Mail>();
 		mails.add(mail);
+		
 		try {
 			content = this.mainTemplate.TemplateMail(mails);
 		} catch (NullPointerException e) {
@@ -112,7 +114,6 @@ public class MailSender extends Thread {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);
 		

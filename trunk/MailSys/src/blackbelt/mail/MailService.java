@@ -24,8 +24,8 @@ public class MailService {
 	 * @param userID user's id to whom the mail will be send to
 	 * @param isAImmadiateMessage indicates if the mail is send or not
 	 */
-	public void send(String subject,MainSubject mailSubject, String text, Long userID, MailType mailType){
-		Mail mail = new Mail(null,subject,mailSubject,text,mailType);
+	public void send(String subject,MainSubject mailSubject, String text, Long userID, MailType mailType, boolean useTemplate){
+		Mail mail = new Mail(null,subject,mailSubject,text,mailType, useTemplate);
 		dao.save(mail, userID);
 	}
 	
