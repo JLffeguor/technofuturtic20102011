@@ -20,45 +20,6 @@ public class ItemService {
 	@Autowired
 	// From Java v6, use @Resource
 	private InventoryDao inventoryDao; // Injected by Spring.
-	
-	// Method to display users with a specified birthDate
-	
-	public void dropItemForBirthDay(){
-		
-		for(User us : inventoryDao.getUsersByBirthDate()){
-					
-			System.out.println("\nUser name : " + us.getNickName() + "  / birthDate : " + us.getBirthDate());
-			dropRandomItem(us,1,"Happy birthday");
-		}
-	}
-	
-	public void displayItemsUsedOrNot(boolean usedOrNot){
-				
-		for(Item it : inventoryDao.getUsedItems(usedOrNot)){
-			
-			if(usedOrNot == true){
-				System.out.println("\nItem type : " + it.getItemType() + " is not used / removalDate : " + it.getRemovalDate());
-			}
-			
-			else{
-				System.out.println("\nItem type : " + it.getItemType() + " is used / removalDate : " + it.getRemovalDate());
-			}
-		}
-	}
-	
-	// Method to display list of active items
-	public void displayListOfActiveItems(List<Item> list) {
-
-		if (list != null) {
-			for (Item it : list) {
-				System.out.println("ItemType : " + it.getItemType());
-			}
-		} 
-		else {
-			System.out.println("Empty List ");
-		}
-
-	}
 
 	/**
 	 * Selects an ItemType with level = given level. Creates a new Item and puts
@@ -69,8 +30,7 @@ public class ItemService {
 		// temporary lists
 		List<ItemType> itemsWithLevel = new ArrayList<ItemType>();
 
-		// add items in the tempItemList if their level is >= than enumItems
-		// level
+		// add items in the tempItemList if their level is >= than enumItems level
 		for (ItemType enumItems : ItemType.values()) {
 			if (level == enumItems.getItemLevel()) {
 				itemsWithLevel.add(enumItems);
@@ -106,6 +66,7 @@ public class ItemService {
 	public Item dropRandomItem(User user, int level, int percent,
 			String cause) {
 
+		// if the number generated is < than the number in parameter
 		if (((int) (Math.random() * 100) + 1) <= percent) {
 
 			return dropRandomItem(user, level, cause);
@@ -114,10 +75,12 @@ public class ItemService {
 		}
 	}
 
-	// doc .... when is it typically used ?
+	/**
+	 *  This method is typically used when an user get an item for a special event (Birthday,...)
+	 */
 	public Item dropItem(User user, ItemType itemType, String cause) {
 
-		/** add an item to the user itemset */
+		//add an item to the user itemset
 		Item userItem = new Item(user, itemType);
 		userItem.setCause(cause);
 		user.addItem(userItem);
@@ -127,25 +90,25 @@ public class ItemService {
 		return userItem;
 	}
 
-	/** send an user's item or a globally item to a user */
+	//send an user's item or a globally item to a user
 	public void sendItemTo(User sender, Item item, User receiver) {
 
-		/** Check of Item destination (GLOBAL, GROUP, USER) */
+		// Check of Item destination (GLOBAL, GROUP, USER)
 		if (item.getItemType().getTargetType() == ItemType.TargetType.GROUP) {
 			throw new RuntimeException(
 					"Group items cannot be sent to a user ! ");
 		}
-		/** add item in User's Inventory */
+		//add item in User's Inventory 
 		receiver.addItem(item);
 		System.out.println(receiver.getNickName()
 				+ " just received the object "
 				+ item.getItemType().getItemName() + " from "
 				+ sender.getNickName());
-		/** remove item from sender'inventory */
+		
+		//remove item from sender'inventory
 		sender.removeItem(item);
 		
 		inventoryDao.merge(item);
-		// return item ;
 	}
 
 	/** activate a globally item by a user */
@@ -160,13 +123,13 @@ public class ItemService {
 					"Global items cannot be activated on a group ! ");
 		}
 
-		/** initialization of activationDate and removalDate */
+		// initialization of activationDate and removalDate
 		item.setActivationDate();
 
-		/** add an actived item to the globalItemsList */
+		// add an actived item to the globalItemsList
 		ActiveItems.getInstance().addItemToGloballyActiveItems(item);
 
-		/** activation item on the site (background or home page) */
+		// activation item on the site (background or home page)
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName() + " on the "
 				+ item.getItemType().getItemTypeGroup() + "\n");
@@ -174,7 +137,7 @@ public class ItemService {
 		inventoryDao.merge(item);
 	}
 
-	/** activate an item on a group by a user */
+	// activate an item on a group by a user
 	public void activateItemOnGroup(User sender, Item item,
 			Group receiver) {
 
@@ -186,16 +149,16 @@ public class ItemService {
 			throw new IllegalArgumentException(
 					"Group items cannot be activated globally ! ");
 		}
-		/** initialization of activationDate and removalDate */
+		// initialization of activationDate and removalDate
 		item.setActivationDate();
 
-		/** initialization of groupTarget */
+		// initialization of groupTarget
 		item.setGroupTarget(receiver);
 
-		/** add an actived item to the groupActiveItemsMap */
+		// add an actived item to the groupActiveItemsMap 
 		ActiveItems.getInstance().addItemToGroupActiveItemsMap(item, receiver);
 
-		/** activation item on the site */
+		// activation item on the site
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName()
 				+ " on group " + receiver.getGroupName() + "\n");
@@ -214,20 +177,55 @@ public class ItemService {
 			throw new IllegalArgumentException(
 					"User items cannot be activated on a group ! ");
 		}
-		/** initialization of activationDate and removalDate */
+		// initialization of activationDate and removalDate
 		item.setActivationDate();
 
-		/** initialization of userTarget */
+		// initialization of userTarget
 		item.setUserTarget(receiver);
 
-		/** add an actived item to the UsertActiveItemsMap */
+		// add an actived item to the UsertActiveItemsMap
 		ActiveItems.getInstance().addItemToUserListActiveItemsMap(item,
 				receiver);
-		/** activation item on the site */
+		// activation item on the site 
 		System.out.println(item.getItemType().getItemDescription()
 				+ " has been activated by " + sender.getNickName() + " on "
 				+ receiver.getNickName() + "\n");
 		
 		inventoryDao.merge(item);
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////
+	///////////////////////// Only used for tests ///////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+	
+	public void dropItemForBirthDay(){
+		
+		for(User us : inventoryDao.getUsersByBirthDate()){		
+			System.out.println("\nUser name : " + us.getNickName() + "  / birthDate : " + us.getBirthDate());
+			dropRandomItem(us,1,"Happy birthday");
+		}
+	}
+	
+	public void displayItemsUsedOrNot(boolean usedOrNot){
+				
+		for(Item it : inventoryDao.getUsedItems(usedOrNot)){
+			if(usedOrNot == true){
+				System.out.println("\nItem type : " + it.getItemType() + " is not used / removalDate : " + it.getRemovalDate());
+			}else {
+				System.out.println("\nItem type : " + it.getItemType() + " is used / removalDate : " + it.getRemovalDate());
+			}
+		}
+	}
+
+	public void displayListOfActiveItems(List<Item> list) {
+
+		if (list != null) {
+			for (Item it : list) {
+				System.out.println("ItemType : " + it.getItemType());
+			}
+		} else {
+			System.out.println("Empty List ");
+		}
 	}
 }
