@@ -37,41 +37,7 @@ public class ActiveItems {
 	 * thanks to the removal date)
 	 */
 	synchronized public List<Item> getActiveItems(User user) {
-
-		List<Item> activeItemList = new ArrayList<Item>();
-		Long mapKey = user.getUserId();
-
-		// if the list in the Map(userListActiveItemsMap) for the specified mapKey(User) is null, return null
-		if (userListActiveItemsMap.get(mapKey) == null) {
-			return null;
-		} 
-		
-		else {
-
-			// Call to the method itemStillActivated which will return a cleaned list (only active items)
-			// with the user list(userListActiveItemsMap.get(mapKey)) in parameter
-			activeItemList = itemsStillActivated(userListActiveItemsMap.get(mapKey));
-			
-			// if the list returned is not empty
-			if(!(activeItemList.isEmpty())){
-
-				
-				// clear the list in the Map and add into this one the activeItemList
-				userListActiveItemsMap.get(mapKey).clear();
-				userListActiveItemsMap.get(mapKey).addAll(activeItemList);
-
-				// return the list
-				return userListActiveItemsMap.get(mapKey);
-			}
-
-			else{
-				
-				// remove the user's mapKey from the Map (remove the user)
-				userListActiveItemsMap.remove(mapKey);
-				System.out.println("getActiveItems output is null");
-				return null;
-			}
-		}
+		return getActiveItems(userListActiveItemsMap, user.getUserId());
 	}
 
 	/**
@@ -80,187 +46,126 @@ public class ActiveItems {
 	 * thanks to the removal date)
 	 */
 	synchronized public List<Item> getActiveItems(Group group) {
-
-		// Instantiate the list is not useful but better for reading
-		List<Item> activeItemList = new ArrayList<Item>();
-		Long mapKey = group.getGroupId();
-
-		// if the list in the Map(groupActiveItemsMap) for the specified mapKey(Group) is null, return null
-		if (groupActiveItemsMap.get(mapKey) == null) {
-			return null;
-		} 
-		
-		else {
-			
-			// Call to the method itemStillActivated which will return a cleaned list (only active items)
-			// with the group list(groupActiveItemsMap(mapKey)) in parameter
-			activeItemList = itemsStillActivated(groupActiveItemsMap.get(mapKey));
-			
-			// if the list is not empty
-			if(!(activeItemList.isEmpty())){
-				
-				// clear the list in the Map and add into this one the activeItemList
-				groupActiveItemsMap.get(mapKey).clear();
-				groupActiveItemsMap.get(mapKey).addAll(activeItemList);
-				
-				// return the cleaned list
-				return groupActiveItemsMap.get(mapKey);
-			}
-			
-			else{
-				
-				// remove the group's mapKey from the Map (remove the user)
-				groupActiveItemsMap.remove(mapKey);
-				System.out.println("getActiveItems output is null");
-				return null;
-			}
-		}
+		return getActiveItems(groupActiveItemsMap, group.getGroupId());
 	}
 
+	synchronized private List<Item> getActiveItems(Map<Long, List<Item>> map, long id) {
+		List<Item> itemsInMap = map.get(id);
+		if (itemsInMap != null) { // Group has active items (maybe too old, we'll see...)
+
+			removeOldItems(itemsInMap);
+
+			if (itemsInMap.isEmpty()) { // No more active item => let's remove
+										// the empty list from the map.
+				// remove the group mapKey from the Map (remove the user)
+				groupActiveItemsMap.remove(id);
+			}
+		}
+		return itemsInMap; // same as above
+		
+	}
+	
+	
 	/** returns the globally active item. Return null if no list */
 	synchronized public List<Item> getGlobalActiveItems(ItemType itemType) {
 
-		// same as above for all global items
-		System.out.println("Global Items list - size = " + globalItems.size());
-		for (Item g : globalItems) {
-			System.out.println("Item type" + g.getItemType() + " Creation : "
-					+ g.getCreationDate());
+		removeOldItems(globalItems);
 
-		}
-		
-		// if the list returned by the itemsStillActivated method is null, return null
-		if (itemsStillActivated(globalItems) == null) {
-			return null;
-		} 
-		
-		// else return the global list cleaned
-		else {
-			return itemsStillActivated(globalItems);
-		}
-	}
-
-	/** print active item on the itemTypeGroup (Background or image_home) */
-	synchronized public List<Item> getActiveItems(ItemType.Group itemTypeGroup) {
-
-		// same as above for all items with a given item-type-group
-
-		// get the list with the items which are still active
-
-		System.out.println("Global Items list - size = " + globalItems.size());
-		for (Item g : globalItems) {
-			System.out.println("Item type" + g.getItemType() + " Creation : "
-					+ g.getCreationDate());
-		}
-
-		// return the global list cleaned
-		return itemsStillActivated(globalItems);
-	}
-
-	/** returns the items still activated */
-	synchronized public List<Item> itemsStillActivated(
-			List<Item> ListOfItemsFromMap) {
-
-		// Creating a new list to get active items
-
-		List<Item> activeItemList = new ArrayList<Item>();
-
-		for (Item i : ListOfItemsFromMap) {
-
-			// if the date of today is higher than the removalDate of the items in the ListOfItemsFromMap
-
-			if ((new Date().before(i.getRemovalDate()))) {
-				activeItemList.add(i);
+		// Creating a list to get items of a specified itemType
+		List<Item> itemsInList = new ArrayList<Item>();
+		for (int i = 0; i < globalItems.size(); i++) {
+			if (itemType.equals(globalItems.get(i).getItemType())) {
+				itemsInList.add(globalItems.get(i)); // put it into the itemsInList
 			}
 		}
-		return activeItemList;
+
+		return itemsInList;
 	}
 
-	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
-	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
-	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
-	/////////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	/** print active items of the itemTypeGroup (Background or image_home) */
+	synchronized public List<Item> getActiveItems(ItemType.Group itemTypeGroup) {
+		
+		removeOldItems(globalItems);
+
+		// Creating a list to get items of a specified itemTypeGroup
+		List<Item> itemsInList = new ArrayList<Item>();
+		for (int i = 0; i < globalItems.size(); i++) {
+			if (itemTypeGroup.equals(globalItems.get(i).getItemType().getItemTypeGroup())) {
+				itemsInList.add(globalItems.get(i)); // put it into the itemsInList
+			}
+		}
+
+		return itemsInList;
+	}
+
+	/** Remove old elements (that are not active anymore) from the given list */
+	synchronized public void removeOldItems(List<Item> itemsList) {
+
+		for (int i = 0; i < itemsList.size();) {
+			if ((new Date().after(itemsList.get(i).getRemovalDate()))) { // Item is too old! (has been activated long ago
+				itemsList.remove(i);
+			} else { // Ok, Item is not too old.
+				i++; // Next one.
+			}
+		}
+	}
+
+	///////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////// Methods to add an item in a Map (User or Group) or in the globalList ////////
+	///////// Methods to add an item in a Map (User or Group) or in the globalList ////////
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
-	synchronized public void addItemToUserListActiveItemsMap(Item item,	User user) {
+	synchronized public void addItemToUserListActiveItemsMap(Item item,
+			User user) {
 		
-		Long userId = user.getUserId();
+		// If the list for the specified user is null, create it
+		if(userListActiveItemsMap.get(user.getUserId()) == null){
 		
-		// Create list if no list yet.
-		if (userListActiveItemsMap.get(userId) == null) {
-
-			// ... /** creation of userId in the Map */
-
 			List<Item> userItemsList = new ArrayList<Item>();
-			userItemsList.add(item);
-			
-			userListActiveItemsMap.put(userId, userItemsList);
+			userListActiveItemsMap.put(user.getUserId(), userItemsList);	
 		}
 		
-		else{
-			userListActiveItemsMap.get(userId).add(item);
-		}
+		// in all cases, add an item into the list 		
+		userListActiveItemsMap.get(user.getUserId()).add(item);
 	}
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	synchronized public void addItemToGroupActiveItemsMap(Item item, Group group) {
-		
-		long groupId = group.getGroupId();
-		
-		if (groupActiveItemsMap.get(groupId) == null) {
-
-			/** creation of userId in the Map */
-
-			List<Item> groupItemsList = new ArrayList<Item>();
-			groupItemsList.add(item);
 			
-			groupActiveItemsMap.put(groupId, groupItemsList);
+		// If the list for the specified group is null, create it
+		if(groupActiveItemsMap.get(group.getGroupId()) == null){
+		
+			List<Item> groupItemsList = new ArrayList<Item>();
+			groupActiveItemsMap.put(group.getGroupId(), groupItemsList);	
 		}
 		
-		else{
-			groupActiveItemsMap.get(groupId).add(item);
-		}
+		// in all cases, add an item into the list 		
+		groupActiveItemsMap.get(group.getGroupId()).add(item);
 	}
 
 	/** Don't call this directly, go through ItemService.activateItemOn... */
 	/** Replace active item by a new active item (background or image_home) */
 	synchronized public void addItemToGloballyActiveItems(Item item) {
-
-		// Creating a temporary list
 		
-		List<Item> tempActiveItemsList = new ArrayList<Item>();
-
-		// if the global list is empty, add the first item
-		
-		if (globalItems == null) {
+		// If the globalItems list is empty, add the first item into
+		if(globalItems.isEmpty()){
 			globalItems.add(item);
-		}
-
-		else {
-
-			// Copy the global list into the tempActiveItemsList
-			// to avoid ConcurrentModificationException in the loop below
 			
-			for (Item i : globalItems) {
-				tempActiveItemsList.add(i);
-			}
-
-			for (Item i : tempActiveItemsList) {
-
-				// If the Item in the tempActiveItemsList is of the same type as the input Item, overwrite it
+		} else {
+			
+			// Loop on the globalItems list to see if there's already an item of the same itemTypeGroup of the parameter
+			// There can be only one item  of each itemTypeGroup in the globalItems list (HOME_PAGE,BACKGROUND)
+			
+			for(int i=0;i<globalItems.size();i++){
 				
-				if (i.getItemType().getItemTypeGroup() == item.getItemType()
-						.getItemTypeGroup()) {
-					globalItems.set(globalItems.indexOf(i), item);
-				}
-
-				else {
+				// if one itemTypeGroup already exists in the list, replace it with incoming item.
+				if (item.getItemType().getItemTypeGroup().equals(globalItems.get(i).getItemType().getItemTypeGroup())) {
+					globalItems.set(globalItems.indexOf(globalItems.get(i)), item);
+				} else {
 					globalItems.add(item); // add into the global list
 				}
 			}
 		}
-	}
-
-	public List<Item> getGlobalItemsList() {
-		return globalItems;
 	}
 }
