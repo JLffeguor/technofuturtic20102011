@@ -24,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
  * @author John
  *
  */
-public class MyCourseTextFormatter {
+public class CourseTextFormatter {
 	String course; //Course
 	String input;
     int currentIndex = 0;
