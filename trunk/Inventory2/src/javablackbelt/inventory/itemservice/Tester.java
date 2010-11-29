@@ -152,8 +152,7 @@ public class Tester {
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.IMAGE_HOME_24));		
 		
 		itemService.dropItemForBirthDay();
-		itemService.displayItemsUsedOrNot(true);
-		
+		itemService.displayItemsUsedOrNot(true);	
 		
 		// new item activation 
 		
@@ -163,5 +162,8 @@ public class Tester {
 		
 		System.out.println("Active Items of user : "+inventoryDao.findUser(2L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
+		
+		System.out.println("Active Items of user : "+inventoryDao.findUser(5L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(5L)));
 	}
 }
