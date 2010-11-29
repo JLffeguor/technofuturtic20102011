@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
+import blackbelt.model.MailType;
 import blackbelt.model.MailingDelayType;
 import blackbelt.model.MainSubject;
 import blackbelt.model.User;
@@ -69,9 +70,30 @@ public final class MainTemplateService {
 			+ "<br><br><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>";
 	}
 	
-	public final String TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
+	public class MailPackage{
+		
+		private String subject;
+		private String content;
+		
+		public String getSubject() {
+			return subject;
+		}
+		public void setSubject(String subject) {
+			this.subject = subject;
+		}
+		public String getContent() {
+			return content;
+		}
+		public void setContent(String content) {
+			this.content = content;
+		}
+	}
+	
+	public final MailPackage TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
+		MailPackage mp;
 		String content = "";
 		User user;
+		mp=new MailPackage();
 		if (mails == null){
 			throw new NullPointerException("No list defined for 'mails'.");
 		} else if (mails.size() == 0){
@@ -88,11 +110,14 @@ public final class MainTemplateService {
 		}
 		
 		content  += this.templateFooter(user);
+
+		mp.setSubject((mails.get(0).getMailType()==MailType.GROUPABLE)?this.MainSubjectOfGroupedMails(mails):mails.get(0).getSubject());
+		mp.setContent(content);
 		
-		return content;
+		return mp;
 	}
 	
-	public String MainSubjectOfGroupedMails(List<Mail> mails){    
+	private String MainSubjectOfGroupedMails(List<Mail> mails){    
         int i;
         
         for(Mail mail : mails){

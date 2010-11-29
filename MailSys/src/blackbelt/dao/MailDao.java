@@ -136,17 +136,6 @@ public class MailDao {
 	}
 	
 	/**
-	 * remove a mail
-	 * @param mail
-	 */
-	public void removeMail(Mail mail) {
-		if(mail!=null){
-			Query query = em.createQuery("DELETE FROM Mail m WHERE m = :mailToRemove").setParameter("mailToRemove",mail);
-			query.executeUpdate();
-		}
-	}
-	
-	/**
 	 * updates the lastMailSendedDate of a user
 	 * @param user
 	 */
