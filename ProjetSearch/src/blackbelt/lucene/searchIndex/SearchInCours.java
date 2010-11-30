@@ -83,7 +83,7 @@ public class SearchInCours implements PathIndex{
 		}
 	}
 	
-	public void searchBySctionId(String sectionId,String language) throws ParseException, IOException {
+	public void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
 
 		try {
 			String queryString=sectionId + " AND language:" +language;
