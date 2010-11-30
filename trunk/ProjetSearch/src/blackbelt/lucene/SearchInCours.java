@@ -81,10 +81,10 @@ public class SearchInCours implements PathIndex{
 		}
 	}
 	
-	public void search(String id) throws ParseException, IOException {
+	public void search2(String id,String language) throws ParseException, IOException {
 
 		try {
-			String queryString=id;
+			String queryString=id + " AND language:" +language;
 			
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
@@ -92,7 +92,7 @@ public class SearchInCours implements PathIndex{
 			
 			Set<String> stopWords =new java.util.HashSet<String>(); 
 
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "id",new StandardAnalyzer(Version.LUCENE_30, stopWords));
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionid",new StandardAnalyzer(Version.LUCENE_30, stopWords));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;
