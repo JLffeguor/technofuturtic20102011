@@ -97,7 +97,7 @@ public class Indexer {
 		result = result.replaceAll("(?i)href.*?>",""); //Remove <a href...>
 		result = result.replaceAll("(?i)\\<p>","");
 		result = result.replaceAll("(?i)\\<p.*?>",""); //Remove <p align...>
-		result = result.replaceAll("(?i)\\<b>","");
+		result = result.replaceAll("(?i)\\<b.*?>","");
 		result = result.replaceAll("(?i)\\<i>","");
 		result = result.replaceAll("(?i)\\<pre>","");
 		result = result.replaceAll("(?i)\\<ul>","");
