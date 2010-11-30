@@ -21,7 +21,7 @@ import org.apache.lucene.util.Version;
 import blackbelt.PathIndex;
 
 public class SearchInCours implements PathIndex{
-	public void search(String keyWord,String language) throws ParseException, IOException {
+	public void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
 		try {
 			String queryString=keyWord + " AND language:" +language;
@@ -83,10 +83,10 @@ public class SearchInCours implements PathIndex{
 		}
 	}
 	
-	public void search2(String id,String language) throws ParseException, IOException {
+	public void searchBySctionId(String sectionId,String language) throws ParseException, IOException {
 
 		try {
-			String queryString=id + " AND language:" +language;
+			String queryString=sectionId + " AND language:" +language;
 			
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
@@ -118,7 +118,7 @@ public class SearchInCours implements PathIndex{
 
 				// Iterate over the Documents in the Hits object
 				List<String> bigString = new ArrayList<String>();
-				RenderResult rr = new RenderResult(id);
+				RenderResult rr = new RenderResult(sectionId);
 				for (int i = 0; i < hits.length; i++) {
 					ScoreDoc scoreDoc = hits[i];
 					int docId = scoreDoc.doc;

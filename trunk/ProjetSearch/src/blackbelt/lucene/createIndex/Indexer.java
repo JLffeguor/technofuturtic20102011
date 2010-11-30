@@ -24,7 +24,7 @@ public class Indexer {
 	@Autowired
 	private SectionDao dao;
 	
-	public Document indexSection(Section section) throws IOException {
+	public Document indexSection(SectionText section) throws IOException {
 		
 		//Use a text formatter to format the text
 		CourseTextFormatter courseTextFormatter = new CourseTextFormatter(null, section.getText());
@@ -65,14 +65,14 @@ public class Indexer {
 		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,stopWords), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries		
-		List<Section> sections=dao.myQuerry("select s1 from Section s1 where s1.version=(" +
+		List<SectionText> sections=dao.myQuerry("select s1 from Section s1 where s1.version=(" +
 				"select max(s2.version) from Section s2 where s2.sectionid=s1.sectionid and s2.language=s1.language " +
 				"group by s2.sectionid)" +
 				"order by s1.sectionid");
 		
 		//Print (use for debug)
 		int i=0;
-		for (Section section : sections) {
+		for (SectionText section : sections) {
 			i++;
 			writer.addDocument(indexSection(section));
 			System.out.println("\t("+i+") "+section);
