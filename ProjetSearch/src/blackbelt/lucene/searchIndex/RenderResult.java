@@ -3,6 +3,7 @@ package blackbelt.lucene.searchIndex;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
@@ -20,8 +21,30 @@ public class RenderResult {
 		String courseUrl="http://www.blackbeltfactory.com/ui#CoursePage/";
 		String textSectionFull = doc.get("text");
 		textSectionFull = textSectionFull.toLowerCase();
-		int keyWordStart = textSectionFull.indexOf(keyword);
-		int keyWordEnd = textSectionFull.indexOf(keyword)+keyword.length();
+		int indexDebKeyword = 0;
+		List<String> keywordList = new ArrayList<String>();
+		String result = "";
+		
+		while(indexDebKeyword < keyword.length()){
+			int indexBlankSpace = keyword.indexOf(" ");
+			if (indexBlankSpace == -1){
+				keywordList.add(keyword);
+				break;
+			}else{
+			keywordList.add(keyword.substring(indexDebKeyword,indexBlankSpace));
+			}
+			keyword = keyword.substring(indexBlankSpace+1,keyword.length());
+		}
+		for(String str: keywordList){
+			result += textAroundKeyword(doc, courseUrl, textSectionFull,str);
+		}
+		
+		return "...." + result +"....<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>"; 
+	}
+
+	private String textAroundKeyword(Document doc, String courseUrl,String textSectionFull,String singleKeyword) {
+		int keyWordStart = textSectionFull.indexOf(singleKeyword);
+		int keyWordEnd = textSectionFull.indexOf(singleKeyword)+singleKeyword.length();
 		
 		String subStrBeforeKeyword = "";
 		String subStrAfterKeyword = "";
@@ -54,9 +77,10 @@ public class RenderResult {
 		}
 		subStrAfterKeyword = subStrAfterKeyword.substring(0,endSubStrAfterKeyword);
 		
-		String finalResultText = "...."+subStrBeforeKeyword + " <b>" + keyword + "</b> " + subStrAfterKeyword +"....<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>";
-		return finalResultText;
+		String firstResult = subStrBeforeKeyword + " <b>" + singleKeyword + "</b> " + subStrAfterKeyword  + "<br>";
+		return firstResult;
 	}
+	
 	public void toHTML(List<String> bigString){
 		String result = "";
 		String courseUrl="http://www.blackbeltfactory.com/ui#CoursePage/";
