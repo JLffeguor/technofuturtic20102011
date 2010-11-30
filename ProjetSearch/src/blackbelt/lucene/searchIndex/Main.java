@@ -10,7 +10,7 @@ public class Main {
 		
 		SearchInCours searchInCours = new SearchInCours();
 		try {
-			searchInCours.search("hibernate", "en");
+			searchInCours.searchByKWandL("hibernate dao", "en");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
