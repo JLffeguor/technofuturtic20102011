@@ -14,6 +14,7 @@ public class Main {
 		Tester theItemTest = (Tester)applicationContext.getBean("tester");
 		
 		theItemTest.createData();
-		theItemTest.performTests();
+		//theItemTest.performTests();
+		theItemTest.performTestsFor1User();
 	}
 }
