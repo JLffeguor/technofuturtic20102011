@@ -15,9 +15,14 @@ public class MyLuceneTest {
 		Indexer indexer = (Indexer) applicationContext.getBean("indexer");
 		
 		SearchInCours searchInCours = new SearchInCours();
-		
-		String keyWord="hibernate";
-		String language="fr";
+		String keyWord="";
+		if(args.length==0){
+			keyWord="hibernate";
+		}
+		else{
+			keyWord=args[1];
+		}
+		String language="en";
 
 		try {
 			
