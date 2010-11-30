@@ -85,6 +85,11 @@ public class Item {
 		}
 		this.activationDate = new Date();  
 		GregorianCalendar cal = new GregorianCalendar();
+		
+		// set date for test
+		cal.set(2010, 10, 29, 02, 55);
+		
+		
 		cal.add(GregorianCalendar.HOUR_OF_DAY, this.itemType.getItemDuration());
 		this.removalDate = cal.getTime();
 	}
