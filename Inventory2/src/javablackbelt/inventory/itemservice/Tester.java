@@ -166,4 +166,50 @@ public class Tester {
 		System.out.println("Active Items of user : "+inventoryDao.findUser(5L).getNickName());
 		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(5L)));
 	}
+	
+	public void performTestsFor1User() {
+		
+		// dropItem method
+		
+		Item specificItemGroup = itemService.dropItem(inventoryDao.findUser(1L), ItemType.BEER_BARREL, "A beer barrel for a group"); // for activeGroup		  
+		
+		Item specificItemGlobal = itemService.dropItem(inventoryDao.findUser(1L), ItemType.BAKG_NAKED, "Japan girl naked !"); // for activeGlobally
+		
+		Item specificItemUser = itemService.dropItem(inventoryDao.findUser(1L),ItemType.BEER_PINT, "I just felt like it"); // for activeOnUser 
+		Item specificItemUser2 = itemService.dropItem(inventoryDao.findUser(1L), ItemType.CHAMPAIN_GLASS, "Happy birthday !"); // for activeOnUser
+				  
+				  
+		// Activate methods 
+		itemService.activateItemOnUser(inventoryDao.findUser(1L),specificItemUser,inventoryDao.findUser(1L));
+		itemService.activateItemOnUser(inventoryDao.findUser(1L),specificItemUser2,inventoryDao.findUser(1L));
+		
+		itemService.activateItemOnGroup(inventoryDao.findUser(1L),specificItemGroup,inventoryDao.findGroup(9L)); 
+		
+		itemService.activateItemGlobally(inventoryDao.findUser(1L),specificItemGlobal);
+			  
+	
+		// getActiveItems methods 
+		System.out.println("Active Items of user : " +inventoryDao.findUser(1L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(1L)));
+		System.out.println("");
+			
+		System.out.println("Active Items of user : "+inventoryDao.findUser(2L).getNickName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findUser(2L)));
+		System.out.println("");
+		
+		// Groups ActiveItems
+		System.out.println("Active Items of group : "+inventoryDao.findGroup(9L).getGroupName());
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(inventoryDao.findGroup(9L)));
+		System.out.println("");
+		  
+		// Global ActiveItems
+		System.out.println("Active items of type BACKGROUND");
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getActiveItems(ItemType.Group.BACKGROUND));
+		System.out.println("");
+		
+		// getGlobalActiveItems method  
+		System.out.println("Global active items");
+		itemService.displayListOfActiveItems(ActiveItems.getInstance().getGlobalActiveItems(ItemType.BAKG_NAKED));
+		System.out.println("");
+	}
 }

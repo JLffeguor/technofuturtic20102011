@@ -50,9 +50,10 @@ public class ActiveItems {
 	}
 
 	synchronized private List<Item> getActiveItems(Map<Long, List<Item>> map, long id) {
+		
 		List<Item> itemsInMap = map.get(id);
 		if (itemsInMap != null) { // Group has active items (maybe too old, we'll see...)
-
+			
 			removeOldItems(itemsInMap);
 
 			if (itemsInMap.isEmpty()) { // No more active item => let's remove
@@ -60,8 +61,9 @@ public class ActiveItems {
 				// remove the group mapKey from the Map (remove the user)
 				groupActiveItemsMap.remove(id);
 			}
+			
 		}
-		return itemsInMap; // same as above
+		return itemsInMap;
 		
 	}
 	
