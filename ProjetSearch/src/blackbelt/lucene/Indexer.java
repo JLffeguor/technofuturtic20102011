@@ -34,7 +34,7 @@ public class Indexer {
 		//Add a new Document to the index
 		Document doc = new Document();
 		//And add each field
-		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.NO));
+		doc.add(new Field("id", String.valueOf(section.getId()), Field.Store.YES, Field.Index.ANALYZED));
 		doc.add(new Field("sectionid", String.valueOf(section.getSectionid()), Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
         doc.add(new Field("language", section.getLanguage(), Field.Store.YES, Field.Index.ANALYZED));
@@ -43,7 +43,7 @@ public class Indexer {
         doc.add(new Field("content", fullSearchableText, Field.Store.YES, Field.Index.ANALYZED));
         
         //Print (use it for debug)
-        System.out.println(doc.toString());
+        //System.out.println(doc.toString());
 		return doc;
 	}
 
