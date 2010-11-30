@@ -28,7 +28,9 @@ public class MyLuceneTest {
 			
 			indexer.createIndexes();			
 			searchInCours.search(keyWord,language);
-
+			UpdateIndex.deleteSection("12647221");
+			searchInCours.search("12647225");
+			
 		} catch (Exception e) {
 			System.out.println("Exception caught.\n" + e);
 		}
