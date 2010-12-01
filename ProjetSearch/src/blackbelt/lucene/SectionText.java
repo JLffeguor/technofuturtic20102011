@@ -1,4 +1,4 @@
-package blackbelt.lucene.createIndex;
+package blackbelt.lucene;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import blackbelt.lucene.ConfigIndex;
+import blackbelt.lucene.SectionText;
 import blackbelt.lucene.SectionTextDocument;
 
 @Service
