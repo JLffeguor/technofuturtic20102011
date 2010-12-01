@@ -37,10 +37,10 @@ public class RenderResult {
 			testKeyword = testKeyword.substring(indexBlankSpace+1,testKeyword.length());
 		}
 		for(String str: keywordList){
-			result += textAroundKeyword(doc, courseUrl, textSectionFull,str);
+			result += "...."+textAroundKeyword(doc, courseUrl, textSectionFull,str)+"....";
 		}
 		
-		return "...." + result +"....<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>..."; 
+		return  result +"<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>"; 
 	}
 
 	private String textAroundKeyword(Document doc, String courseUrl,String textSectionFull,String singleKeyword) {
