@@ -1,4 +1,4 @@
-package blackbelt;
+package blackbelt.lucene;
 
 import java.io.IOException;
 
