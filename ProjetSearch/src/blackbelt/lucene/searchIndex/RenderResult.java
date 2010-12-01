@@ -97,7 +97,7 @@ public class RenderResult {
 		result+="</body></html>";
 		
 		
-		File file = new File("S:\\SearchHtml\\search.html");
+		File file = new File("C:\\testing\\Search\\test.html");
 		try {
 			PrintWriter pw = new PrintWriter(file);
 			pw.print(result);
