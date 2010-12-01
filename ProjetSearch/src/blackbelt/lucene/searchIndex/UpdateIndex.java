@@ -2,8 +2,6 @@ package blackbelt.lucene.searchIndex;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
@@ -14,8 +12,8 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import blackbelt.ConfigIndex;
-import blackbelt.SectionTextDocument;
+import blackbelt.lucene.ConfigIndex;
+import blackbelt.lucene.SectionTextDocument;
 import blackbelt.lucene.createIndex.SectionText;
 
 public class UpdateIndex implements ConfigIndex{
