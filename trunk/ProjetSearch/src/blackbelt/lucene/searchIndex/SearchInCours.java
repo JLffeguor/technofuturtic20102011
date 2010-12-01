@@ -29,10 +29,8 @@ public class SearchInCours implements PathIndex{
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
-			
-			Set<String> stopWords =new java.util.HashSet<String>(); 
 
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, stopWords));
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;
