@@ -38,8 +38,7 @@ public class UpdateIndex implements PathIndex{
 			String queryString = "sectionid:" + sectionId + " AND language:"
 					+ language;
 
-			QueryParser parser = new QueryParser(Version.LUCENE_30,
-					"sectionid", new StandardAnalyzer(Version.LUCENE_30,STOPWORD));
+			QueryParser parser = new QueryParser(Version.LUCENE_30,"sectionid", new StandardAnalyzer(Version.LUCENE_30,STOPWORD));
 			Query query = parser.parse(queryString);
 
 			writer.deleteDocuments(query);
