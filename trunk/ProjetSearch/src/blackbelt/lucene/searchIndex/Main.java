@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.lucene.queryParser.ParseException;
 
+import blackbelt.lucene.UpdateIndex;
 import blackbelt.lucene.createIndex.SectionText;
 
 public class Main {
