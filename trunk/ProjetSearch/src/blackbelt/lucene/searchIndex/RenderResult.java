@@ -85,8 +85,9 @@ public class RenderResult {
 	public void toHTML(List<String> bigString){
 		String result = "";
 		String courseUrl="http://www.blackbeltfactory.com/ui#CoursePage/";
-		result+="<html><head><title>Black Belt Google</title></head><LINK rel='stylesheet' type='text/css' href='style.css'><body>";
-		result+="<img align='left' src='http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-100x63.png'><br/><div class='searchLogo'><form><input type='text' value='keyword'/><input type='submit' value='search!'/></form></div><br/><br/><br/><br/>";
+		result+="<html><head><title>Black Belt Google</title><LINK rel='stylesheet' type='text/css' href='style.css'>";
+		result+="</head><body>";
+		result+="<img align='left' src='http://www.blackbeltfactory.com/imgs/logos/BlackBeltFactory-logo-100x63.png'/><br/><div class='searchLogo'><form style='vertical-align:middle' name='searching'><input name='keyword' type='text' value='keyword'/><input type='submit' value='search' onClick=\"return search()\"/></form></div><br/><br/><br/><br/>";
 		
 		
 		result+="<div align='left'><h2><u>Results for :"+keyword+"</u></h2></div><br/>";
@@ -96,7 +97,7 @@ public class RenderResult {
 		result+="</body></html>";
 		
 		
-		File file = new File("S:\\SearchHtml\\searchJey.html");
+		File file = new File("S:\\SearchHtml\\search.html");
 		try {
 			PrintWriter pw = new PrintWriter(file);
 			pw.print(result);
@@ -106,4 +107,5 @@ public class RenderResult {
 			e.printStackTrace();
 		}
 	}
+
 }
