@@ -20,9 +20,9 @@ public class Main {
 		sectionText.setSectionid(172647220);
 		
 		try {
-			searchInCours.searchBySectionId("12647220", "EN");
+			searchInCours.searchBySectionId("172647220", "EN");
 			UpdateIndex.update(sectionText);
-			searchInCours.searchBySectionId("12647220", "EN");
+			searchInCours.searchBySectionId("172647220", "EN");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
