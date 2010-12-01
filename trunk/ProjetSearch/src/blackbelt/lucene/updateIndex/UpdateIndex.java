@@ -1,4 +1,4 @@
-package blackbelt.lucene;
+package blackbelt.lucene.updateIndex;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import blackbelt.lucene.createIndex.SectionText;
+import blackbelt.lucene.ConfigIndex;
+import blackbelt.lucene.SectionText;
+import blackbelt.lucene.SectionTextDocument;
 
 public class UpdateIndex implements ConfigIndex{
 	public static void update(SectionText sectionText) {
