@@ -24,22 +24,23 @@ public class RenderResult {
 		int indexDebKeyword = 0;
 		List<String> keywordList = new ArrayList<String>();
 		String result = "";
+		String testKeyword = keyword;
 		
 		while(indexDebKeyword < keyword.length()){
-			int indexBlankSpace = keyword.indexOf(" ");
+			int indexBlankSpace = testKeyword.indexOf(" ");
 			if (indexBlankSpace == -1){
-				keywordList.add(keyword);
+				keywordList.add(testKeyword);
 				break;
 			}else{
-			keywordList.add(keyword.substring(indexDebKeyword,indexBlankSpace));
+			keywordList.add(testKeyword.substring(indexDebKeyword,indexBlankSpace));
 			}
-			keyword = keyword.substring(indexBlankSpace+1,keyword.length());
+			testKeyword = testKeyword.substring(indexBlankSpace+1,testKeyword.length());
 		}
 		for(String str: keywordList){
 			result += textAroundKeyword(doc, courseUrl, textSectionFull,str);
 		}
 		
-		return "...." + result +"....<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>"; 
+		return "...." + result +"....<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>..."; 
 	}
 
 	private String textAroundKeyword(Document doc, String courseUrl,String textSectionFull,String singleKeyword) {
