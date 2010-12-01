@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import blackbelt.PathIndex;
+import blackbelt.ConfigIndex;
 import blackbelt.SectionTextDocument;
 
 @Service
@@ -23,7 +23,7 @@ public class Indexer {
 
 	public void createIndexes() throws IOException {
 		
-		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(PathIndex.DIRECTORY));
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
 		
 		System.out.println("*****************Begin Indexing Section*****************");
 		
@@ -34,7 +34,7 @@ public class Indexer {
 		 *  */
 		
 		// Make an writer to create the index
-		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,PathIndex.STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 		//Index all Accommodation entries		
 		List<SectionText> sections=dao.myQuerry("select s1 from SectionText s1 where s1.version=(" +
