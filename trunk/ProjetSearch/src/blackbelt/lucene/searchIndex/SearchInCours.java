@@ -115,8 +115,6 @@ public class SearchInCours implements PathIndex{
 						+ "\" were found in quotes by:");
 
 				// Iterate over the Documents in the Hits object
-				List<String> bigString = new ArrayList<String>();
-				RenderResult rr = new RenderResult(sectionId);
 				for (int i = 0; i < hits.length; i++) {
 					ScoreDoc scoreDoc = hits[i];
 					int docId = scoreDoc.doc;
@@ -125,7 +123,6 @@ public class SearchInCours implements PathIndex{
 							+ docScore);
 
 					Document doc = searcher.doc(docId);
-					bigString.add(rr.extractResult(doc));
 					// Print the value that we stored in the "title" field. Note
 					// that this Field was not indexed, but (unlike the
 					// "contents" field) was stored verbatim and can be
@@ -133,7 +130,6 @@ public class SearchInCours implements PathIndex{
 					System.out.println("Content N°" + (i + 1) + ": "
 							+ doc.get("language") + " (" + doc.get("id") + ")");
 				}
-				rr.toHTML(bigString);
 			}
 			
 			System.out.println();
