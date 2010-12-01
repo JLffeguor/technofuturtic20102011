@@ -14,11 +14,11 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import blackbelt.PathIndex;
+import blackbelt.ConfigIndex;
 import blackbelt.SectionTextDocument;
 import blackbelt.lucene.createIndex.SectionText;
 
-public class UpdateIndex implements PathIndex{
+public class UpdateIndex implements ConfigIndex{
 	public static void update(SectionText sectionText) {
 		deleteSectionIndex(String.valueOf(sectionText.getSectionid()),sectionText.getLanguage());
 		addSectionIndex(sectionText);

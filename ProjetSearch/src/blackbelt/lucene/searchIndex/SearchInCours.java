@@ -18,9 +18,9 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 
-import blackbelt.PathIndex;
+import blackbelt.ConfigIndex;
 
-public class SearchInCours implements PathIndex{
+public class SearchInCours implements ConfigIndex{
 	public void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
 		try {
