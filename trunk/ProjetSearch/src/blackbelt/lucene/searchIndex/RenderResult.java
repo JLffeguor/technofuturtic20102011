@@ -37,7 +37,7 @@ public class RenderResult {
 			testKeyword = testKeyword.substring(indexBlankSpace+1,testKeyword.length());
 		}
 		for(String str: keywordList){
-			result += "...."+textAroundKeyword(doc, courseUrl, textSectionFull,str)+"....";
+			result += "...."+textAroundKeyword(doc, courseUrl, textSectionFull,str)+"....<br/>";
 		}
 		
 		return  result +"<br/><a href='"+courseUrl+doc.get("sectionid")+"'>"+courseUrl+doc.get("sectionid")+"</a>"; 
@@ -78,7 +78,7 @@ public class RenderResult {
 		}
 		subStrAfterKeyword = subStrAfterKeyword.substring(0,endSubStrAfterKeyword);
 		
-		String firstResult = subStrBeforeKeyword + " <b>" + singleKeyword + "</b> " + subStrAfterKeyword  + "<br>";
+		String firstResult = subStrBeforeKeyword + " <b>" + singleKeyword + "</b> " + subStrAfterKeyword ;
 		return firstResult;
 	}
 	
