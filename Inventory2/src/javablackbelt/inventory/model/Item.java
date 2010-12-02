@@ -87,7 +87,7 @@ public class Item {
 		GregorianCalendar cal = new GregorianCalendar();
 		
 		// set date for test
-		cal.set(2010, 10, 29, 02, 55);
+		//cal.set(2010, 10, 29, 02, 55);
 		
 		
 		cal.add(GregorianCalendar.HOUR_OF_DAY, this.itemType.getItemDuration());
