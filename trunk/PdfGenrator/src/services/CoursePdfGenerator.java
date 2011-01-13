@@ -132,7 +132,7 @@ public class CoursePdfGenerator {
 		this.doTheUserWantACoverPage = coverPageOrNot;
 		
 		this.urlLogoPdf = logoUrl;
-		this.user.changeTheFuckingValueOfTheBooleanOfTheUseCustomLogo(true);
+		this.user.changeTheValueOfTheBooleanOfTheUseCustomLogo(true);
 	}
 	
 //	public  void printSection(){
