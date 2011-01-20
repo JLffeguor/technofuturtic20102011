@@ -17,13 +17,13 @@ public class DataTest extends Thread{
 	public void run(){
 		
 		//init date
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",1L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",2L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",3L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",4L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",5L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",6L,MailType.GROUPABLE, true);
-		mailService.send(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",7L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",2L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_IN_FORUM,"Ce message ne sert a rien.Go te chercher un café.",3L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",4L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",5L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",6L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" blllllllaaaaaaaaaaaaaaaaa ",MainSubject.ANSWER_FROM_COACH,"Ce message ne sert a rien.Go te chercher un café.",7L,MailType.GROUPABLE, true);
 		
 		try {
 			//delai entre 2 send
@@ -34,22 +34,22 @@ public class DataTest extends Thread{
 			e.printStackTrace();
 		}
 		
-		mailService.send(" message 1 ",MainSubject.REMINDER, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 1L,MailType.GROUPABLE, true);
-		mailService.send(" message 2 ",MainSubject.CONGRATULATION, "contenu de. la mort qui tue, again.", 1L,MailType.IMMEDIATE, true);
-		mailService.send(" message 3 - 1",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue 1, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.send(" message 3 - 2",MainSubject.CONGRATULATION, "deuxieme contenu de la mort qui tue 2, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.send(" message 3 - 3",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue 3, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.send(" message 3 - 4",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.send(" message 10",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.SLOW_NOT_GROUPABLE, true);
+		mailService.createAndSaveMail(" message 1 ",MainSubject.REMINDER, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 2 ",MainSubject.CONGRATULATION, "contenu de. la mort qui tue, again.", 1L,MailType.IMMEDIATE, true);
+		mailService.createAndSaveMail(" message 3 - 1",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue 1, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 3 - 2",MainSubject.CONGRATULATION, "deuxieme contenu de la mort qui tue 2, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 3 - 3",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue 3, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 3 - 4",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 10",MainSubject.ANSWER_IN_FORUM, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.SLOW_NOT_GROUPABLE, true);
 		
-		mailService.send(" message 4 ",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue.encore.", 2L,MailType.GROUPABLE, true);
-		mailService.send(" message 5 ",MainSubject.CONGRATULATION, "contenu de la mort qui tue.", 2L,MailType.IMMEDIATE, true);
-		mailService.send(" message 6 ",MainSubject.REMINDER, "blablabla. blablabla blabla.", 2L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 4 ",MainSubject.REMINDER, "deuxieme contenu de la mort qui tue.encore.", 2L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 5 ",MainSubject.CONGRATULATION, "contenu de la mort qui tue.", 2L,MailType.IMMEDIATE, true);
+		mailService.createAndSaveMail(" message 6 ",MainSubject.REMINDER, "blablabla. blablabla blabla.", 2L,MailType.GROUPABLE, true);
 		
-		mailService.send(" message 7 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
-		mailService.send(" message 8 ",MainSubject.CONGRATULATION,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.IMMEDIATE, true);
-		mailService.send(" message 9 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
-		mailService.send(" message 11a ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, false);
-		mailService.send(" message 11b ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, true);
+		mailService.createAndSaveMail(" message 7 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 8 ",MainSubject.CONGRATULATION,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.IMMEDIATE, true);
+		mailService.createAndSaveMail(" message 9 ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" message 11a ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, false);
+		mailService.createAndSaveMail(" message 11b ",MainSubject.REMINDER,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, true);
 	}
 }
