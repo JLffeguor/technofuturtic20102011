@@ -10,7 +10,7 @@ public class MainTest{
 	
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-		MailSender consumer = (MailSender)applicationContext.getBean("mailSender");;
+		MailSender consumer = (MailSender)applicationContext.getBean("mailSender");
 		consumer.start();
 		
 		DataTest dataTest = (DataTest)applicationContext.getBean("dataTest");
