@@ -36,12 +36,12 @@ public final class MainTemplateService {
 			+ "</div></div><br>";
 	}
 	
-	private String templateFooter(User user) {
+	private String templateFooter(User user, boolean isGrouped) {
 		
 		String mailDelayOption = "";
 		String secondDelayOption = "";
 		String thirdDelayOption = "";
-		
+		String footer;
 		if(user.getMailingDelai() == MailingDelayType.DAILY) {
 			mailDelayOption = user.getMailingDelai().toString();
 			secondDelayOption = MailingDelayType.IMMEDIATELY.toString();
@@ -56,18 +56,21 @@ public final class MainTemplateService {
 			thirdDelayOption = MailingDelayType.WEEKLY.toString();
 		}
 		
-		return "<br><hr><br><div align=\"justify\"> your account : <a href=\"http://www.blackbeltfactory.com/ui#!User/d&d\"> http://www.blackbeltfactory.com/ui#!</a>"
-			+ "<br>group option is "
-			+ mailDelayOption
-			+ "  change to : "
-			+ "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
-			+ secondDelayOption
-			+ "</a> or "
-			+ "<a href=\"http://imstars.aufeminin.com/stars/fan/jessica-alba/jessica-alba-20070817-299693.jpg\">"
-			+ thirdDelayOption
-			+ "</a><div align=\"center\">"
-			+ "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
-			+ "<br><br><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>";
+		footer = "<br><hr><br><div align=\"justify\"> your account : <a href=\"http://www.blackbeltfactory.com/ui#!User/d&d\"> http://www.blackbeltfactory.com/ui#!</a>";
+		if (isGrouped) {
+			footer += "<br>group option is "
+				   + mailDelayOption
+				   + "  change to : "
+				   + "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
+				   + secondDelayOption
+				   + "</a> or "
+				   + "<a href=\"http://imstars.aufeminin.com/stars/fan/jessica-alba/jessica-alba-20070817-299693.jpg\">"
+				   + thirdDelayOption
+				   + "</a><div align=\"center\">"
+				   + "<a href=\"http://www.blackbeltfactory.com/ui#!\">"
+				   + "<br><br><img border=\"0\" src=\"http://antisosial.free.fr/projet/BlackBeltFactoryLogo3D-header.png\"><br>";
+		}
+		return footer;
 	}
 	
 	public class MailPackage{
@@ -109,7 +112,7 @@ public final class MainTemplateService {
 			content += (mail.getUseTemplate()) ? this.templateBody(mail) : mail.getText();
 		}
 		
-		content  += this.templateFooter(user);
+		content  += this.templateFooter(user, (mails.size()>1));
 
 		mp.setSubject((mails.get(0).getMailType()==MailType.GROUPABLE)?this.MainSubjectOfGroupedMails(mails):mails.get(0).getSubject());
 		mp.setContent(content);
