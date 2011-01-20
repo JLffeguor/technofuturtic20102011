@@ -122,7 +122,7 @@ public class Mail {
 		GregorianCalendar gDate = new GregorianCalendar();
 		gDate.setGregorianChange(this.creationDate);
 		String date = gDate.get(GregorianCalendar.YEAR) + "/"
-					+ gDate.get(GregorianCalendar.MONTH) + "/"
+					+ gDate.get(GregorianCalendar.MONTH)+1 + "/"
 					+ gDate.get(GregorianCalendar.DAY_OF_MONTH) + " ("
 					+ gDate.get(GregorianCalendar.HOUR_OF_DAY) + ":"
 					+ gDate.get(GregorianCalendar.MINUTE) + ":"

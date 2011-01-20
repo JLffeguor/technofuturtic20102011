@@ -113,11 +113,11 @@ public class MailSender extends Thread {
 			PrintWriter make;
 			GregorianCalendar gc;
 			String fileName;
-			rep = new File("C:/testing/" + user.getPseudo());
+			rep = new File("C:/testing/Mails/" + user.getPseudo());
 			rep.mkdirs();
 			date=new Date();
-			fileName = date.getYear()+"_"+date.getMonth()+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+subject+"_message(s).html";
-			make = new PrintWriter("C:/testing/" + user.getPseudo() + "/" +fileName);// apres : le nombbre de message
+			fileName = date.getYear()+"_"+(date.getMonth()+1)+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+subject+"_message(s).html";
+			make = new PrintWriter("C:/testing/Mails/" + user.getPseudo() + "/" +fileName);// apres : le nombbre de message
 			make.println("<div>subject: "+subject+"</div>");
 			make.println(content);
 			make.close();
