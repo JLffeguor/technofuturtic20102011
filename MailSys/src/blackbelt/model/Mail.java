@@ -90,12 +90,16 @@ public class Mail {
 
 	public String getFormatedText() {
 
-		String content = new String(this.content);
-		String result = new String("");
+		String content = this.content;
+		String result = "";
 
 		while (content.length() > 0) {
 			result += content.substring(0, content.indexOf(".") + 1) + "<br>";
 			content = content.substring(content.substring(0, content.indexOf(".") + 1).length(), content.length());
+			if (content.indexOf(".") == -1){
+				result += content;
+				break;
+			}
 		}
 
 		return result;

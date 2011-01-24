@@ -17,7 +17,7 @@ public class DataTest extends Thread{
 	public void run(){
 		
 		//init date
-		mailService.createAndSaveMail(" subject ",Categorie.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",1L,MailType.GROUPABLE, true);
+		mailService.createAndSaveMail(" subject ",Categorie.CONTRIBUTION,"Ce message ne sert a rien Go te chercher un caf�",1L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",Categorie.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",2L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",Categorie.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",3L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",Categorie.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",4L,MailType.GROUPABLE, true);
