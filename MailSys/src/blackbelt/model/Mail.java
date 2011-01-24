@@ -30,7 +30,7 @@ public class Mail {
 	private User user;
 	
 	@Enumerated(EnumType.STRING)
-	private MainSubject mainSubject;
+	private Categorie categorie;
 	
 	@Column(nullable = false)
 	private String subject;
@@ -48,10 +48,10 @@ public class Mail {
 	//Constructors
 	public Mail() {}
 	
-	public Mail(User user,String subject, MainSubject mailSubject, String content, MailType mailType, boolean useTemplate) {
+	public Mail(User user,String subject, Categorie mailSubject, String content, MailType mailType, boolean useTemplate) {
 		////this.id = -1;
 		this.user = user;
-		this.mainSubject = mailSubject;
+		this.categorie = mailSubject;
 		this.content = content;
 		this.mailType=mailType;
 		this.creationDate = new Date();
@@ -59,10 +59,10 @@ public class Mail {
 		this.useTemplate = useTemplate;
 	}
 
-	public Mail(User user, MainSubject mailSubject, String text, boolean immediate, Date date, boolean useTemplate) {
+	public Mail(User user, Categorie mailSubject, String text, boolean immediate, Date date, boolean useTemplate) {
 		////this.id = id;
 		this.user = user;
-		this.mainSubject = mailSubject;
+		this.categorie = mailSubject;
 		this.content = text;
 		this.mailType=mailType;
 		this.creationDate = date;
@@ -81,8 +81,8 @@ public class Mail {
 		this.user = user;
 	}
 
-	public MainSubject getMailSubject() {
-		return this.mainSubject;
+	public Categorie getCategorie() {
+		return this.categorie;
 	}
 
 	public String getText() {
