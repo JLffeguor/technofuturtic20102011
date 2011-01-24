@@ -64,7 +64,6 @@ public class Mail {
 		this.user = user;
 		this.categorie = mailSubject;
 		this.content = text;
-		this.mailType=mailType;
 		this.creationDate = date;
 		this.useTemplate = useTemplate;
 	}

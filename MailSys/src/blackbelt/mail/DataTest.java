@@ -31,7 +31,7 @@ public class DataTest extends Thread{
 			sleep(5000);
 			System.out.println("////////////////////////");
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		mailService.createAndSaveMail(" subject ",Categorie.QUESTION, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 1L,MailType.GROUPABLE, true);
