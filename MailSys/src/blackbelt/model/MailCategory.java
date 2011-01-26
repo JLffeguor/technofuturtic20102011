@@ -3,6 +3,7 @@ package blackbelt.model;
  * 
  * @author Alia Faton
  * Each grouped mail has a category, we go through the categories of grouped mails to be send and we build the subject. 
+ * Example of a common subject for grouped mails: XXXXXXXXXXXXXXXXXXXXXXXXx 
  */
 public enum MailCategory {
     CONTRIBUTION("Contribution(s)"),
@@ -11,7 +12,7 @@ public enum MailCategory {
     COACH("Coach"),
     COURSE("Course access"),
     INVENTORY("Inventory");
-    //*****Code Forum*****
+    
 
     private String text;
     
