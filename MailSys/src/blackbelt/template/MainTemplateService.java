@@ -1,5 +1,6 @@
 package blackbelt.template;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,37 +121,31 @@ public final class MainTemplateService {
 		return mp;
 	}
 	
-	private String mainSubjectOfGroupedMails(List<Mail> mails){    
-		int i;
+	private String mainSubjectOfGroupedMails(List<Mail> mails){
+		
+		int i = 0;
+        String subjectOfGroupedMails = "";
+        String currentSubject = "";
 
-		// increment Categorie's int field;
-		for (Mail mail : mails) {
-			for (MailCategory mailSubject : MailCategory.values()) {
-				if (mail.getMailCategory() == mailSubject) {
-					i = mailSubject.getMailsHavingSameSubject() + 1;
-					mailSubject.setMailsHavingSameSubject(i);
-				}
-			}
-		}
-
-		String subjectOfGroupedMails = "";
-
-		if (mails.size() == 1) {// only one mail: category = mail.getSubject();
-			subjectOfGroupedMails = mails.get(0).getSubject();
-		} else {// more then one mail : construct subject of grouped mails, here
-				// is where the int field of Category will come in use
-			for (MailCategory mailSubject : MailCategory.values()) {
-				if (mailSubject.getMailsHavingSameSubject() > 0) {
-					subjectOfGroupedMails += String.valueOf(mailSubject.getMailsHavingSameSubject() + "-" + mailSubject.getText() + ", ");
-				}
-			}
-		}
-
-		// reinitialize Categorie's int field to zero for ;
-		for (MailCategory mailSubject : MailCategory.values()) {
-			mailSubject.setMailsHavingSameSubject(0);
-		}
-
-		return subjectOfGroupedMails;
+        if(mails.size()==1){
+            subjectOfGroupedMails = mails.get(0).getSubject();
+            
+        }else{
+            // increment Categorie's int field;
+            for (MailCategory mailSubject : MailCategory.values()) {
+                for (Mail mail : mails) {
+                    if (mail.getMailCategory() == mailSubject) {
+                    	i++;
+                    	currentSubject = mail.getMailCategory().getText();
+                    }
+                }
+                if (i != 0){
+                	subjectOfGroupedMails += (String.valueOf(i) + "-" +currentSubject + " ");
+                    i=0;
+                }
+            }
+        }
+        
+        return subjectOfGroupedMails;
 	}
 }
