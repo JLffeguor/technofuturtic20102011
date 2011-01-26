@@ -133,15 +133,15 @@ public final class MainTemplateService {
 			}
 		}
 
-		String SubjectOfGroupedMails = "";
+		String subjectOfGroupedMails = "";
 
 		if (mails.size() == 1) {// only one mail: category = mail.getSubject();
-			SubjectOfGroupedMails = mails.get(0).getSubject();
+			subjectOfGroupedMails = mails.get(0).getSubject();
 		} else {// more then one mail : construct subject of grouped mails, here
 				// is where the int field of Category will come in use
 			for (MailCategory mailSubject : MailCategory.values()) {
 				if (mailSubject.getMailsHavingSameSubject() > 0) {
-					SubjectOfGroupedMails += SubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject() + "-" + mailSubject.getText() + ", ");
+					subjectOfGroupedMails += String.valueOf(mailSubject.getMailsHavingSameSubject() + "-" + mailSubject.getText() + ", ");
 				}
 			}
 		}
@@ -151,6 +151,6 @@ public final class MainTemplateService {
 			mailSubject.setMailsHavingSameSubject(0);
 		}
 
-		return SubjectOfGroupedMails;
+		return subjectOfGroupedMails;
 	}
 }
