@@ -9,7 +9,7 @@ import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
 import blackbelt.model.MailType;
 import blackbelt.model.MailingDelayType;
-import blackbelt.model.Categorie;
+import blackbelt.model.MailCategory;
 import blackbelt.model.User;
 /**
  * Generates a Html string based on a mail
@@ -92,7 +92,7 @@ public final class MainTemplateService {
 		}
 	}
 	
-	public final MailPackage TemplateMail(List<Mail> mails) throws NullPointerException, Exception{
+	public final MailPackage templateMail(List<Mail> mails) throws NullPointerException, Exception{
 		MailPackage mp;
 		String content = "";
 		User user;
@@ -125,8 +125,8 @@ public final class MainTemplateService {
 
 		// increment Categorie's int field;
 		for (Mail mail : mails) {
-			for (Categorie mailSubject : Categorie.values()) {
-				if (mail.getCategorie() == mailSubject) {
+			for (MailCategory mailSubject : MailCategory.values()) {
+				if (mail.getMailCategory() == mailSubject) {
 					i = mailSubject.getMailsHavingSameSubject() + 1;
 					mailSubject.setMailsHavingSameSubject(i);
 				}
@@ -139,7 +139,7 @@ public final class MainTemplateService {
 			SubjectOfGroupedMails = mails.get(0).getSubject();
 		} else {// more then one mail : construct subject of grouped mails, here
 				// is where the int field of Category will come in use
-			for (Categorie mailSubject : Categorie.values()) {
+			for (MailCategory mailSubject : MailCategory.values()) {
 				if (mailSubject.getMailsHavingSameSubject() > 0) {
 					SubjectOfGroupedMails += SubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject() + "-" + mailSubject.getText() + ", ");
 				}
@@ -147,7 +147,7 @@ public final class MainTemplateService {
 		}
 
 		// reinitialize Categorie's int field to zero for ;
-		for (Categorie mailSubject : Categorie.values()) {
+		for (MailCategory mailSubject : MailCategory.values()) {
 			mailSubject.setMailsHavingSameSubject(0);
 		}
 
