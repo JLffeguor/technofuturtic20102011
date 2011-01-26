@@ -140,7 +140,7 @@ public final class MainTemplateService {
                     }
                 }
                 if (i != 0){
-                	subjectOfGroupedMails += (String.valueOf(i) + "-" +currentSubject + " ");
+                	subjectOfGroupedMails += (String.valueOf(i) + "-" +currentSubject + ", ");
                     i=0;
                 }
             }
