@@ -89,7 +89,7 @@ public class MailSender extends Thread {
 	public void sendMailList(List<Mail> mails) {
 		MainTemplateService.MailPackage mp;
 		try {
-			mp = this.mainTemplate.TemplateMail(mails);
+			mp = this.mainTemplate.templateMail(mails);
 		} catch (NullPointerException e) {
 			throw new RuntimeException(e);
 		} catch (Exception e) {

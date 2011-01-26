@@ -1,6 +1,6 @@
 package blackbelt.model;
 
-public enum Categorie {
+public enum MailCategory {
     CONTRIBUTION("Contribution(s)"),
     QUESTION("Question update(s)"),
     BELT("Belt"),
@@ -12,7 +12,7 @@ public enum Categorie {
     private int mailsHavingSameSubject=0;
     private String text;
     
-    private Categorie(String text){
+    private MailCategory(String text){
         this.text=text;
     }
     
