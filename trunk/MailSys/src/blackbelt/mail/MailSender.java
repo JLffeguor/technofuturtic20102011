@@ -23,8 +23,10 @@ import blackbelt.template.MainTemplateService;
 public class MailSender extends Thread {
 
 	 
-	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // ms.  // FIXME : put this value: ???????????????
-	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep ?
+	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // in ms. In case the SMTP server is too slow (cannot accept too many mails too fast),
+	   // use this const to temporize between 2 SMTP calls. 
+	   // FIXME : put this value: ???????????????
+	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep before querying the DB again for mails to be sent ?
 	
 	@Autowired	private MailDao mailDao;
 	
@@ -36,46 +38,43 @@ public class MailSender extends Thread {
 		while (isAlive()) {
 			
 			List<Mail> toSend;
-			List<Mail> nextMailList = this.findNextMail();
+			List<Mail> nextMailList = this.findNextMails();
 			
 			while (nextMailList != null && nextMailList.size()>0) {
-				
-				if (nextMailList.get(0).getMailType()== MailType.IMMEDIATE || nextMailList.get(0).getMailType()== MailType.SLOW_NOT_GROUPABLE) { // if there are immediate mails, we send one after one... 
+				Mail nextMail = nextMailList.get(0);
+				if (nextMail.getMailType()== MailType.IMMEDIATE || nextMail.getMailType()== MailType.SLOW_NOT_GROUPABLE) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
 						List<Mail> mails;
-						mails=new ArrayList<Mail>();
+						mails = new ArrayList<Mail>();
 						mails.add(nextMailList.get(i));
 						sendMailList(mails);
 						mailDao.removeMails(mails);
-						this.sleepBetweenSend();
+						this.sleepWell(DELAY_BETWEEN_EACH_MAIL);
 					}
 				} else {// ...here we send a group of mails as one mail
 					// Send all these mails grouped as one mail and remove them from the DB.
 					sendMailList(nextMailList);
-					mailDao.updateLastMailSendedDate(nextMailList.get(0).getUser());
+					mailDao.updateLastMailSendedDate(nextMail.getUser());
 					mailDao.removeMails(nextMailList);
-					this.sleepBetweenSend();
+					this.sleepWell(DELAY_BETWEEN_EACH_MAIL);
 				}
-				nextMailList = this.findNextMail();
+				nextMailList = this.findNextMails();
 			}
 			
-			try {
-				// FIXME --- remove these prints.
-				System.out.println("******************************************************************");
-				System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
-				System.out.println("******************************************************************");
-				sleep(WAKE_UP_DELAY_WHEN_NO_MAIL);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			// FIXME --- remove these prints.
+			System.out.println("******************************************************************");
+			System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
+			System.out.println("******************************************************************");
+			sleepWell(WAKE_UP_DELAY_WHEN_NO_MAIL);
 		}
 	}
 	
-	private void sleepBetweenSend(){
+	/** To manage the InterruptedException */
+	private void sleepWell(int delayMs){
 		try {
 			// delai entre 2 send
-			sleep(DELAY_BETWEEN_EACH_MAIL);
+			sleep(delayMs);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -87,14 +86,8 @@ public class MailSender extends Thread {
 	 * NB : here we simulate the sending of mails by saving them in a file
 	 */
 	public void sendMailList(List<Mail> mails) {
-		MainTemplateService.MailPackage mp;
-		try {
-			mp = this.mainTemplate.templateMail(mails);
-		} catch (NullPointerException e) {
-			throw new RuntimeException(e);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		MainTemplateService.MailSubjectAndContent mp;
+		mp = this.mainTemplate.templateMail(mails);
 		
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);
@@ -106,6 +99,7 @@ public class MailSender extends Thread {
 		throw new UnsupportedOperationException();
 	}
 		
+	// TODO: remove when integrated.
 	private void sendFileMail(User user, String content, String subject) {
 		try {
 			File rep;
@@ -138,9 +132,10 @@ public class MailSender extends Thread {
 	
 	/**
 	 * returns a list of mails which are either immediate or grouped of a user.
-	 * @return a list of mails
+	 * 
+	 * @return a list of mails all to the same user.
 	 */
-	public List<Mail> findNextMail(){
+	public List<Mail> findNextMails(){
 		
 		User user;
 		

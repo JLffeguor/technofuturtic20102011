@@ -73,7 +73,7 @@ public final class MainTemplateService {
 		return footer;
 	}
 	
-	public class MailPackage{
+	public class MailSubjectAndContent{
 		
 		private String subject;
 		private String content;
@@ -92,59 +92,72 @@ public final class MainTemplateService {
 		}
 	}
 	
-	public final MailPackage templateMail(List<Mail> mails) throws NullPointerException, Exception{
-		MailPackage mp;
-		String content = "";
-		User user;
-		mp=new MailPackage();
+	/** Builds the complete content and subject of the one mail to be sent.
+	 * If the mails parameter contains more than a mail, they are all groupables. Individual mails are always passed individually to this method.
+	 */
+	public MailSubjectAndContent templateMail(List<Mail> mails) {
+		// Params check
 		if (mails == null){
-			throw new NullPointerException("No list defined for 'mails'.");
+			throw new IllegalArgumentException("bug: No list defined for 'mails'.");
 		} else if (mails.size() == 0){
-			throw new Exception("No mail define for template.");
+			throw new IllegalArgumentException("bug: No mail defined for template.");
 		} else if (mails.get(0).getUser() == null){
-			throw new NullPointerException("No user defined (the user is obtained by the first mail in the list).");
+			throw new IllegalArgumentException("bug: No user defined (the user is obtained by the first mail in the list).");
 		}
-		
-		user = mails.get(0).getUser();
-		//content = this.templateHeader(user);
-		
-		for (Mail mail : mails) {
-			content += (mail.getUseTemplate()) ? this.templateBody(mail) : mail.getText();
-		}
-		
-		content  += this.templateFooter(user, (mails.size()>1));
 
-		mp.setSubject((mails.get(0).getMailType()==MailType.GROUPABLE)?this.mainSubjectOfGroupedMails(mails):mails.get(0).getSubject());
-		mp.setContent(content);
+		MailSubjectAndContent msc = new MailSubjectAndContent();
+		User recipient = mails.get(0).getUser();
+		//content = this.templateHeader(user);
+
+		// Building of content
+		String content = "";
+		for (Mail mail : mails) {
+			content += (mail.getUseTemplate()) ?
+					this.templateBody(mail) // Case of most mails.
+					:
+					mail.getText();  // This would be the case of a newsletter: we don't add a template around.
+		}
+		content  += this.templateFooter(recipient,
+				(mails.size()>1)  // We only require the special grouping footer part if have multiple grouped mails. 
+				);
+		msc.setContent(content);
+
+		// Building of subject
+		if (mails.get(0).getMailType() == MailType.GROUPABLE) {  // We have a list of groupable mails.
+			msc.setSubject( this.mainSubjectOfGroupedMails(mails) );
+		} else {
+			msc.setSubject( mails.get(0).getSubject() );
+		}
 		
-		return mp;
+		return msc;
 	}
 	
-	private String mainSubjectOfGroupedMails(List<Mail> mails){
+	/** From a list of grouped mail, makes a single subject string that represents every mail
+	 * Example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	 * 
+	 * */ 
+	private String mainSubjectOfGroupedMails(List<Mail> mails) {
 		
-		int i = 0;
-        String subjectOfGroupedMails = "";
-        String currentSubject = "";
-
-        if(mails.size()==1){
-            subjectOfGroupedMails = mails.get(0).getSubject();
+        if(mails.size()==1) {  // One mail => we just take the subject of the mail.
+            return mails.get(0).getSubject();
             
-        }else{
-            // increment Categorie's int field;
-            for (MailCategory mailSubject : MailCategory.values()) {
+        } else {  // Multiple mail => we have to build a generic subject.
+        	String subjectOfGroupedMails = "";
+            for (MailCategory mailCategory : MailCategory.values()) {
+            	// Count the mails of the current subject.
+        		int amountOfMailsForTheCurrentSubject = 0;
                 for (Mail mail : mails) {
-                    if (mail.getMailCategory() == mailSubject) {
-                    	i++;
-                    	currentSubject = mail.getMailCategory().getText();
+                    if (mail.getMailCategory() == mailCategory) {
+                    	amountOfMailsForTheCurrentSubject++;
                     }
                 }
-                if (i != 0){
-                	subjectOfGroupedMails += (String.valueOf(i) + "-" +currentSubject + ", ");
-                    i=0;
+                
+                if (amountOfMailsForTheCurrentSubject != 0){
+                	subjectOfGroupedMails += (Integer.toString(amountOfMailsForTheCurrentSubject) + " - " + mailCategory.getText() + ", ");
                 }
             }
+            return subjectOfGroupedMails;
         }
         
-        return subjectOfGroupedMails;
 	}
 }

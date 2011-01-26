@@ -44,26 +44,25 @@ public class MailDao {
 	}
 	
 	/**
-	 * returns a user containing grouped mails
+	 * returns a user (the next one) having grouped mails that must be sent now.
 	 * @return a user
 	 */
 	public User userHavingGroupedMails(){
-		/************************/
+		///// We compute the date/time of yesterday (for users having grouped daily), and the date/time of one week ago (for users having grouped weekly)
 		Date yesterday;
 		Date lastWeek;		
 		Date now;
-		//This code determines the interval used for the grouping mail (day and week).
-		//Actually, for debug, we use : daily = 10 sec and weekly = 40 sec.
 		now = new Date();
 		GregorianCalendar cal= new GregorianCalendar();
 		cal.setTime(now);
-		cal.add(Calendar.SECOND, -10);   // FIXME Change that to ....... XXXXXXXXXXXXXXXXXXXXXXXX
+		// FIXME Actually, for debug, we use : daily = 10 sec and weekly = 40 sec.
+		cal.add(Calendar.SECOND, -10);   // FIXME  cal.add(Calendar.DAY, -1);   
 		yesterday = cal.getTime();
-		cal.add(Calendar.SECOND, -30);   // FIXME Change that to ....... XXXXXXXXXXXXXXXXXXXXXXXX
+		cal.add(Calendar.SECOND, -30);   // FIXME  cal.add(Calendar.DAY, -7);
 		lastWeek = cal.getTime();	
 		/************************/
 		
-		//request to get a user containing grouped mails
+		//request to get a user having at least one old pending grouped mails (so old that we must send it now). 
 		List<User> list = em.createQuery("SELECT m.user "
 				+ "FROM Mail m "
 					+ " WHERE ("
@@ -130,22 +129,12 @@ public class MailDao {
 	 */
 	public void removeMails(List<Mail> mails) {
 		if(!mails.isEmpty()){
-			Query query = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
-			query.executeUpdate();
+			Query update = em.createQuery("DELETE FROM Mail m WHERE m IN (:mails)").setParameter("mails",mails);
+			update.executeUpdate();
 		}
 	}
 	
-	/**
-	 * updates the lastMailSendedDate of a user
-	 * @param user
-	 */
-	public void updateLastMailSendedDate(User user){	
-		em.createQuery("UPDATE User user SET user.lastMailSendedDate =:todayDate WHERE user.id =:userid")
-		  .setParameter("todayDate", new Date())
-		  .setParameter("userid", user.getId())
-		  .executeUpdate();
-	}
-	
+   // TODO: remove at integration (use inherited)
 	/**
 	 * saves a mail in the database
 	 * @param mail
