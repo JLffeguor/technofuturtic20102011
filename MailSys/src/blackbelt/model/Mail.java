@@ -95,7 +95,7 @@ public class Mail {
 
 		while (content.length() > 0) {
 			//We make a new paragraph if there is a '.' in the text
-			result += content.substring(0, content.indexOf(".") + 1) + "<br>";
+			result += content.substring(0, content.indexOf(".") + 1) + "<br /><br />";
 			content = content.substring(content.substring(0, content.indexOf(".") + 1).length(), content.length());
 			
 			//If there is not '.' in the text, we stop the loop
