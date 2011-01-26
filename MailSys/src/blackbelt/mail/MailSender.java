@@ -22,8 +22,8 @@ import blackbelt.template.MainTemplateService;
 @Repository
 public class MailSender extends Thread {
 
-	  // FIXME : put this value: ???????????????
-	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // ms. 
+	 
+	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // ms.  // FIXME : put this value: ???????????????
 	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep ?
 	
 	@Autowired	private MailDao mailDao;

@@ -114,42 +114,43 @@ public final class MainTemplateService {
 		
 		content  += this.templateFooter(user, (mails.size()>1));
 
-		mp.setSubject((mails.get(0).getMailType()==MailType.GROUPABLE)?this.MainSubjectOfGroupedMails(mails):mails.get(0).getSubject());
+		mp.setSubject((mails.get(0).getMailType()==MailType.GROUPABLE)?this.mainSubjectOfGroupedMails(mails):mails.get(0).getSubject());
 		mp.setContent(content);
 		
 		return mp;
 	}
 	
-	   private String MainSubjectOfGroupedMails(List<Mail> mails){    
-	        int i;
-	        
-	        //ioncrement Categorie's int field;
-	        for(Mail mail : mails){
-	            for(Categorie mailSubject : Categorie.values()){
-	                if (mail.getCategorie() == mailSubject) {
-	                    i=mailSubject.getMailsHavingSameSubject()+1;
-	                    mailSubject.setMailsHavingSameSubject(i);
-	                }
-	            }
-	        }
+	private String mainSubjectOfGroupedMails(List<Mail> mails){    
+		int i;
 
-	        String SubjectOfGroupedMails="";
+		// increment Categorie's int field;
+		for (Mail mail : mails) {
+			for (Categorie mailSubject : Categorie.values()) {
+				if (mail.getCategorie() == mailSubject) {
+					i = mailSubject.getMailsHavingSameSubject() + 1;
+					mailSubject.setMailsHavingSameSubject(i);
+				}
+			}
+		}
 
-	        if(mails.size()==1){//only one mail: category = mail.getSubject();
-	            SubjectOfGroupedMails = mails.get(0).getSubject();
-	        }else{// more then one mail : construct subject of grouped mails, here is where the int field of Category will come in use
-	            for(Categorie mailSubject : Categorie.values()){
-	                if (mailSubject.getMailsHavingSameSubject()>0){
-	                    SubjectOfGroupedMails+=SubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject()+"-"+mailSubject.getText()+", ");
-	                }
-	            }
-	        }
+		String SubjectOfGroupedMails = "";
 
-	        //reinitialize Categorie's int field to zero for ;
-	        for(Categorie mailSubject : Categorie.values()){
-	            mailSubject.setMailsHavingSameSubject(0);
-	        }
+		if (mails.size() == 1) {// only one mail: category = mail.getSubject();
+			SubjectOfGroupedMails = mails.get(0).getSubject();
+		} else {// more then one mail : construct subject of grouped mails, here
+				// is where the int field of Category will come in use
+			for (Categorie mailSubject : Categorie.values()) {
+				if (mailSubject.getMailsHavingSameSubject() > 0) {
+					SubjectOfGroupedMails += SubjectOfGroupedMails.valueOf(mailSubject.getMailsHavingSameSubject() + "-" + mailSubject.getText() + ", ");
+				}
+			}
+		}
 
-	        return SubjectOfGroupedMails;
-	    }
+		// reinitialize Categorie's int field to zero for ;
+		for (Categorie mailSubject : Categorie.values()) {
+			mailSubject.setMailsHavingSameSubject(0);
+		}
+
+		return SubjectOfGroupedMails;
+	}
 }
