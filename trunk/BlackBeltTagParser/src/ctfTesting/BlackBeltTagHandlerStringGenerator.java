@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
 
 public abstract class BlackBeltTagHandlerStringGenerator implements BlackBeltTagHandler{
-	String output;
+	String output = "";
 	List<TextBlock> textBlocks = new ArrayList<TextBlock>();
 	
 	boolean shouldWePutParagraphTagsInsideTheCurrentTextBlock;
@@ -19,6 +19,11 @@ public abstract class BlackBeltTagHandlerStringGenerator implements BlackBeltTag
 	
 	public String getOutputString(){
 		PTagsGenerator pTagsGenerator = new PTagsGenerator();
+		
+		for(TextBlock tb : textBlocks){
+			output += tb.text;
+		}
+		
 		return pTagsGenerator.transformTextBlocksIntoStringWithPTags(output);
 	}
 	
@@ -37,7 +42,7 @@ public abstract class BlackBeltTagHandlerStringGenerator implements BlackBeltTag
 		TextBlock textBlock = new TextBlock();
 		textBlock.text = text;
 		textBlock.insertParagraphs = shouldWePutParagraphTagsInsideTheCurrentTextBlock;
-		textBlocks.add(textBlock);
+		this.textBlocks.add(textBlock);
 		shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;  // Default for next block.
 	}
 

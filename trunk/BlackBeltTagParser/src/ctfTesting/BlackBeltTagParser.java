@@ -1,12 +1,8 @@
 package ctfTesting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 //import blackbelt.model.Course;
@@ -38,7 +34,14 @@ public class BlackBeltTagParser {
 		this.blackBeltTagHandler = handler;
 		
 	}
-	public void parse() {
+	
+	//If we recieved a Course as parameter, We parse the body
+	public BlackBeltTagParser(BlackBeltTagHandler handler, Course course){
+		this.blackBeltTagHandler = handler;
+		this.input = course.DEFAULT_WORKSHOP_TEXT;
+	}
+	
+	public String parse() {
 		if (instanceUsed) {
 			throw new IllegalStateException(
 					"Instances of this class are like condoms: not thread safe and not reusable. Should be thrown away after use.");
@@ -56,17 +59,19 @@ public class BlackBeltTagParser {
 						currentIndexBeforeNextElement, element.startPosition));
 
 				onElement(element);
-				//teting
+				//testing
 				System.out.println(element.innerText);
 				currentIndexBeforeNextElement = currentIndex;
 				element = findNextElement();
 			}
 			blackBeltTagHandler.onText(
 					StringUtils.substring(input, currentIndex)); // apache substring to allow currentIndex to be too big.
+			
 		} catch (Exception e) {
 			fireError("Unidentified problem while parsing the tags in your text. Tags are elements like [image src='filename'], or [code] ... [/code]. It is probably a mistake in your text, but it may also be a bug. If you are convinced that it's a bug, please copy it on the forum.");
 		}
 		
+		return blackBeltTagHandler.getOutputString();
 	}
 
 	protected void fireError(String errorText) {
