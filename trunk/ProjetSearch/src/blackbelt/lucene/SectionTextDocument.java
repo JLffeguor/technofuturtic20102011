@@ -44,8 +44,8 @@ public class SectionTextDocument {
 		// Add a new Document to the index
 		Document sectionTextDocument = new Document();
 		// And add each field
-		sectionTextDocument.add(new Field("id", String.valueOf(sectionText.getId()),Field.Store.YES, Field.Index.NOT_ANALYZED));
-		sectionTextDocument.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NO));
+		sectionTextDocument.add(new Field("id", String.valueOf(sectionText.getId()),Field.Store.YES, Field.Index.ANALYZED));
+		sectionTextDocument.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.ANALYZED));
 		sectionTextDocument.add(new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED));
 		sectionTextDocument.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
 		sectionTextDocument.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
