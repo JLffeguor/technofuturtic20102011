@@ -18,6 +18,14 @@ public class DataTest extends Thread{
 		
 		//init date
 		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien Go te chercher un caf�",1L,MailType.GROUPABLE, true);
+        try {
+            //delai entre 2 send
+            System.out.println("////////////////////////");
+            sleep(5000);
+            System.out.println("////////////////////////");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",2L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",3L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",4L,MailType.GROUPABLE, true);
@@ -25,14 +33,6 @@ public class DataTest extends Thread{
 		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",6L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",MailCategory.QUESTION,"Ce message ne sert a rien.Go te chercher un caf�.",7L,MailType.GROUPABLE, true);
 		
-		try {
-			//delai entre 2 send
-			System.out.println("////////////////////////");
-			sleep(5000);
-			System.out.println("////////////////////////");
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
 		
 		mailService.createAndSaveMail(" subject ",MailCategory.QUESTION, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 1L,MailType.GROUPABLE, true);
 		mailService.createAndSaveMail(" subject ",null, "contenu de. la mort qui tue, again.", 1L,MailType.IMMEDIATE, true);

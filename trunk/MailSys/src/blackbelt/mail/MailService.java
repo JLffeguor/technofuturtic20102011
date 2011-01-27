@@ -16,6 +16,8 @@ public class MailService {
 
 	@Autowired
 	private MailDao dao;
+	@Autowired
+	private MailSender mailSender;
 	
 	/**
 	 * Save a mail.
@@ -27,6 +29,11 @@ public class MailService {
 	public void createAndSaveMail(String subject,MailCategory mailSubject, String text, Long userID, MailType mailType, boolean useTemplate){
 		Mail mail = new Mail(null,subject,mailSubject,text,mailType, useTemplate);
 		dao.save(mail, userID);
+		
+		synchronized(mailSender) {
+            mailSender.notify();
+        }
+		
 	}
 	
 	
