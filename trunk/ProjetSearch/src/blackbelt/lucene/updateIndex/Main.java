@@ -14,6 +14,7 @@ public class Main {
 		String id="172647220";
 		
 		SectionText sectionText=new SectionText();
+		sectionText.setTitle("test");
 		sectionText.setText("hibernate dao1");
 		sectionText.setLanguage("EN");
 		sectionText.setVersion(30);
