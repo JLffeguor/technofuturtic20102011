@@ -4,25 +4,27 @@ import java.io.IOException;
 
 import org.apache.lucene.queryParser.ParseException;
 
+import blackbelt.lucene.IndexManager;
 import blackbelt.lucene.SectionText;
-import blackbelt.lucene.searchIndex.SearchInCours;
 
 public class Main {
 	
 	public static void main(String[] args){
 		
-		SearchInCours searchInCours = new SearchInCours();
+		String id="172647220";
 		
 		SectionText sectionText=new SectionText();
-		sectionText.setText("hibernate dao");
+		sectionText.setText("hibernate dao1");
 		sectionText.setLanguage("EN");
 		sectionText.setVersion(30);
-		sectionText.setSectionid(172647220);
+		sectionText.setSectionid(Long.valueOf(id));
 		
 		try {
-			searchInCours.searchBySectionId("172647220", "EN");
-			UpdateIndex.update(sectionText);
-			searchInCours.searchBySectionId("172647220", "EN");
+			IndexManager.addSectionText(sectionText);
+			IndexManager.searchBySectionId(id, "EN");
+			sectionText.setText("hibernate dao2");
+			IndexManager.updateSectionTextById(id, sectionText);
+			IndexManager.searchBySectionId(id, "EN");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

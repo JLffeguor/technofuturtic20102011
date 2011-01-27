@@ -1,4 +1,4 @@
-package blackbelt.lucene.searchIndex;
+package blackbelt.lucene;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,8 @@ public class RenderResult {
 	private String keyword;
 //	private Document doc;
 	private final int MAX = 100;
-	RenderResult(String keyword){
+	
+	public RenderResult(String keyword){
 //		this.doc=doc;
 		this.keyword = keyword;
 	}

@@ -1,7 +1,12 @@
 package blackbelt.lucene.createIndex;
 
+import java.io.IOException;
+
+import org.apache.lucene.index.IndexWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import blackbelt.lucene.IndexManager;
 
 public class Main {
 
@@ -10,15 +15,13 @@ public class Main {
 		// Construct a RAMDirectory to hold the in-memory representation
 		// of the index.
 		// RAMDirectory idx = new RAMDirectory();
-
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-		Indexer indexer = (Indexer) applicationContext.getBean("indexer");
 		
 		try {
-			indexer.createIndexes();			
+			
+			IndexManager.createIndexes();
 			
 		} catch (Exception e) {
-			System.out.println("Exception caught.\n" + e);
+			throw new RuntimeException(e);
 		}
 	}
 }
