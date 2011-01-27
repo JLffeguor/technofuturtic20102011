@@ -59,8 +59,7 @@ public class BlackBeltTagParser {
 						currentIndexBeforeNextElement, element.startPosition));
 
 				onElement(element);
-				//testing
-				System.out.println(element.innerText);
+				
 				currentIndexBeforeNextElement = currentIndex;
 				element = findNextElement();
 			}
