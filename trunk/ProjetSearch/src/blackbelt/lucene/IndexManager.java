@@ -17,6 +17,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
@@ -94,14 +95,18 @@ public class IndexManager implements ConfigIndex{
 	public static void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
 		try {
-			String queryString=keyWord + " AND language:" +language;
+			String queryString="(" + keyWord + ") AND language:" + language;
+			//String queryString=keyWord + " AND language:" + language;
 
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
-
 			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
 			Query query = parser.parse(queryString);
+			System.out.println("query: "+query);
+			
+			Query query2 = parser.parse(keyWord);
+			System.out.println("query2: "+query2);
 
 			int hitsPerPage = 10;
 			// Search for the query
@@ -158,8 +163,9 @@ public class IndexManager implements ConfigIndex{
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionid",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
 			Query query = parser.parse(queryString);
+			System.out.println(query);
 
 			int hitsPerPage = 10;
 			// Search for the query
