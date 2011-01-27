@@ -66,10 +66,10 @@ public class IndexManager implements ConfigIndex{
 
 		System.out.println("*****************End Indexing Section*****************");
 	}
-
-	public static void updateSectionTextById(String id,SectionText sectionText) throws IOException, CorruptIndexException {
+	
+	public static void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
-		writer.updateDocument(new Term("id", id), SectionTextDocument.createDocument(sectionText));
+		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), SectionTextDocument.createDocument(sectionText));
 		writer.close();
 	}
 
@@ -88,7 +88,7 @@ public class IndexManager implements ConfigIndex{
 	private static IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
 		StandardAnalyzer standardAnalyzer=new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD);
-		return new IndexWriter(indexDirectory, standardAnalyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
+		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
 	public static void searchByKWandL(String keyWord,String language) throws ParseException, IOException {

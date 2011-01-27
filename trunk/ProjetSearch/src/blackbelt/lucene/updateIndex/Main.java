@@ -20,10 +20,14 @@ public class Main {
 		sectionText.setSectionid(Long.valueOf(id));
 		
 		try {
+			System.out.println("***************************** 1");
+			IndexManager.searchBySectionId(id, "EN");
 			IndexManager.addSectionText(sectionText);
+			System.out.println("***************************** 2");
 			IndexManager.searchBySectionId(id, "EN");
 			sectionText.setText("hibernate dao2");
-			IndexManager.updateSectionTextById(id, sectionText);
+			IndexManager.updateSectionText(sectionText);
+			System.out.println("***************************** 3");
 			IndexManager.searchBySectionId(id, "EN");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
