@@ -13,6 +13,8 @@ public class SectionText {
 	private long id;
 	@Column(name = "language")
 	private String language;
+	@Column(name = "title")
+	private String title;
 	@Column(name = "text")
 	private String text;
 	@Column(name = "version")
@@ -64,5 +66,12 @@ public class SectionText {
 		this.sectionid = sectionid;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	
 }
