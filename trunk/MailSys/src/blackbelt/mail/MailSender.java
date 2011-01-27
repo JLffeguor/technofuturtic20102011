@@ -23,7 +23,7 @@ import blackbelt.template.MainTemplateService;
 public class MailSender extends Thread {
 
 	 
-	public final static int DELAY_BETWEEN_EACH_MAIL = 100;  // in ms. In case the SMTP server is too slow (cannot accept too many mails too fast),
+	public final static int DELAY_BETWEEN_EACH_MAIL = 1000;  // in ms. In case the SMTP server is too slow (cannot accept too many mails too fast),
 	   // use this const to temporize between 2 SMTP calls. 
 	   // FIXME : put this value: ???????????????
 	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep before querying the DB again for mails to be sent ?
@@ -55,7 +55,6 @@ public class MailSender extends Thread {
 				} else {// ...here we send a group of mails as one mail
 					// Send all these mails grouped as one mail and remove them from the DB.
 					sendMailList(nextMailList);
-					mailDao.updateLastMailSendedDate(nextMail.getUser());
 					mailDao.removeMails(nextMailList);
 					this.sleepWell(DELAY_BETWEEN_EACH_MAIL);
 				}
@@ -66,19 +65,28 @@ public class MailSender extends Thread {
 			System.out.println("******************************************************************");
 			System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
 			System.out.println("******************************************************************");
-			sleepWell(WAKE_UP_DELAY_WHEN_NO_MAIL);
+			sleepBad(WAKE_UP_DELAY_WHEN_NO_MAIL);
 		}
 	}
 	
 	/** To manage the InterruptedException */
-	private void sleepWell(int delayMs){
+	synchronized private void sleepWell(int delayMs){
 		try {
 			// delai entre 2 send
 			sleep(delayMs);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+			// We have been awaken sooner ;-)
+        }
 	}
+	
+	synchronized private void sleepBad(int delayMs){
+        try {
+            //wait for new mail 
+            wait(delayMs);
+        } catch (InterruptedException e) {
+            // We have been awaken sooner ;-)
+        }
+    }
 	
 	/**
 	 * Send mails to a user.
