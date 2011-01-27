@@ -29,7 +29,7 @@ public class MailSender extends Thread {
 	public final static int WAKE_UP_DELAY_WHEN_NO_MAIL = 15 * 1000;  // ms. When there is no mail anymore, how long should this batch sleep before querying the DB again for mails to be sent ?
 	
 	@Autowired	private MailDao mailDao;
-	@Autowired  private UserDao userDao; // FIXME: CHECK WHEN INTEGRATION
+//	@Autowired  private UserDao userDao; // FIXME: CHECK WHEN INTEGRATION
 	
 	@Autowired	private MainTemplateService mainTemplate;
 	
@@ -57,7 +57,7 @@ public class MailSender extends Thread {
 					// Send all these mails grouped as one mail and remove them from the DB.
 					sendMailList(nextMailList);
 					nextMail.getUser().setLastMailSendedDate(new Date());
-					userDao.save(nextMail.getUser()); // FIXME: CHECK WHEN INTEGRATION 
+//					userDao.save(nextMail.getUser()); // FIXME: CHECK WHEN INTEGRATION 
 					mailDao.removeMails(nextMailList);// FIXME: CHECK WHEN INTEGRATION 
 					this.sleepWell(DELAY_BETWEEN_EACH_MAIL);
 				}
