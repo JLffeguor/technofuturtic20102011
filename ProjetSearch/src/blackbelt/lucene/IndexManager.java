@@ -1,4 +1,4 @@
-package blackbelt.lucene.searchIndex;
+package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import java.util.Set;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -17,15 +20,82 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import blackbelt.lucene.ConfigIndex;
+import blackbelt.lucene.spring.IndexerService;
 
-public class SearchInCours implements ConfigIndex{
-	public void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
+public class IndexManager implements ConfigIndex{
+	private static IndexerService indexerService;
+
+	static {
+		// TODO Auto-generated constructor stub
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+		indexerService = (IndexerService) applicationContext.getBean("indexerService");
+	}
+
+	public static void createIndexes() throws IOException, CorruptIndexException {
+
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
+
+		System.out.println("*****************Begin Indexing Section*****************");
+
+		/** 
+		 * The keyword "IT" is use for the language (Italian). But the default stopWords of Lucene doesn't accept this keyword.
+		 * So we have to create another stopWords.
+		 * TODO : add stopWords
+		 *  */
+
+		// Make an writer to create the index
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
+
+		//Index all Accommodation entries		
+		List<SectionText> sections=indexerService.getLastVersionOfEachSectionTexts();
+
+		//Print (use for debug)
+		int i=0;
+		for (SectionText section : sections) {
+			i++;
+			System.out.println("\t("+i+") "+section);
+			writer.addDocument(SectionTextDocument.createDocument(section));
+		}
+
+		// Optimize and close the writer to finish building the index
+		writer.optimize();
+		writer.close();
+
+		System.out.println("*****************End Indexing Section*****************");
+	}
+
+	public static void updateSectionTextById(String id,SectionText sectionText) throws IOException, CorruptIndexException {
+		IndexWriter writer = getIndexWriter();
+		writer.updateDocument(new Term("id", id), SectionTextDocument.createDocument(sectionText));
+		writer.close();
+	}
+
+	public static void deleteSectionTextById(String id) throws IOException, CorruptIndexException {
+		IndexWriter writer = getIndexWriter();
+		writer.deleteDocuments(new Term("id", id));
+		writer.close();
+	} 
+
+	public static void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
+		IndexWriter writer = getIndexWriter();
+		writer.addDocument(SectionTextDocument.createDocument(sectionText));
+		writer.close();
+	}
+
+	private static IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
+		StandardAnalyzer standardAnalyzer=new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD);
+		return new IndexWriter(indexDirectory, standardAnalyzer, true, IndexWriter.MaxFieldLength.UNLIMITED);
+	}
+
+	public static void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
 		try {
 			String queryString=keyWord + " AND language:" +language;
-			
+
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
@@ -74,25 +144,21 @@ public class SearchInCours implements ConfigIndex{
 				rr.toHTML(bigString);
 			}
 			
-			System.out.println();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
-	
-	public void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
+
+	public static void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
 
 		try {
 			String queryString=sectionId + " AND language:" +language;
-			
+
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
-			
-			Set<String> stopWords =new java.util.HashSet<String>(); 
-
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionid",new StandardAnalyzer(Version.LUCENE_30, stopWords));
+			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionid",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
 			Query query = parser.parse(queryString);
 
 			int hitsPerPage = 10;
@@ -128,11 +194,9 @@ public class SearchInCours implements ConfigIndex{
 					// "contents" field) was stored verbatim and can be
 					// retrieved.
 					System.out.println("Content N°" + (i + 1) + ": "
-							+ doc.get("language") + " (" + doc.get("id") + ")");
+							+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
 				}
 			}
-			
-			System.out.println();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

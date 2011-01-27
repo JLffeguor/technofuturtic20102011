@@ -1,4 +1,4 @@
-package blackbelt.lucene.createIndex;
+package blackbelt.lucene.spring;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class SectionDao {
 	@PersistenceContext
 	EntityManager em;
 	
-	public List myQuerry(String querry){
+	public List createQuery(String querry){
 		return em.createQuery(querry).getResultList();
 	}
 }
