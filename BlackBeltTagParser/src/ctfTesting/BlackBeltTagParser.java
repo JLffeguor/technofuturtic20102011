@@ -25,6 +25,7 @@ public class BlackBeltTagParser {
 	boolean shouldWePutParagraphTagsInsideTheCurrentTextBlock = true;
 	boolean instanceUsed = false;  // Parser is not reusable.
 	String input;
+	Course course;
 	int currentIndex = 0;
 	int errorCount = 0;
 	
@@ -38,6 +39,7 @@ public class BlackBeltTagParser {
 	//If we recieved a Course as parameter, We parse the body
 	public BlackBeltTagParser(BlackBeltTagHandler handler, Course course){
 		this.blackBeltTagHandler = handler;
+		this.course = course;
 		this.input = course.DEFAULT_WORKSHOP_TEXT;
 	}
 	
