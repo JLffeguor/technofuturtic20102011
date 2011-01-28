@@ -1,12 +1,16 @@
 package blackbelt.mail;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
-import blackbelt.model.MailCategory;
 import blackbelt.model.Mail;
+import blackbelt.model.MailCategory;
 import blackbelt.model.MailType;
+import blackbelt.model.User;
 
 /**
  * Service of mail.
@@ -14,29 +18,69 @@ import blackbelt.model.MailType;
 @Service
 public class MailService {
 
-	@Autowired
-	private MailDao dao;
-	@Autowired
-	private MailSender mailSender;
-	
-	/**
-	 * Save a mail.
-	 * @param subject subject of mail
-	 * @param text text of mail
-	 * @param userID user's id to whom the mail will be send to
-	 * @param isAImmadiateMessage indicates if the mail is send or not
-	 */
-	public void createAndSaveMail(String subject,MailCategory mailSubject, String text, Long userID, MailType mailType, boolean useTemplate){
-		Mail mail = new Mail(null,subject,mailSubject,text,mailType, useTemplate);
-		dao.save(mail, userID);
-		
-		synchronized(mailSender) {
+    @Autowired	private MailDao dao;
+    @Autowired	private MailSender mailSender;
+
+ 
+    /**
+     * Send a mail to a blackbelt user or to none blackbelt user
+     * this methode uses blackbelt template, if you want to use an other template use the methode sendMail(Mail mail)
+     */
+    public void sendMail(Collection<Object> targets, String subject, String content, MailType mailType, MailCategory mailCategory){
+
+        for(Object object : targets){
+            if (object instanceof User){
+                this.sendMail(new Mail((User)object, subject, mailCategory, content, mailType, true ));
+            }else if (object instanceof String ){
+                this.sendMail(new Mail((String)object, subject, mailCategory, content, mailType, true ));
+            } else {
+                throw new IllegalArgumentException("Bug: we only accept Strings and Users. Current object's class: " + object.getClass());
+            }
+        }
+    }
+
+    /**
+     * Send a mail to a blackbelt user
+     * this methode uses a blackbelt template, if you don't want to use it call the method sendMail(Mail mail)
+     */
+    public void sendMail(User recipient, String subject, String content, MailType mailType, MailCategory mailCategory){
+        this.sendMail(new Mail(recipient, subject, mailCategory, content, mailType, true ));
+    }
+
+    /**
+     * Sends a mail to an electronic email
+     * this methode uses a blackbelt template, if you don't want to use it call the method sendMail(Mail mail)
+     * 
+     */
+    public void sendMail(String emailTarget, String subject,MailCategory mailCategory, String content, MailType mailType){
+        this.sendMail(new Mail(emailTarget, subject, mailCategory, content, mailType, true ));
+    }
+    
+    
+    
+    public void sendMail(User recipient,User replyTo, String subject, String content, MailType mailType, MailCategory mailCategory){
+        this.sendMail(new Mail(recipient, replyTo, subject, mailCategory, content, mailType, true ));
+    }
+
+
+    /**
+     * Save a mail to database
+     * Use this methode if you want to use a black belt template
+     * 
+     */
+    public void sendMail(Mail mail){
+        //FIXME remove body at integration(), check with mathieu how dao function in blackbelt 
+
+        if (mail.getUser()==null){
+            dao.save(mail, null);
+        }else{
+            dao.save(mail, mail.getUser().getId());
+        }
+
+        synchronized(mailSender) {
             mailSender.notify();
         }
-		
-	}
-	
-	
-	
+    }
+
 }
 

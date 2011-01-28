@@ -9,7 +9,9 @@ CREATE SEQUENCE seq_user_id  INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775
 
 CREATE TABLE mails (
   id                BIGINT  NOT NULL DEFAULT (nextval('seq_mails_id')),
-  User_Id           BIGINT  NOT NULL,
+  User_Id           BIGINT  		,
+  replyTo           BIGINT          ,
+  EmailTarget       TEXT            ,
   Content           TEXT    NOT NULL,
   MailCategory      TEXT            ,
   MailType          TEXT    NOT NULL,
@@ -29,6 +31,8 @@ CREATE TABLE users (
 );
 
 ALTER TABLE mails ADD CONSTRAINT fk_mailhaveuser FOREIGN KEY (User_Id) REFERENCES users(id);
+ALTER TABLE mails ADD CONSTRAINT fk_mailreplyTo FOREIGN KEY (User_Id) REFERENCES users(replyTo);
+ALTER TABLE mails ADD CONSTRAINT fk_emailtargetoruser CHECK ((User_Id IS NULL AND EmailTarget IS NOT NULL) OR (User_Id IS NOT NULL AND EmailTarget IS NULL));
 -- ----------------------------
 -- Records of user
 -- ----------------------------

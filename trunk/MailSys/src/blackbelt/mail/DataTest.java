@@ -17,7 +17,7 @@ public class DataTest extends Thread{
 	public void run(){
 		
 		//init date
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien Go te chercher un caf�",1L,MailType.GROUPABLE, true);
+		mailService.sendMail("fatonalia@hotmail.com", "subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien Go te chercher un caf�",MailType.GROUPABLE);
         try {
             //delai entre 2 send
             System.out.println("////////////////////////");
@@ -26,30 +26,30 @@ public class DataTest extends Thread{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",2L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",3L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",4L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",5L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",6L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.QUESTION,"Ce message ne sert a rien.Go te chercher un caf�.",7L,MailType.GROUPABLE, true);
+		mailService.sendMail("laurent@hotmail.com"," subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",MailType.GROUPABLE);
+//		mailService.sendMail(2L," subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",MailType.GROUPABLE);
+//		mailService.sendMail(2L," subject2 ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",MailType.GROUPABLE);
+        mailService.sendMail("fatonalia@hotmail.com"," subject ",MailCategory.CONTRIBUTION,"Ce message ne sert a rien.Go te chercher un caf�.",MailType.GROUPABLE);
+		mailService.sendMail("email@coldletter.com"," subject ",MailCategory.QUESTION,"Ce message ne sert a rien.Go te chercher un caf�.",MailType.GROUPABLE);
 		
 		
-		mailService.createAndSaveMail(" subject ",MailCategory.QUESTION, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.", 1L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",null, "contenu de. la mort qui tue, again.", 1L,MailType.IMMEDIATE, true);
-		mailService.createAndSaveMail(" subject",MailCategory.QUESTION, "deuxieme contenu de la mort qui tue 1, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject",MailCategory.QUESTION, "deuxieme contenu de la mort qui tue 2, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject",MailCategory.CONTRIBUTION, "deuxieme contenu de la mort qui tue 3, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject",MailCategory.CONTRIBUTION, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject",null, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.SLOW_NOT_GROUPABLE, true);
-		
-		mailService.createAndSaveMail(" subject ",MailCategory.COACH, "deuxieme contenu de la mort qui tue.encore.", 2L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",null, "contenu de la mort qui tue.", 2L,MailType.IMMEDIATE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.COACH, "blablabla. blablabla blabla.", 2L,MailType.GROUPABLE, true);
-		
-		mailService.createAndSaveMail(" subject ",MailCategory.COACH,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.IMMEDIATE, true);
-		mailService.createAndSaveMail(" subject ",MailCategory.COACH,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
-		mailService.createAndSaveMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, false);
-		mailService.createAndSaveMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, true);
+		mailService.sendMail("fatonalia@hotmail.com"," subject ",MailCategory.QUESTION, "contenu de la mort qui tue, blablabla.blablabla blabla blablabla.blabla blablabla blablablabla blabla.",MailType.GROUPABLE);
+		mailService.sendMail("email@coldletter.com"," subject ",null, "contenu de. la mort qui tue, again.",MailType.IMMEDIATE);
+//		mailService.sendMail(3L," subject ",null, "contenu de. la mort qui tue, again.",MailType.IMMEDIATE, true);
+        //mailService.sendMail(" subject",MailCategory.QUESTION, "deuxieme contenu de la mort qui tue 1, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		mailService.sendMail("email@coldletter.com"," subject",MailCategory.QUESTION, "deuxieme contenu de la mort qui tue 2, plusieur fois.",MailType.GROUPABLE);
+		//mailService.sendMail(" subject",MailCategory.CONTRIBUTION, "deuxieme contenu de la mort qui tue 3, plusieur fois.", 1L,MailType.GROUPABLE, true);
+		//mailService.sendMail(" subject",MailCategory.CONTRIBUTION, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.GROUPABLE, true);
+//		mailService.sendMail(" subject",null, "deuxieme contenu de la mort qui tue 4, plusieur fois.", 1L,MailType.SLOW_NOT_GROUPABLE, true);
+//		
+//		mailService.sendMail(" subject ",MailCategory.COACH, "deuxieme contenu de la mort qui tue.encore.", 2L,MailType.GROUPABLE, true);
+//		mailService.sendMail(" subject ",null, "contenu de la mort qui tue.", 2L,MailType.IMMEDIATE, true);
+//		mailService.sendMail(" subject ",MailCategory.COACH, "blablabla. blablabla blabla.", 2L,MailType.GROUPABLE, true);
+//		
+//		mailService.sendMail(" subject ",MailCategory.COACH,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
+//		mailService.sendMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.IMMEDIATE, true);
+//		mailService.sendMail(" subject ",MailCategory.COACH,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.GROUPABLE, true);
+//		mailService.sendMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, false);
+//		mailService.sendMail(" subject ",null,"blablablablma blablabla blabla.blablabla.blabla blablablabla.",3L,MailType.SLOW_NOT_GROUPABLE, true);
 	}
 }
