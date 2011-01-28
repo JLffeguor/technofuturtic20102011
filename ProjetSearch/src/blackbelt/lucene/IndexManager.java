@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -21,12 +22,18 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import blackbelt.lucene.spring.IndexerService;
+import blackbelt.lucene.spring.SectionDao;
+import blackbelt.parser.BlackBeltTagHandlerLuceneSearch;
+import blackbelt.parser.BlackBeltTagParser;
 
+@Service
 public class IndexManager {
+	@Autowired
+	SectionDao sectionDao;
+	
 	public final String DIRECTORY="index";
 	
 	/** The collection of stopwords is empty. 
@@ -34,14 +41,6 @@ public class IndexManager {
 	 * => we use an empty stopword collection. 
 	 * */
 	public final Set<String> STOP_WORDS = new HashSet<String>();
-	
-	private SectionTextDocument sectionTextDocument = new SectionTextDocument();
-	private ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-	private IndexerService indexerService;
-
-	public IndexManager() {
-		indexerService = (IndexerService) applicationContext.getBean("indexerService");
-	}
 
 	public void createIndexes() throws IOException, CorruptIndexException {
 
@@ -51,9 +50,9 @@ public class IndexManager {
 		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
 		//Index all Accommodation entries		
-		List<SectionText> sectionTexts = indexerService.getLastVersionOfEachSectionTexts();  // TODO: use DAO directly.
+		List<SectionText> sectionTexts = sectionDao.findLastVersionOfEachSectionTexts();  // TODO: use DAO directly.
 		for (SectionText sectionText : sectionTexts) {
-			writer.addDocument(sectionTextDocument.createDocument(sectionText));
+			writer.addDocument(createDocument(sectionText));
 		}
 
 		// Optimize and close the writer to finish building the index
@@ -63,7 +62,7 @@ public class IndexManager {
 	
 	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
-		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), sectionTextDocument.createDocument(sectionText));
+		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), createDocument(sectionText));
 		writer.close();
 	}
 
@@ -75,7 +74,7 @@ public class IndexManager {
 
 	public void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
-		writer.addDocument(sectionTextDocument.createDocument(sectionText));
+		writer.addDocument(createDocument(sectionText));
 		writer.close();
 	}
 
@@ -184,6 +183,55 @@ public class IndexManager {
 						+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
 			}
 		}
+	}
+	
+	/**
+	 * Some user who write course on BlackBelt write some balises. Some balises
+	 * are not delete with the CourseTextFormatter So we have to clean those
+	 * balises with this method.
+	 * */
+	private String cleanHtmlTags(String textToFormat) {
+		String result = "";
+
+		result = textToFormat.replaceAll("\\</.*?>", "\n"); // remove all
+															// balises </?>
+		// remove all other balises who are in the DB.
+		result = result.replaceAll("(?i)\\<a", "");
+		result = result.replaceAll("(?i)href.*?>", ""); // Remove <a href...>
+		result = result.replaceAll("(?i)\\<p>", "");
+		result = result.replaceAll("(?i)\\<p.*?>", ""); // Remove <p align...>
+		result = result.replaceAll("(?i)\\<b.*?>", "");
+		result = result.replaceAll("(?i)\\<i>", "");
+		result = result.replaceAll("(?i)\\<pre>", "");
+		result = result.replaceAll("(?i)\\<ul>", "");
+		result = result.replaceAll("(?i)\\</ul>", "");
+		result = result.replaceAll("(?i)\\<ol>", "");
+		result = result.replaceAll("(?i)\\<li>", "");
+		result = result.replaceAll("(?i)\\</li>", "");
+
+		return result;
+	}
+
+	private Document createDocument(SectionText sectionText) {
+		// Use a text formatter to format the text
+		BlackBeltTagParser blackBeltTagParser=new BlackBeltTagParser(new BlackBeltTagHandlerLuceneSearch(), sectionText.getText());
+		String text = blackBeltTagParser.parse();
+		text = cleanHtmlTags(text);
+
+		// Add a new Document to the index
+		Document doc = new Document();
+		
+		doc.add(new Field("id", String.valueOf(sectionText.getId()),Field.Store.YES, Field.Index.NOT_ANALYZED));
+		// We need the sectionId in the search results page to link to the CoursePage.
+		// TODO set Field.Index.NO
+		doc.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NOT_ANALYZED));
+		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED);
+		titleField.setBoost(1.5f);
+		doc.add(titleField);
+		doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
+		doc.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
+
+		return doc;
 	}
 	
 	public static class CourseSearchResult {
