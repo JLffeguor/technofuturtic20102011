@@ -27,13 +27,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import blackbelt.lucene.spring.IndexerService;
 
 public class IndexManager {
-	public static final String DIRECTORY="index";
-	public static final Set<String> STOPWORD=new HashSet<String>();
-	
-	private static IndexerService indexerService;
+	public final String DIRECTORY="index";
+	public final Set<String> STOPWORD=new HashSet<String>();
+	private SectionTextDocument sectionTextDocument = new SectionTextDocument();
+	private ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+	private IndexerService indexerService;
 
-	static {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+	public IndexManager() {
 		indexerService = (IndexerService) applicationContext.getBean("indexerService");
 	}
 
@@ -60,7 +60,7 @@ public class IndexManager {
 		for (SectionText section : sections) {
 			i++;
 			System.out.println("\t("+i+") "+section);
-			writer.addDocument(SectionTextDocument.createDocument(section));
+			writer.addDocument(sectionTextDocument.createDocument(section));
 		}
 
 		// Optimize and close the writer to finish building the index
@@ -72,7 +72,7 @@ public class IndexManager {
 	
 	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
-		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), SectionTextDocument.createDocument(sectionText));
+		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), sectionTextDocument.createDocument(sectionText));
 		writer.close();
 	}
 
@@ -84,7 +84,7 @@ public class IndexManager {
 
 	public void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
-		writer.addDocument(SectionTextDocument.createDocument(sectionText));
+		writer.addDocument(sectionTextDocument.createDocument(sectionText));
 		writer.close();
 	}
 
