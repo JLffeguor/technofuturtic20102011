@@ -13,7 +13,7 @@ public class SectionTextDocument {
 	 * are not delete with the CourseTextFormatter So we have to clean those
 	 * balises with this method.
 	 * */
-	private static String cleanHtmlBalises(String textToFormat) {
+	private String cleanHtmlBalises(String textToFormat) {
 		String result = "";
 
 		result = textToFormat.replaceAll("\\</.*?>", "\n"); // remove all
@@ -35,7 +35,7 @@ public class SectionTextDocument {
 		return result;
 	}
 
-	public static Document createDocument(SectionText sectionText) {
+	public Document createDocument(SectionText sectionText) {
 		// Use a text formatter to format the text
 		BlackBeltTagParser blackBeltTagParser=new BlackBeltTagParser(new BlackBeltTagHandlerLuceneSearch(), sectionText.getText());
 		String text = blackBeltTagParser.parse();
