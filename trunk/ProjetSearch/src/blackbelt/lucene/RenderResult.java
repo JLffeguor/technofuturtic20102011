@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 
+@Deprecated
 public class RenderResult {
 	private String keyword;
 //	private Document doc;
