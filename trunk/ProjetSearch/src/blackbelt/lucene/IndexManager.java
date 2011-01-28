@@ -3,6 +3,7 @@ package blackbelt.lucene;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,6 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
@@ -27,7 +27,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import blackbelt.lucene.spring.IndexerService;
 
-public class IndexManager implements ConfigIndex{
+public class IndexManager {
+	public static final String DIRECTORY="index";
+	public static final Set<String> STOPWORD=new HashSet<String>();	
+	
 	private static IndexerService indexerService;
 
 	static {
@@ -38,7 +41,7 @@ public class IndexManager implements ConfigIndex{
 
 	public static void createIndexes() throws IOException, CorruptIndexException {
 
-		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
 
 		System.out.println("*****************Begin Indexing Section*****************");
 
@@ -49,7 +52,7 @@ public class IndexManager implements ConfigIndex{
 		 *  */
 
 		// Make an writer to create the index
-		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
 		//Index all Accommodation entries		
 		List<SectionText> sections=indexerService.getLastVersionOfEachSectionTexts();
@@ -88,8 +91,8 @@ public class IndexManager implements ConfigIndex{
 	}
 
 	private static IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
-		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(ConfigIndex.DIRECTORY));
-		StandardAnalyzer standardAnalyzer=new StandardAnalyzer(Version.LUCENE_30,ConfigIndex.STOPWORD);
+		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
+		StandardAnalyzer standardAnalyzer=new StandardAnalyzer(Version.LUCENE_30,STOPWORD);
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
@@ -124,7 +127,7 @@ public class IndexManager implements ConfigIndex{
 						+ "\" were found in quotes by:");
 
 				// Iterate over the Documents in the Hits object
-				List<String> bigString = new ArrayList<String>();
+				//List<String> bigString = new ArrayList<String>();
 				//RenderResult rr = new RenderResult(keyWord);
 				for (int i = 0; i < hits.length; i++) {
 					ScoreDoc scoreDoc = hits[i];
