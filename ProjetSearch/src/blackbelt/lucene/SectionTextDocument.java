@@ -5,7 +5,6 @@ import org.apache.lucene.document.Field;
 
 import blackbelt.parser.BlackBeltTagHandlerLuceneSearch;
 import blackbelt.parser.BlackBeltTagParser;
-import blackbelt.parserSection.CourseTextFormatter;
 
 public class SectionTextDocument {
 
@@ -54,10 +53,6 @@ public class SectionTextDocument {
 		sectionTextDocument.add(titleField);
 		sectionTextDocument.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
 		sectionTextDocument.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
-		//sectionTextDocument.add(new Field("version", String.valueOf(sectionText.getVersion()),Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-//		//String fullSearchableText = text + " " + sectionText.getLanguage() + " " + sectionText.getVersion();
-//		String fullSearchableText = text;
-//		sectionTextDocument.add(new Field("content", fullSearchableText, Field.Store.YES,Field.Index.ANALYZED));
 
 		// Print (use it for debug)
 		// System.out.println(doc.toString());

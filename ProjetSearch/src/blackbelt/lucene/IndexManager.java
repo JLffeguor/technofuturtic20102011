@@ -106,6 +106,7 @@ public class IndexManager {
 
 		int hitsPerPage = 10;
 		// Search for the query
+		// TODO review the number of display per page 
 		TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
 		searcher.search(query, collector);
 
