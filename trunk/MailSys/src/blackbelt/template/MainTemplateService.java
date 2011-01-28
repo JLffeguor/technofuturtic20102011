@@ -1,5 +1,6 @@
 package blackbelt.template;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import blackbelt.dao.MailDao;
 import blackbelt.model.Mail;
+import blackbelt.model.MailCategory;
 import blackbelt.model.MailType;
 import blackbelt.model.MailingDelayType;
-import blackbelt.model.MailCategory;
 import blackbelt.model.User;
 /**
  * Generates a Html string based on a mail
@@ -159,7 +160,11 @@ public final class MainTemplateService {
 
         } else {  // Multiple mail => we have to build a generic subject.
             String subjectOfGroupedMails = "";
-            for (MailCategory mailCategory : MailCategory.values()) {
+            MailCategory[] mailCategoryValues = MailCategory.values();
+            int numerOfCategories = mailCategoryValues.length;
+            
+            for (MailCategory mailCategory : mailCategoryValues) {
+                numerOfCategories--;
                 // Count the mails of the current subject.
                 int amountOfMailsForTheCurrentSubject = 0;
                 for (Mail mail : mails) {
@@ -169,8 +174,14 @@ public final class MainTemplateService {
                 }
 
                 if (amountOfMailsForTheCurrentSubject != 0){
-                    subjectOfGroupedMails += (Integer.toString(amountOfMailsForTheCurrentSubject) + " - " + mailCategory.getText() + ", ");
+                    subjectOfGroupedMails += (Integer.toString(amountOfMailsForTheCurrentSubject) + " - " + mailCategory.getText());
+                    
+                    // if it is the last categorie to be added to the subject don't add a comma at the end of the subject
+                    if(numerOfCategories<1){
+                        subjectOfGroupedMails += ", ";
+                    }
                 }
+                
             }
             return subjectOfGroupedMails;
         }

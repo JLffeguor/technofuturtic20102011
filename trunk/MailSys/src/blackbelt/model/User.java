@@ -29,7 +29,7 @@ public class User {
 	private Date lastMailSendedDate;
 	
 	@Enumerated(EnumType.STRING)
-	private MailingDelayType mailingDelai;// 0= immediately 1=daily 2= weakly
+	private MailingDelayType mailingDelai;
 
 	//Constructors
 	public User() {

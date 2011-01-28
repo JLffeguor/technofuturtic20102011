@@ -18,13 +18,15 @@ import blackbelt.model.User;
 @Service
 public class MailService {
 
-    @Autowired	private MailDao dao;
+    @Autowired	private MailDao mailDao;
     @Autowired	private MailSender mailSender;
 
  
     /**
      * Send a mail to a blackbelt user or to none blackbelt user
-     * this methode uses blackbelt template, if you want to use an other template use the methode sendMail(Mail mail)
+     * This method uses blackbelt template, if you don't want to use it call the method sendMail(Mail mail)
+     * The collection contains Users and strings(electronic email address) 
+      * 
      */
     public void sendMail(Collection<Object> targets, String subject, String content, MailType mailType, MailCategory mailCategory){
 
@@ -58,7 +60,7 @@ public class MailService {
     
     
     
-    public void sendMail(User recipient,User replyTo, String subject, String content, MailType mailType, MailCategory mailCategory){
+    public void sendMail(User recipient, User replyTo, String subject, String content, MailType mailType, MailCategory mailCategory){
         this.sendMail(new Mail(recipient, replyTo, subject, mailCategory, content, mailType, true ));
     }
 
@@ -72,11 +74,12 @@ public class MailService {
         //FIXME remove body at integration(), check with mathieu how dao function in blackbelt 
 
         if (mail.getUser()==null){
-            dao.save(mail, null);
+            mailDao.save(mail, null);
         }else{
-            dao.save(mail, mail.getUser().getId());
+            mailDao.save(mail, mail.getUser().getId());
         }
 
+        // wake up the thread each time we send a mail to database because if there isn't any mail to send the thread goes to sleep for a certain time.
         synchronized(mailSender) {
             mailSender.notify();
         }

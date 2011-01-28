@@ -31,7 +31,7 @@ CREATE TABLE users (
 );
 
 ALTER TABLE mails ADD CONSTRAINT fk_mailhaveuser FOREIGN KEY (User_Id) REFERENCES users(id);
-ALTER TABLE mails ADD CONSTRAINT fk_mailreplyTo FOREIGN KEY (User_Id) REFERENCES users(replyTo);
+ALTER TABLE mails ADD CONSTRAINT fk_mailreplyTo FOREIGN KEY (replyTo) REFERENCES users(id);
 ALTER TABLE mails ADD CONSTRAINT fk_emailtargetoruser CHECK ((User_Id IS NULL AND EmailTarget IS NOT NULL) OR (User_Id IS NOT NULL AND EmailTarget IS NULL));
 -- ----------------------------
 -- Records of user
@@ -44,4 +44,5 @@ INSERT INTO users (pseudo, email, mailingDelai	)
                          ('steph', 'steph@hotmail.com', 'DAILY'),
                          ('john', 'john@hotmail.com', 'DAILY'),
                          ('tati', 'tati@hotmail.com', 'WEEKLY');
+
 
