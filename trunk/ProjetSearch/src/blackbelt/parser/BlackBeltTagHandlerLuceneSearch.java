@@ -2,7 +2,11 @@ package blackbelt.parser;
 
 import blackbelt.parser.BlackBeltTagParser.Element;
 
-//TODO Comment
+/**
+*This parse a text from a section without BlackBelt tag 
+*This is use by the search engine project to build a index
+*We only need title of a attachment and the text code between [code][/code]
+*/
 public class BlackBeltTagHandlerLuceneSearch extends BlackBeltTagHandlerStringGenerator{
 
 	public BlackBeltTagHandlerLuceneSearch(){
