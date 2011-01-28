@@ -2,7 +2,6 @@ package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,12 +28,11 @@ import blackbelt.lucene.spring.IndexerService;
 
 public class IndexManager {
 	public static final String DIRECTORY="index";
-	public static final Set<String> STOPWORD=new HashSet<String>();	
+	public static final Set<String> STOPWORD=new HashSet<String>();
 	
 	private static IndexerService indexerService;
 
 	static {
-		// TODO Auto-generated constructor stub
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 		indexerService = (IndexerService) applicationContext.getBean("indexerService");
 	}
@@ -92,119 +90,109 @@ public class IndexManager {
 
 	private static IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
-		StandardAnalyzer standardAnalyzer=new StandardAnalyzer(Version.LUCENE_30,STOPWORD);
+		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_30,STOPWORD);
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
 	public static void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
-		try {
-			String queryString="(" + keyWord + ") AND language:" + language;
+		String queryString="(" + keyWord + ") AND language:" + language;
 
-			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
+		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
-			// Build a Query object
-			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
-			Query query = parser.parse(queryString);
+		// Build a Query object
+		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+		Query query = parser.parse(queryString);
 
-			int hitsPerPage = 10;
-			// Search for the query
-			TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
-			searcher.search(query, collector);
+		int hitsPerPage = 10;
+		// Search for the query
+		TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
+		searcher.search(query, collector);
 
-			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-			int hitCount = collector.getTotalHits();
-			System.out.println(hitCount + " total matching documents");
+		int hitCount = collector.getTotalHits();
+		System.out.println(hitCount + " total matching documents");
 
-			// Examine the Hits object to see if there were any matches
+		// Examine the Hits object to see if there were any matches
 
-			if (hitCount == 0) {
-				System.out.println("No matches were found for \"" + query
-						+ "\"");
-			} else {
-				System.out.println("Hits for \"" + query
-						+ "\" were found in quotes by:");
+		if (hitCount == 0) {
+			System.out.println("No matches were found for \"" + query
+					+ "\"");
+		} else {
+			System.out.println("Hits for \"" + query
+					+ "\" were found in quotes by:");
 
-				// Iterate over the Documents in the Hits object
-				//List<String> bigString = new ArrayList<String>();
-				//RenderResult rr = new RenderResult(keyWord);
-				for (int i = 0; i < hits.length; i++) {
-					ScoreDoc scoreDoc = hits[i];
-					int docId = scoreDoc.doc;
-					float docScore = scoreDoc.score;
-					System.out.println("docId: " + docId + "\t" + "docScore: "
-							+ docScore);
+			// Iterate over the Documents in the Hits object
+			//TODO review render result
+			//List<String> bigString = new ArrayList<String>();
+			//RenderResult rr = new RenderResult(keyWord);
+			for (int i = 0; i < hits.length; i++) {
+				ScoreDoc scoreDoc = hits[i];
+				int docId = scoreDoc.doc;
+				float docScore = scoreDoc.score;
+				System.out.println("docId: " + docId + "\t" + "docScore: "
+						+ docScore);
 
-					Document doc = searcher.doc(docId);
-					//bigString.add(rr.extractResult(doc));
-					// Print the value that we stored in the "title" field. Note
-					// that this Field was not indexed, but (unlike the
-					// "contents" field) was stored verbatim and can be
-					// retrieved.
-					System.out.println("Content N°" + (i + 1) + ": "
-							+ doc.get("language") + " (" + doc.get("id") + ")");
-				}
-				//rr.toHTML(bigString);
+				Document doc = searcher.doc(docId);
+				//bigString.add(rr.extractResult(doc));
+				// Print the value that we stored in the "title" field. Note
+				// that this Field was not indexed, but (unlike the
+				// "contents" field) was stored verbatim and can be
+				// retrieved.
+				System.out.println("Content N°" + (i + 1) + ": "
+						+ doc.get("language") + " (" + doc.get("id") + ")");
 			}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+			//rr.toHTML(bigString);
 		}
 	}
 
 	public static void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
 
-		try {
-			String queryString=sectionId + " AND language:" +language;
+		String queryString=sectionId + " AND language:" +language;
 
-			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
+		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
-			// Build a Query object
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
-			Query query = parser.parse(queryString);
-			System.out.println(query);
+		// Build a Query object
+		QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+		Query query = parser.parse(queryString);
+		System.out.println(query);
 
-			int hitsPerPage = 10;
-			// Search for the query
-			TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
-			searcher.search(query, collector);
+		int hitsPerPage = 10;
+		// Search for the query
+		TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
+		searcher.search(query, collector);
 
-			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
-			int hitCount = collector.getTotalHits();
-			System.out.println(hitCount + " total matching documents");
+		int hitCount = collector.getTotalHits();
+		System.out.println(hitCount + " total matching documents");
 
-			// Examine the Hits object to see if there were any matches
+		// Examine the Hits object to see if there were any matches
 
-			if (hitCount == 0) {
-				System.out.println("No matches were found for \"" + query
-						+ "\"");
-			} else {
-				System.out.println("Hits for \"" + queryString
-						+ "\" were found in quotes by:");
+		if (hitCount == 0) {
+			System.out.println("No matches were found for \"" + query
+					+ "\"");
+		} else {
+			System.out.println("Hits for \"" + queryString
+					+ "\" were found in quotes by:");
 
-				// Iterate over the Documents in the Hits object
-				for (int i = 0; i < hits.length; i++) {
-					ScoreDoc scoreDoc = hits[i];
-					int docId = scoreDoc.doc;
-					float docScore = scoreDoc.score;
-					System.out.println("docId: " + docId + "\t" + "docScore: "
-							+ docScore);
+			// Iterate over the Documents in the Hits object
+			for (int i = 0; i < hits.length; i++) {
+				ScoreDoc scoreDoc = hits[i];
+				int docId = scoreDoc.doc;
+				float docScore = scoreDoc.score;
+				System.out.println("docId: " + docId + "\t" + "docScore: "
+						+ docScore);
 
-					Document doc = searcher.doc(docId);
-					// Print the value that we stored in the "title" field. Note
-					// that this Field was not indexed, but (unlike the
-					// "contents" field) was stored verbatim and can be
-					// retrieved.
-					System.out.println("Content N°" + (i + 1) + ": "
-							+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
-				}
+				Document doc = searcher.doc(docId);
+				// Print the value that we stored in the "title" field. Note
+				// that this Field was not indexed, but (unlike the
+				// "contents" field) was stored verbatim and can be
+				// retrieved.
+				System.out.println("Content N°" + (i + 1) + ": "
+						+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
 		}
 	}
 }
