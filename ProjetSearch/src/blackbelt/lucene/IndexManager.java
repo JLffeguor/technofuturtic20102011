@@ -28,7 +28,13 @@ import blackbelt.lucene.spring.IndexerService;
 
 public class IndexManager {
 	public final String DIRECTORY="index";
-	public final Set<String> STOPWORD=new HashSet<String>();
+	
+	/** The collection of stopwords is empty. 
+	 * We cannot use the default stopwords fo Lucene, because they include "IT" which is used for the Italian language.
+	 * => we use an empty stopword collection. 
+	 * */
+	public final Set<String> STOP_WORDS = new HashSet<String>();
+	
 	private SectionTextDocument sectionTextDocument = new SectionTextDocument();
 	private ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 	private IndexerService indexerService;
@@ -43,24 +49,20 @@ public class IndexManager {
 
 		System.out.println("*****************Begin Indexing Section*****************");
 
-		/** 
-		 * The keyword "IT" is use for the language (Italian). But the default stopWords of Lucene doesn't accept this keyword.
-		 * So we have to create another stopWords.
-		 * TODO : add stopWords
-		 *  */
+	
 
 		// Make an writer to create the index
-		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30,STOPWORD), true, IndexWriter.MaxFieldLength.UNLIMITED);
+		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
 		//Index all Accommodation entries		
-		List<SectionText> sections=indexerService.getLastVersionOfEachSectionTexts();
+		List<SectionText> sectionTexts = indexerService.getLastVersionOfEachSectionTexts();  // TODO: use SectionTextDao.
 
 		//Print (use for debug)
 		int i=0;
-		for (SectionText section : sections) {
+		for (SectionText sectionText : sectionTexts) {
 			i++;
-			System.out.println("\t("+i+") "+section);
-			writer.addDocument(sectionTextDocument.createDocument(section));
+			System.out.println("\t("+i+") "+sectionText);
+			writer.addDocument(sectionTextDocument.createDocument(sectionText));
 		}
 
 		// Optimize and close the writer to finish building the index
@@ -90,7 +92,7 @@ public class IndexManager {
 
 	private IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
-		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_30,STOPWORD);
+		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_30,STOP_WORDS);
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
@@ -101,7 +103,7 @@ public class IndexManager {
 		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 		// Build a Query object
-		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 
 		int hitsPerPage = 10;
@@ -155,7 +157,7 @@ public class IndexManager {
 		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 		// Build a Query object
-		QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+		QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 		System.out.println(query);
 
