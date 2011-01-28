@@ -47,29 +47,18 @@ public class IndexManager {
 
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
 
-		System.out.println("*****************Begin Indexing Section*****************");
-
-	
-
 		// Make an writer to create the index
 		IndexWriter writer = new IndexWriter(indexDirectory, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS), true, IndexWriter.MaxFieldLength.UNLIMITED);
 
 		//Index all Accommodation entries		
-		List<SectionText> sectionTexts = indexerService.getLastVersionOfEachSectionTexts();  // TODO: use SectionTextDao.
-
-		//Print (use for debug)
-		int i=0;
+		List<SectionText> sectionTexts = indexerService.getLastVersionOfEachSectionTexts();  // TODO: use DAO directly.
 		for (SectionText sectionText : sectionTexts) {
-			i++;
-			System.out.println("\t("+i+") "+sectionText);
 			writer.addDocument(sectionTextDocument.createDocument(sectionText));
 		}
 
 		// Optimize and close the writer to finish building the index
 		writer.optimize();
 		writer.close();
-
-		System.out.println("*****************End Indexing Section*****************");
 	}
 	
 	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
@@ -96,7 +85,7 @@ public class IndexManager {
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
-	public void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
+	public void searchByKeyWordAndLanguage(String keyWord, String language) throws ParseException, IOException {
 
 		String queryString="(" + keyWord + ") AND language:" + language;
 
@@ -106,19 +95,17 @@ public class IndexManager {
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 
-		int hitsPerPage = 10;
+		int hitsPerPage = 50;
 		// Search for the query
 		// TODO review the number of display per page 
-		TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
+		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
 		searcher.search(query, collector);
 
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
 		int hitCount = collector.getTotalHits();
-		System.out.println(hitCount + " total matching documents");
 
 		// Examine the Hits object to see if there were any matches
-
 		if (hitCount == 0) {
 			System.out.println("No matches were found for \"" + query
 					+ "\"");
@@ -197,5 +184,14 @@ public class IndexManager {
 						+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
 			}
 		}
+	}
+	
+	public static class CourseSearchResult {
+		//TODO
+//		constructor (ScoreDoc ??)
+//		
+//		public String textFound;
+//		public Section section;
+//		public Language
 	}
 }

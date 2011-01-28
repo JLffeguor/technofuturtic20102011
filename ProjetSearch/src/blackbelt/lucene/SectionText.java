@@ -67,7 +67,10 @@ public class SectionText {
 	}
 
 	public String getTitle() {
-		return title;
+		if (title == null)
+			return "";
+		else
+			return title;
 	}
 
 	public void setTitle(String title) {

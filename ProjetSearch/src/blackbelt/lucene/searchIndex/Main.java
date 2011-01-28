@@ -11,7 +11,7 @@ public class Main {
 	public static void main(String[] args){
 		
 		try {
-			new IndexManager().searchByKWandL("jpa hibernate", "EN");
+			new IndexManager().searchByKeyWordAndLanguage("jpa hibernate", "EN");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException(e);

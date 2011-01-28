@@ -39,14 +39,14 @@ public class SectionTextDocument {
 		// Use a text formatter to format the text
 		BlackBeltTagParser blackBeltTagParser=new BlackBeltTagParser(new BlackBeltTagHandlerLuceneSearch(), sectionText.getText());
 		String text = blackBeltTagParser.parse();
-		// Remove all the balises who stay after the format
 		text = cleanHtmlBalises(text);
 
 		// Add a new Document to the index
 		Document sectionTextDocument = new Document();
-		// And add each field
+		
 		sectionTextDocument.add(new Field("id", String.valueOf(sectionText.getId()),Field.Store.YES, Field.Index.NOT_ANALYZED));
-		//TODO set Field.Index.NO
+		// We need the sectionId in the search results page to link to the CoursePage.
+		// TODO set Field.Index.NO
 		sectionTextDocument.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NOT_ANALYZED));
 		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED);
 		titleField.setBoost(1.5f);
@@ -54,8 +54,6 @@ public class SectionTextDocument {
 		sectionTextDocument.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
 		sectionTextDocument.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
 
-		// Print (use it for debug)
-		// System.out.println(doc.toString());
 		return sectionTextDocument;
 	}
 }
