@@ -11,6 +11,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -96,17 +97,12 @@ public class IndexManager implements ConfigIndex{
 
 		try {
 			String queryString="(" + keyWord + ") AND language:" + language;
-			//String queryString=keyWord + " AND language:" + language;
 
 			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 			// Build a Query object
-			QueryParser parser = new QueryParser(Version.LUCENE_30, "text",new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOPWORD));
 			Query query = parser.parse(queryString);
-			System.out.println("query: "+query);
-			
-			Query query2 = parser.parse(keyWord);
-			System.out.println("query2: "+query2);
 
 			int hitsPerPage = 10;
 			// Search for the query
@@ -121,15 +117,15 @@ public class IndexManager implements ConfigIndex{
 			// Examine the Hits object to see if there were any matches
 
 			if (hitCount == 0) {
-				System.out.println("No matches were found for \"" + queryString
+				System.out.println("No matches were found for \"" + query
 						+ "\"");
 			} else {
-				System.out.println("Hits for \"" + queryString
+				System.out.println("Hits for \"" + query
 						+ "\" were found in quotes by:");
 
 				// Iterate over the Documents in the Hits object
 				List<String> bigString = new ArrayList<String>();
-				RenderResult rr = new RenderResult(keyWord);
+				//RenderResult rr = new RenderResult(keyWord);
 				for (int i = 0; i < hits.length; i++) {
 					ScoreDoc scoreDoc = hits[i];
 					int docId = scoreDoc.doc;
@@ -138,7 +134,7 @@ public class IndexManager implements ConfigIndex{
 							+ docScore);
 
 					Document doc = searcher.doc(docId);
-					bigString.add(rr.extractResult(doc));
+					//bigString.add(rr.extractResult(doc));
 					// Print the value that we stored in the "title" field. Note
 					// that this Field was not indexed, but (unlike the
 					// "contents" field) was stored verbatim and can be
@@ -146,7 +142,7 @@ public class IndexManager implements ConfigIndex{
 					System.out.println("Content N°" + (i + 1) + ": "
 							+ doc.get("language") + " (" + doc.get("id") + ")");
 				}
-				rr.toHTML(bigString);
+				//rr.toHTML(bigString);
 			}
 			
 		} catch (Exception e) {
@@ -180,7 +176,7 @@ public class IndexManager implements ConfigIndex{
 			// Examine the Hits object to see if there were any matches
 
 			if (hitCount == 0) {
-				System.out.println("No matches were found for \"" + queryString
+				System.out.println("No matches were found for \"" + query
 						+ "\"");
 			} else {
 				System.out.println("Hits for \"" + queryString
