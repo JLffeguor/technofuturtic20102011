@@ -30,6 +30,8 @@ public class Mail {
 	@JoinColumn(nullable = true, name = "user_id")
 	private User user;
 	
+	@ManyToOne
+    @JoinColumn(nullable = true, name = "replyTo")
 	private User replyTo;
     
 	//in case we send an email to a person not in the database

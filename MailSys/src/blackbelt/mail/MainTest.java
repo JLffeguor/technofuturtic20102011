@@ -3,6 +3,8 @@ package blackbelt.mail;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import blackbelt.model.User;
+
 /**
  * Used for test.
  */

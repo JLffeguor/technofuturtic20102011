@@ -157,4 +157,9 @@ public class MailDao {
         }
         em.persist(mail);
     }
+    
+    //Remove at integration. This methode it is only used for testing the application
+    public User getUser(Long id){
+        return em.find(User.class, id);
+    }
 }

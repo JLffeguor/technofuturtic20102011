@@ -59,6 +59,7 @@ public class MailSender extends Thread {
 					nextMail.getUser().setLastMailSendedDate(new Date());
 //					userDao.save(nextMail.getUser()); // FIXME: CHECK WHEN INTEGRATION 
 					mailDao.removeMails(nextMailList);// FIXME: CHECK WHEN INTEGRATION 
+					//the thread sleeps well between each mail sent, if it gets interrupted there is a bug 
 					this.sleepWell(DELAY_BETWEEN_EACH_MAIL);
 				}
 				nextMailList = this.findNextMails();
@@ -68,6 +69,7 @@ public class MailSender extends Thread {
 			System.out.println("******************************************************************");
 			System.out.println("*****aucun message a envoyer dans l'immediat, dodo 15 secondes****");// on attend 15 secondes
 			System.out.println("******************************************************************");
+			//if new mail is in database the thread will wake up and get back to work.
 			sleepBad(WAKE_UP_DELAY_WHEN_NO_MAIL);
 		}
 	}
@@ -75,10 +77,10 @@ public class MailSender extends Thread {
 	/** To manage the InterruptedException */
 	synchronized private void sleepWell(int delayMs){
 		try {
-			// delai entre 2 send
+		    //There is no mail in database, sleep
 			sleep(delayMs);
 		} catch (InterruptedException e) {
-			// We have been awaken sooner ;-)
+			throw new RuntimeException(e);
         }
 	}
 	
@@ -87,7 +89,7 @@ public class MailSender extends Thread {
             //wait for new mail 
             wait(delayMs);
         } catch (InterruptedException e) {
-            // We have been awaken sooner ;-)
+            throw new RuntimeException(e);
         }
     }
 	
@@ -186,13 +188,13 @@ public class MailSender extends Thread {
 			return mailDao.getMailsFromUser(MailType.GROUPABLE, user);
 		}
 		
-		// 3. There is no immediate and groupable mail to send (anymore) => we look for mails to send to electronic address mails.
+		// 3. There is no immediate and groupable mail to send (anymore) => we look for mails to send to electronic address mails (instead of user).
 		List<Mail> mails = mailDao.getMailsEmailTarget(); 
 		if(mails!=null && mails.size()>0) {
 		    return mails;
 		}
 		
-		// 4. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
+		// 4. There is no immediate and groupable mail to send (anymore), we look for slow_not_groupabel(example newsletter) mails to send
 		user = mailDao.userHavingSlowMails();
 		if(user!=null){
 			return mailDao.getMailsFromUser(MailType.SLOW_NOT_GROUPABLE, user);
