@@ -43,7 +43,7 @@ public class MailSender extends Thread {
 			
 			while (nextMailList != null && nextMailList.size()>0) {
 				Mail nextMail = nextMailList.get(0);
-				if (nextMail.getMailType()== MailType.IMMEDIATE || nextMail.getMailType()== MailType.SLOW_NOT_GROUPABLE) { // if there are immediate mails, we send one after one... 
+				if (nextMail.getMailType()== MailType.IMMEDIATE || nextMail.getMailType()== MailType.SLOW_NOT_GROUPABLE || nextMail.getEmailTarget() != null) { // if there are immediate mails, we send one after one... 
 					for (int i=0; i<nextMailList.size() ; i++) {
 						// Send the mail and remove it from the DB.
 						List<Mail> mails;
@@ -103,7 +103,11 @@ public class MailSender extends Thread {
 		// FIXME: really send the mail via SMTP instead of saving it on the file system.
 		// sendSmtpMail(mail.get(0).getUser(), content);
 		sendConsoleMail(mails);
-		sendFileMail(mails.get(0).getUser(), mp.getContent(), mp.getSubject());
+		if ((mails.get(0).getUser()!=null)){
+		    sendFileMail(mails.get(0).getUser(), mp.getContent(), mp.getSubject());
+		} else {
+		    sendFileMail(mails.get(0).getEmailTarget(), mp.getContent(), mp.getSubject());
+		}
 	}
 	
 	private void sendSmtpMail(User user, String content, String subject) {
@@ -131,9 +135,29 @@ public class MailSender extends Thread {
 		}
 	}
 	
+	private void sendFileMail(String targerMail, String content, String subject) {
+        try {
+            File rep;
+            Date date;
+            PrintWriter make;
+            GregorianCalendar gc;
+            String fileName;
+            rep = new File("C:/testing/Mails/" + targerMail);
+            rep.mkdirs();
+            date=new Date();
+            fileName = date.getYear()+"_"+(date.getMonth()+1)+"_"+date.getDay()+"_"+date.getHours()+"_"+date.getMinutes()+"_"+date.getSeconds()+"_"+subject+"_message(s).html";
+            make = new PrintWriter("C:/testing/Mails/" + targerMail + "/" +fileName);// apres : le nombbre de message
+            make.println("<div>subject: "+subject+"</div>");
+            make.println(content);
+            make.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+	
 	private void sendConsoleMail(List<Mail> mail) {
 		// TODO: replace this code by SMTP send.
-		System.out.println("************Mailing to:" + mail.get(0).getUser().getPseudo() + "************");
+		System.out.println("************Mailing to:" + ((mail.get(0).getUser()!=null)?mail.get(0).getUser().getPseudo():mail.get(0).getEmailTarget()) + "************");
 		for (Mail i : mail) {
 			System.out.println(i.getSubject().toString() + "       " + i.getDateMessage());
 			System.out.println(i.getText());
@@ -162,13 +186,19 @@ public class MailSender extends Thread {
 			return mailDao.getMailsFromUser(MailType.GROUPABLE, user);
 		}
 		
-		// 3. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
+		// 3. There is no immediate and groupable mail to send (anymore) => we look for mails to send to electronic address mails.
+		List<Mail> mails = mailDao.getMailsEmailTarget(); 
+		if(mails!=null && mails.size()>0) {
+		    return mails;
+		}
+		
+		// 4. There is no immediate (non groupable) mail to send (anymore) => we look for groupable mails.
 		user = mailDao.userHavingSlowMails();
 		if(user!=null){
 			return mailDao.getMailsFromUser(MailType.SLOW_NOT_GROUPABLE, user);
 		}
 	
-		// 4. There is no next mail to be sent.
+		// 5. There is no next mail to be sent.
 		return new ArrayList<Mail>();  // Empty list, no mail to send.
 	}
 }

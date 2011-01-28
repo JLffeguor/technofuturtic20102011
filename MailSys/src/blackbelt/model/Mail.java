@@ -25,13 +25,20 @@ public class Mail {
 	@javax.persistence.SequenceGenerator(name="SEQ_GEN",sequenceName="seq_mails_id")
 	private Long id;
 	
+	//in case we send an email to a person in the database
 	@ManyToOne
-	@JoinColumn(nullable = false, name = "user_id")
+	@JoinColumn(nullable = true, name = "user_id")
 	private User user;
 	
+	private User replyTo;
+    
+	//in case we send an email to a person not in the database
+	@Column(nullable = true)
+    private String emailTarget;
+
 	@Enumerated(EnumType.STRING)
 	private MailCategory mailCategory;
-	
+		
 	@Column(nullable = false)
 	private String subject;
 	
@@ -48,9 +55,11 @@ public class Mail {
 	//Constructors
 	public Mail() {}
 	
+	//For sending a mail to a BlackBelt user
 	public Mail(User user,String subject, MailCategory mailSubject, String content, MailType mailType, boolean useTemplate) {
-		////this.id = -1;
 		this.user = user;
+		this.replyTo = null;
+		this.emailTarget = null;
 		this.mailCategory = mailSubject;
 		this.content = content;
 		this.mailType=mailType;
@@ -58,15 +67,34 @@ public class Mail {
 		this.subject=subject;
 		this.useTemplate = useTemplate;
 	}
-
-	public Mail(User user, MailCategory mailSubject, String text, boolean immediate, Date date, boolean useTemplate) {
-		////this.id = id;
-		this.user = user;
-		this.mailCategory = mailSubject;
-		this.content = text;
-		this.creationDate = date;
-		this.useTemplate = useTemplate;
-	}
+	
+	//For sending a mail to an outsider(not a BlackBelt user) 
+	public Mail(String emailTarget, String subject, MailCategory mailSubject, String content, MailType mailType, boolean useTemplate) {
+        this.user = null;
+        this.replyTo = null;
+        this.emailTarget = emailTarget;
+        this.mailCategory = mailSubject;
+        this.content = content;
+        this.mailType=mailType;
+        this.creationDate = new Date();
+        this.subject=subject;
+        this.useTemplate = useTemplate;
+    }
+	
+	//Send a mail to a blackbelt user and it contains information about the personne that send the mail 
+    public Mail(User recipient,User replyTo, String subject, MailCategory mailSubject, String content, MailType mailType, boolean useTemplate) {
+        this.user = recipient;
+        this.replyTo = replyTo;
+        this.emailTarget = null;
+        this.mailCategory = mailSubject;
+        this.content = content;
+        this.mailType=mailType;
+        this.creationDate = new Date();
+        this.subject=subject;
+        this.useTemplate = useTemplate;
+    }
+	
+	
 	
 	//Getters and setters
 	public Long getId() {
@@ -76,9 +104,36 @@ public class Mail {
 	public User getUser() {
 		return this.user;
 	}
+	
+	
+	public User getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(User replyTo) {
+        this.replyTo = replyTo;
+    }
+
+    /**
+     *Set user instead of emailTarget
+     */
 	public void setUser(User user) {
 		this.user = user;
+		this.emailTarget = null;
 	}
+	
+	public String getEmailTarget() {
+        return this.emailTarget;
+    }
+	
+	/**
+     * Set emailTarget instead of user
+     */
+    
+	public void setEmailTarget(String emailTarget) {
+        this.user = null;
+        this.emailTarget = emailTarget;
+    }
 
 	public MailCategory getMailCategory() {
 		return this.mailCategory;
