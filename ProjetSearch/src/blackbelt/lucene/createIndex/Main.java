@@ -18,7 +18,7 @@ public class Main {
 		
 		try {
 			
-			IndexManager.createIndexes();
+			new IndexManager().createIndexes();
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);
