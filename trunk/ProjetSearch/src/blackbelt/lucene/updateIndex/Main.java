@@ -21,21 +21,21 @@ public class Main {
 		sectionText.setSectionid(Long.valueOf(id));
 		
 		try {
+			IndexManager indexManager=new IndexManager();
+			
 			System.out.println("***************************** 1");
-			IndexManager.searchBySectionId(id, "EN");
-			IndexManager.addSectionText(sectionText);
+			indexManager.searchBySectionId(id, "EN");
+			indexManager.addSectionText(sectionText);
 			System.out.println("***************************** 2");
-			IndexManager.searchBySectionId(id, "EN");
+			indexManager.searchBySectionId(id, "EN");
 			sectionText.setText("hibernate dao2");
-			IndexManager.updateSectionText(sectionText);
+			indexManager.updateSectionText(sectionText);
 			System.out.println("***************************** 3");
-			IndexManager.searchBySectionId(id, "EN");
+			indexManager.searchBySectionId(id, "EN");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

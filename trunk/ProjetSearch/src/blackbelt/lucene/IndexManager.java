@@ -37,7 +37,7 @@ public class IndexManager {
 		indexerService = (IndexerService) applicationContext.getBean("indexerService");
 	}
 
-	public static void createIndexes() throws IOException, CorruptIndexException {
+	public void createIndexes() throws IOException, CorruptIndexException {
 
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
 
@@ -70,31 +70,31 @@ public class IndexManager {
 		System.out.println("*****************End Indexing Section*****************");
 	}
 	
-	public static void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
+	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), SectionTextDocument.createDocument(sectionText));
 		writer.close();
 	}
 
-	public static void deleteSectionTextById(String id) throws IOException, CorruptIndexException {
+	public void deleteSectionTextById(String id) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.deleteDocuments(new Term("id", id));
 		writer.close();
 	} 
 
-	public static void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
+	public void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.addDocument(SectionTextDocument.createDocument(sectionText));
 		writer.close();
 	}
 
-	private static IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
+	private IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
 		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_30,STOPWORD);
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
-	public static void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
+	public void searchByKWandL(String keyWord,String language) throws ParseException, IOException {
 
 		String queryString="(" + keyWord + ") AND language:" + language;
 
@@ -148,7 +148,7 @@ public class IndexManager {
 		}
 	}
 
-	public static void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
+	public void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
 
 		String queryString=sectionId + " AND language:" +language;
 
