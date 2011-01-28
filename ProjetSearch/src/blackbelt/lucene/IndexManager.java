@@ -60,6 +60,12 @@ public class IndexManager {
 		writer.close();
 	}
 	
+	/**
+	 *Update Document is a method in Lucene to update the index
+	 *It take a Term and a document as param 
+	 *A Term represents a word from text.  This is the unit of search.  
+	 *It is composed of two elements,the text of the word, as a string,
+	 * and the name of the field that the text occurred in, an interned string.*/
 	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), createDocument(sectionText));
@@ -187,19 +193,20 @@ public class IndexManager {
 	
 	/**
 	 * Some user who write course on BlackBelt write some balises. Some balises
-	 * are not delete with the CourseTextFormatter So we have to clean those
+	 * are not delete with the BlackBeltTagHangdlerLuceneSearch So we have to clean those
 	 * balises with this method.
 	 * */
 	private String cleanHtmlTags(String textToFormat) {
 		String result = "";
-
-		result = textToFormat.replaceAll("\\</.*?>", "\n"); // remove all
-															// balises </?>
+		// remove all balises </?>
+		result = textToFormat.replaceAll("\\</.*?>", "\n"); 
 		// remove all other balises who are in the DB.
 		result = result.replaceAll("(?i)\\<a", "");
-		result = result.replaceAll("(?i)href.*?>", ""); // Remove <a href...>
+		// Remove <a href...>
+		result = result.replaceAll("(?i)href.*?>", ""); 
 		result = result.replaceAll("(?i)\\<p>", "");
-		result = result.replaceAll("(?i)\\<p.*?>", ""); // Remove <p align...>
+		// Remove <p align...>
+		result = result.replaceAll("(?i)\\<p.*?>", ""); 
 		result = result.replaceAll("(?i)\\<b.*?>", "");
 		result = result.replaceAll("(?i)\\<i>", "");
 		result = result.replaceAll("(?i)\\<pre>", "");
@@ -213,7 +220,7 @@ public class IndexManager {
 	}
 
 	private Document createDocument(SectionText sectionText) {
-		// Use a text formatter to format the text
+		// use BlackBeltTagHandlerLuceneSearch to escape the BlackBelt tag from sectiontext
 		BlackBeltTagParser blackBeltTagParser=new BlackBeltTagParser(new BlackBeltTagHandlerLuceneSearch(), sectionText.getText());
 		String text = blackBeltTagParser.parse();
 		text = cleanHtmlTags(text);
@@ -226,6 +233,8 @@ public class IndexManager {
 		// TODO set Field.Index.NO
 		doc.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NOT_ANALYZED));
 		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED);
+		// This give more importance to title during the search
+		// The user see the result from the title before the result from the text 
 		titleField.setBoost(1.5f);
 		doc.add(titleField);
 		doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
