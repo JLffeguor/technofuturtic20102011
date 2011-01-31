@@ -2,6 +2,7 @@ package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,9 +32,13 @@ import blackbelt.parser.BlackBeltTagParser;
 
 @Service
 public class IndexManager {
-	@Autowired
-	SectionDao sectionDao;
 	
+	@Autowired	SectionDao sectionDao;
+	
+	/**
+	 * Directory of the index Lucene.
+	 *  TODO It may be removed at the integration in BBF.
+	 */
 	public final String DIRECTORY="index";
 	
 	/** The collection of stopwords is empty. 
@@ -71,7 +76,7 @@ public class IndexManager {
 		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), createDocument(sectionText));
 		writer.close();
 	}
-
+	
 	public void deleteSectionTextById(String id) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.deleteDocuments(new Term("id", id));
@@ -90,14 +95,15 @@ public class IndexManager {
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
-	public void searchByKeyWordAndLanguage(String keyWord, String language) throws ParseException, IOException {
+	public List<CourseSearchResult> searchByKeyWordAndLanguage(String keyWord, String language) throws ParseException, IOException {
 
 		String queryString="(" + keyWord + ") AND language:" + language;
 
 		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
 
 		// Build a Query object
-		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
+		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, 
+				new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 
 		int hitsPerPage = 50;
@@ -107,8 +113,10 @@ public class IndexManager {
 		searcher.search(query, collector);
 
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
+		
 		int hitCount = collector.getTotalHits();
+		
+		List<CourseSearchResult> listResultDocuments = new ArrayList<CourseSearchResult>();
 
 		// Examine the Hits object to see if there were any matches
 		if (hitCount == 0) {
@@ -122,27 +130,21 @@ public class IndexManager {
 			//TODO review render result
 			//List<String> bigString = new ArrayList<String>();
 			//RenderResult rr = new RenderResult(keyWord);
+			
 			for (int i = 0; i < hits.length; i++) {
 				ScoreDoc scoreDoc = hits[i];
 				int docId = scoreDoc.doc;
-				float docScore = scoreDoc.score;
-				System.out.println("docId: " + docId + "\t" + "docScore: "
-						+ docScore);
-
-				Document doc = searcher.doc(docId);
-				//bigString.add(rr.extractResult(doc));
-				// Print the value that we stored in the "title" field. Note
-				// that this Field was not indexed, but (unlike the
-				// "contents" field) was stored verbatim and can be
-				// retrieved.
-				System.out.println("Content N°" + (i + 1) + ": "
-						+ doc.get("language") + " (" + doc.get("id") + ")");
+				listResultDocuments.add(new CourseSearchResult(scoreDoc.score,searcher.doc(docId)));
 			}
-			//rr.toHTML(bigString);
 		}
+		
+		return listResultDocuments;
 	}
 
-	public void searchBySectionId(String sectionId,String language) throws ParseException, IOException {
+	/**
+	 * TODO this is a method used for the tests. will be removed at the integration
+	 */
+	public List<CourseSearchResult> searchBySectionId(String sectionId,String language) throws ParseException, IOException {
 
 		String queryString=sectionId + " AND language:" +language;
 
@@ -153,9 +155,9 @@ public class IndexManager {
 		Query query = parser.parse(queryString);
 		System.out.println(query);
 
-		int hitsPerPage = 10;
+		int hitsPerPage = 50;
 		// Search for the query
-		TopScoreDocCollector collector = TopScoreDocCollector.create(5 * hitsPerPage, false);
+		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
 		searcher.search(query, collector);
 
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -165,6 +167,7 @@ public class IndexManager {
 
 		// Examine the Hits object to see if there were any matches
 
+		List<CourseSearchResult> listResultDocuments = new ArrayList<CourseSearchResult>();
 		if (hitCount == 0) {
 			System.out.println("No matches were found for \"" + query
 					+ "\"");
@@ -173,34 +176,28 @@ public class IndexManager {
 					+ "\" were found in quotes by:");
 
 			// Iterate over the Documents in the Hits object
+			
 			for (int i = 0; i < hits.length; i++) {
 				ScoreDoc scoreDoc = hits[i];
 				int docId = scoreDoc.doc;
-				float docScore = scoreDoc.score;
-				System.out.println("docId: " + docId + "\t" + "docScore: "
-						+ docScore);
-
-				Document doc = searcher.doc(docId);
-				// Print the value that we stored in the "title" field. Note
-				// that this Field was not indexed, but (unlike the
-				// "contents" field) was stored verbatim and can be
-				// retrieved.
-				System.out.println("Content N°" + (i + 1) + ": "
-						+ doc.get("language") + " (" + doc.get("id") + ") " + doc.get("text"));
+				listResultDocuments.add(new CourseSearchResult(scoreDoc.score, searcher.doc(docId)));
 			}
 		}
+		
+		return listResultDocuments;
 	}
 	
 	/**
-	 * Some user who write course on BlackBelt write some balises. Some balises
+	 * Some user who write course on BlackBelt write some tags. Some tags
 	 * are not delete with the BlackBeltTagHangdlerLuceneSearch So we have to clean those
-	 * balises with this method.
+	 * tags with this method.
 	 * */
 	private String cleanHtmlTags(String textToFormat) {
 		String result = "";
-		// remove all balises </?>
-		result = textToFormat.replaceAll("\\</.*?>", "\n"); 
-		// remove all other balises who are in the DB.
+		// remove all end tags
+		result = textToFormat.replaceAll("\\</.*?>", "\n");
+		
+		// remove all start tags
 		result = result.replaceAll("(?i)\\<a", "");
 		// Remove <a href...>
 		result = result.replaceAll("(?i)href.*?>", ""); 
@@ -211,7 +208,7 @@ public class IndexManager {
 		result = result.replaceAll("(?i)\\<i>", "");
 		result = result.replaceAll("(?i)\\<pre>", "");
 		result = result.replaceAll("(?i)\\<ul>", "");
-		result = result.replaceAll("(?i)\\</ul>", "");
+		result = result.replaceAll("(?i)\\</ul>", "");  // BECAUSE................
 		result = result.replaceAll("(?i)\\<ol>", "");
 		result = result.replaceAll("(?i)\\<li>", "");
 		result = result.replaceAll("(?i)\\</li>", "");
@@ -243,12 +240,42 @@ public class IndexManager {
 		return doc;
 	}
 	
+	/**
+	 * This class contains all information of an item found during a search to display it later.
+	 */
 	public static class CourseSearchResult {
-		//TODO
-//		constructor (ScoreDoc ??)
-//		
-//		public String textFound;
-//		public Section section;
-//		public Language
+		private float score;
+		private String sectionId;
+		private String title;
+		private String text;
+		
+		public CourseSearchResult(float score,Document doc){
+			this.score=score;
+			title=doc.get("title");
+			text=doc.get("text");
+			sectionId=doc.get("sectionId");
+		}
+
+		public float getScore() {
+			return score;
+		}
+		
+		public String getTitle() {
+			return title;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public String getSectionId() {
+			return sectionId;
+		}
+		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "Score: " + score + " // title: " + title;
+		}
 	}
 }
