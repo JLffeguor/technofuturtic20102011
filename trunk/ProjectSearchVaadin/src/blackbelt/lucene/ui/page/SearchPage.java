@@ -33,6 +33,7 @@ public class SearchPage extends VerticalLayout {
 		tfKeyWord.setHeight("25px");
 		listLanguages=new NativeSelect(null,LANGUAGES);
 		listLanguages.setValue(LANGUAGES.get(1));
+		listLanguages.setNullSelectionAllowed(false);
 		listLanguages.setHeight("25px");
 		Button btnSearch=new Button("Search");
 		btnSearch.setClickShortcut(KeyCode.ENTER);
