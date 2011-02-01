@@ -47,6 +47,7 @@ public class SearchPage extends VerticalLayout {
 				if("".equals(tfKeyWord.getValue())){
 					System.out.println("no good");
 				}else{
+				    System.out.println("****************"+tfKeyWord.getValue());
 					Navigator navigator=SearchNavigableApplication.getCurrentNavigableAppLevelWindow().getNavigator();
 					navigator.navigateTo(ResultPage.class, (String)tfKeyWord.getValue()+"/"+(String)listLanguages.getValue());
 				}
