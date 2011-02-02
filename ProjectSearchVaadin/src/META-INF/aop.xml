@@ -1,0 +1,13 @@
+<!DOCTYPE aspectj PUBLIC
+        "-//AspectJ//DTD//EN" "[http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+    
+    <weaver>
+        <include within="blackbelt..*" />
+    </weaver>
+
+    <aspects>
+        <aspect name="org.springframework.beans.factory.aspectj.AnnotationBeanConfigurerAspect"/>
+        <aspect name="org.springframework.transaction.aspectj.AnnotationTransactionAspect"/>
+    </aspects>
+</aspectj>
