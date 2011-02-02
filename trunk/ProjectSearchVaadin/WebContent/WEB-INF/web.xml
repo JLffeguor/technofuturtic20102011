@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:javaee="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" id="WebApp_ID" version="2.4">
-  <javaee:display-name>ProjectSearchVaadinAspectJ</javaee:display-name>
+  <display-name>ProjectSearchVaadinAspectJ</display-name>
   <context-param>
-    <javaee:description>
-		Vaadin production mode</javaee:description>
-    <javaee:param-name>productionMode</javaee:param-name>
-    <javaee:param-value>false</javaee:param-value>
+    <description>
+		Vaadin production mode</description>
+    <param-name>productionMode</param-name>
+    <param-value>false</param-value>
   </context-param>
   <servlet>
     <servlet-name>Projectsearchvaadin Application</servlet-name>
     <servlet-class>org.vaadin.navigator7.NavigableApplicationServlet</servlet-class>
     <init-param>
-      <javaee:param-name>application</javaee:param-name>
-      <javaee:param-value>blackbelt.lucene.ui.SearchNavigableApplication</javaee:param-value>
+      <param-name>application</param-name>
+      <param-value>blackbelt.lucene.ui.SearchNavigableApplication</param-value>
     </init-param>
     <init-param>
-      <javaee:description>Navigator7 WebApplication class to start (optionnal)</javaee:description>
-      <javaee:param-name>webApplication</javaee:param-name>
-      <javaee:param-value>blackbelt.lucene.ui.SearchWebApplication</javaee:param-value>
+      <description>Navigator7 WebApplication class to start (optionnal)</description>
+      <param-name>webApplication</param-name>
+      <param-value>blackbelt.lucene.ui.SearchWebApplication</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
