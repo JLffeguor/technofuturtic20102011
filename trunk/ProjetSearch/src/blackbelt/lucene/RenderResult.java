@@ -3,10 +3,16 @@ package blackbelt.lucene;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.util.Version;
 
 @Deprecated
 public class RenderResult {
@@ -19,6 +25,12 @@ public class RenderResult {
 		this.keyword = keyword;
 	}
 
+	public void highlightResult(Document doc){
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
+		TokenStream tokens = new StandardAnalyzer(Version.LUCENE_30)
+				.tokenStream(new String[]{"title", "text"},new Reader(doc.get("text")));
+		Highlighter highlighter = new Highlighter();
+	}
 	public String extractResult(Document doc) {
 		String courseUrl="http://www.blackbeltfactory.com/ui#CoursePage/";
 		String textSectionFull = doc.get("text");
