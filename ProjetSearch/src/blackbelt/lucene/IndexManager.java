@@ -1,15 +1,22 @@
 package blackbelt.lucene;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Index;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.Field.TermVector;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -21,6 +28,13 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.highlight.SimpleSpanFragmenter; 
+import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,17 +119,22 @@ public class IndexManager {
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, 
 				new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
+		
+		//We use Highlight lucene library for display the result
+		
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
+		QueryScorer scorer = new QueryScorer(query,"title");
+		Highlighter highlighter = new Highlighter(formatter,scorer);
+		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer,45));
 
 		int hitsPerPage = 50;
 		// Search for the query
 		// TODO review the number of display per page 
 		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
 		searcher.search(query, collector);
-
+		
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-		
 		int hitCount = collector.getTotalHits();
-		
 		List<CourseSearchResult> listResultDocuments = new ArrayList<CourseSearchResult>();
 
 		// Examine the Hits object to see if there were any matches
@@ -128,65 +147,24 @@ public class IndexManager {
 
 			// Iterate over the Documents in the Hits object
 			//TODO review render result
-			//List<String> bigString = new ArrayList<String>();
+			//
 			//RenderResult rr = new RenderResult(keyWord);
+			List<String> bigString = new ArrayList<String>();
+			
 			
 			for (int i = 0; i < hits.length; i++) {
 				ScoreDoc scoreDoc = hits[i];
 				int docId = scoreDoc.doc;
-				listResultDocuments.add(new CourseSearchResult(scoreDoc.score,searcher.doc(docId)));
+				String title ;
+				
+				listResultDocuments.add(new CourseSearchResult(scoreDoc.score,
+						searcher.doc(docId),highlighter));
 			}
 		}
 		
 		return listResultDocuments;
 	}
 
-	/**
-	 * TODO this is a method used for the tests. will be removed at the integration
-	 */
-	public List<CourseSearchResult> searchBySectionId(String sectionId,String language) throws ParseException, IOException {
-
-		String queryString=sectionId + " AND language:" +language;
-
-		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
-
-		// Build a Query object
-		QueryParser parser = new QueryParser(Version.LUCENE_30, "sectionId",new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
-		Query query = parser.parse(queryString);
-		System.out.println(query);
-
-		int hitsPerPage = 50;
-		// Search for the query
-		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
-		searcher.search(query, collector);
-
-		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-
-		int hitCount = collector.getTotalHits();
-		System.out.println(hitCount + " total matching documents");
-
-		// Examine the Hits object to see if there were any matches
-
-		List<CourseSearchResult> listResultDocuments = new ArrayList<CourseSearchResult>();
-		if (hitCount == 0) {
-			System.out.println("No matches were found for \"" + query
-					+ "\"");
-		} else {
-			System.out.println("Hits for \"" + queryString
-					+ "\" were found in quotes by:");
-
-			// Iterate over the Documents in the Hits object
-			
-			for (int i = 0; i < hits.length; i++) {
-				ScoreDoc scoreDoc = hits[i];
-				int docId = scoreDoc.doc;
-				listResultDocuments.add(new CourseSearchResult(scoreDoc.score, searcher.doc(docId)));
-			}
-		}
-		
-		return listResultDocuments;
-	}
-	
 	/**
 	 * Some user who write course on BlackBelt write some tags. Some tags
 	 * are not delete with the BlackBeltTagHangdlerLuceneSearch So we have to clean those
@@ -225,16 +203,16 @@ public class IndexManager {
 		// Add a new Document to the index
 		Document doc = new Document();
 		
-		doc.add(new Field("id", String.valueOf(sectionText.getId()),Field.Store.YES, Field.Index.NOT_ANALYZED));
+		doc.add(new Field("id", String.valueOf(sectionText.getId()),Store.YES, Index.NOT_ANALYZED));
 		// We need the sectionId in the search results page to link to the CoursePage.
 		// TODO set Field.Index.NO
 		doc.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NOT_ANALYZED));
-		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED);
+		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS);
 		// This give more importance to title during the search
 		// The user see the result from the title before the result from the text 
 		titleField.setBoost(1.5f);
 		doc.add(titleField);
-		doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED));
+		doc.add(new Field("text", text, Field.Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS));
 		doc.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
 
 		return doc;
@@ -249,11 +227,30 @@ public class IndexManager {
 		private String title;
 		private String text;
 		
-		public CourseSearchResult(float score,Document doc){
+		public CourseSearchResult(float score,Document doc, Highlighter highlighter){
 			this.score=score;
-			title=doc.get("title");
+			//add <b> </b> around the word search in the title
+			TokenStream tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("title",new StringReader(doc.get("title")));
+			try {
+				title = highlighter.getBestFragments(tokens,doc.get("title"),1 ,"<BR/>");
+			}catch (InvalidTokenOffsetsException e){
+				throw new RuntimeException(e);
+			}catch (IOException e) {
+				throw new RuntimeException(e);
+			} 
+//			title=doc.get("title");
+			//add <b> </b> around the word search in the text
+			tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("text",new StringReader(doc.get("text")));
+			try {
+				title = highlighter.getBestFragments(tokens,doc.get("text"),4 ,"<BR/>...");
+			}catch (InvalidTokenOffsetsException e){
+				throw new RuntimeException(e);
+			}catch (IOException e) {
+				throw new RuntimeException(e);
+			} 
 			text=doc.get("text");
 			sectionId=doc.get("sectionId");
+			
 		}
 
 		public float getScore() {

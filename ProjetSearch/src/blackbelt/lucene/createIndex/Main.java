@@ -17,8 +17,9 @@ public class Main {
 		// RAMDirectory idx = new RAMDirectory();
 		
 		try {
-			
-			new IndexManager().createIndexes();
+			ApplicationContext applicationContext=new ClassPathXmlApplicationContext("applicationContext.xml");
+			IndexManager indexManager=(IndexManager)applicationContext.getBean("indexManager");
+			indexManager.createIndexes();
 			
 		} catch (Exception e) {
 			throw new RuntimeException(e);

@@ -37,5 +37,8 @@
 			<attribute name="javadoc_location" value="http://lucene.apache.org/java/3_0_3/api/demo"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/lucene_303/lucene-highlighter-3.0.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/lucene_303/lucene-highlighter-3.0.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/lucene_303/lucene-highlighter-3.0.2.jar" sourcepath="lib/lucene_303/lucene-highlighter-3.0.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
