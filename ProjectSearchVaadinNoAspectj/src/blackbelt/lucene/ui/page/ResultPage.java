@@ -26,6 +26,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  */
 @Page
+// TODO @Configurable(preConpile=true);
 public class ResultPage extends VerticalLayout implements ParamChangeListener {
 
     @Param(pos = 0, required = true)
@@ -42,7 +43,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     public void paramChanged(NavigationEvent navigationEvent) {
         try {
             //Start a search 
-            resultList = SpringUtil.getBean().searchByKeyWordAndLanguage(keyWord, language);
+            resultList = SpringUtil.getBean().searchByKeyWordAndLanguage(keyWord, language);  // TODO Autowired
             //if results found -> display all results. Else display a message "no result"
             if(resultList.size()>0){
                 for(CourseSearchResult courseSearchResult : resultList){
@@ -66,7 +67,11 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
         public ResultDisplayer(CourseSearchResult courseSearchResult) {
             HorizontalLayout titleLinkWithScore =new HorizontalLayout();
             titleLinkWithScore.addComponent(new ParamPageLink(courseSearchResult.getTitle(), CoursePage.class, courseSearchResult.getSectionId(), courseSearchResult.getLanguage()));
-            titleLinkWithScore.addComponent(new Label("Score: " + (int)(courseSearchResult.getScore()*10) + " %"));
+            //titleLinkWithScore.addComponent(new Label());
+            Label score=new Label("Score: " + Math.round(courseSearchResult.getScore()*10) + " %");//Display the score of the result in % without decimal.
+            score.setStyleName("rightAlign");
+            titleLinkWithScore.addComponent(score); //Display the score of the result in % without decimal.
+            titleLinkWithScore.setWidth("100%");
             
             Label labelText=new Label(courseSearchResult.getText());
             labelText.setContentMode(Label.CONTENT_XHTML);

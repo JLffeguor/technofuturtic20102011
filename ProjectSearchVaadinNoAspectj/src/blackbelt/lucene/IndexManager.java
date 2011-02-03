@@ -56,6 +56,10 @@ public class IndexManager {
 	 * */
 	public final Set<String> STOP_WORDS = new HashSet<String>();
 
+	/**
+	 * Lucene create an index with only the last version of each course in each language
+	 * TODO change Directory for integration
+	 */
 	public void createIndexes() throws IOException, CorruptIndexException {
 
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
@@ -75,35 +79,46 @@ public class IndexManager {
 	}
 	
 	/**
-	 *Update Document is a method in Lucene to update the index
-	 *It take a Term and a document as param 
-	 *A Term represents a word from text.  This is the unit of search.  
-	 *It is composed of two elements,the text of the word, as a string,
-	 * and the name of the field that the text occurred in, an interned string.*/
+	 *User create a new Version of a existing SectionText
+	 *Just give the new Version of SectionText
+	 **/
 	public void updateSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
+		
 		writer.updateDocument(new Term("id", String.valueOf(sectionText.getId())), createDocument(sectionText));
 		writer.close();
 	}
-	
-	public void deleteSectionTextById(String id) throws IOException, CorruptIndexException {
-		IndexWriter writer = getIndexWriter();
-		writer.deleteDocuments(new Term("id", id));
-		writer.close();
-	} 
-
-	public void addSectionText(SectionText sectionText) throws IOException, CorruptIndexException {
+//	/**
+//	 *User will delete a Section (you delete all versions in each languages).
+//	 *Just give the Section you will delete
+//	 */
+//	public void deleteSection(Section section) throws IOException, CorruptIndexException {
+//		IndexWriter writer = getIndexWriter();
+//		writer.deleteDocuments(new Term("id", id));
+//		writer.close();
+//	} 
+	/**
+	 * User creates a new Section. We get, as parameter, the first version (SectionText).
+	 * */
+	public void addSection(SectionText sectionText) throws IOException, CorruptIndexException {
 		IndexWriter writer = getIndexWriter();
 		writer.addDocument(createDocument(sectionText));
 		writer.close();
 	}
 
+	/**
+	 * Return an IndexWriter allows to read and write in the index of lucene 
+	 */
 	private IndexWriter getIndexWriter() throws IOException, CorruptIndexException {
 		SimpleFSDirectory indexDirectory = new SimpleFSDirectory(new File(DIRECTORY));
 		StandardAnalyzer standardAnalyzer = new StandardAnalyzer(Version.LUCENE_30,STOP_WORDS);
 		return new IndexWriter(indexDirectory, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 	}
 
+	/**
+	 * Used when the user will search one or more words in a SectionText
+	 * User can choice the language
+	 */
 	public List<CourseSearchResult> searchByKeyWordAndLanguage(String keyWord, String language) throws ParseException, IOException {
 
 		String queryString="(" + keyWord + ") AND language:" + language;
@@ -115,10 +130,10 @@ public class IndexManager {
 				new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 		
-		//We use Highlight lucene library to format the result 
 		
 		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
 		QueryScorer scorer = new QueryScorer(query,"title");
+        //We use Highlight lucene library to format the result 
 		Highlighter highlighter = new Highlighter(formatter,scorer);
 		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer,45));
 
@@ -137,20 +152,11 @@ public class IndexManager {
 			System.out.println("No matches were found for \"" + query
 					+ "\"");
 		} else {
-			System.out.println("Hits for \"" + query
-					+ "\" were found in quotes by:");
+			System.out.println("Hits for \"" + query + "\" were found in quotes by:");
 
-			// Iterate over the Documents in the Hits object
-			//TODO review render result
-			//
-			//RenderResult rr = new RenderResult(keyWord);
-			List<String> bigString = new ArrayList<String>();
-			
-			
 			for (int i = 0; i < hits.length; i++) {
 				ScoreDoc scoreDoc = hits[i];
 				int docId = scoreDoc.doc;
-				String title ;
 				
 				listResultDocuments.add(new CourseSearchResult(scoreDoc.score,
 						searcher.doc(docId),highlighter));
@@ -162,7 +168,7 @@ public class IndexManager {
 
 	/**
 	 * Some user who write course on BlackBelt write some tags. Some tags
-	 * are not delete with the BlackBeltTagHangdlerLuceneSearch So we have to clean those
+	 * are not deleted with the BlackBeltTagHangdlerLuceneSearch So we have to clean those
 	 * tags with this method.
 	 * */
 	private String cleanHtmlTags(String textToFormat) {
@@ -189,6 +195,10 @@ public class IndexManager {
 		return result;
 	}
 
+	/**
+	 * Return a Document used for indexation with lucene.
+	 * Document containt all information about a SectionText. 
+	 */
 	private Document createDocument(SectionText sectionText) {
 		// use BlackBeltTagHandlerLuceneSearch to escape the BlackBelt tag from sectiontext
 		BlackBeltTagParser blackBeltTagParser=new BlackBeltTagParser(new BlackBeltTagHandlerLuceneSearch(), sectionText.getText());
@@ -200,7 +210,6 @@ public class IndexManager {
 		
 		doc.add(new Field("id", String.valueOf(sectionText.getId()),Store.YES, Index.NOT_ANALYZED));
 		// We need the sectionId in the search results page to link to the CoursePage.
-		// TODO set Field.Index.NO
 		doc.add(new Field("sectionId", String.valueOf(sectionText.getSectionid()),Field.Store.YES, Field.Index.NOT_ANALYZED));
 		Field titleField=new Field("title", sectionText.getTitle(), Field.Store.YES, Field.Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS);
 		// This give more importance to title during the search
@@ -223,32 +232,31 @@ public class IndexManager {
 		private String text;
 		private String language;
 		
-		public CourseSearchResult(float score,Document doc, Highlighter highlighter){
-			this.score=score;
-			//add <b> </b> around the word search in the title
-			TokenStream tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("title",new StringReader(doc.get("title")));
-			try {
-				title = highlighter.getBestFragments(tokens,doc.get("title"),1 ,"<BR/>");
-				if (title.isEmpty()){
-				    title=doc.get("title");
-				}
-			}catch (InvalidTokenOffsetsException e){
-				throw new RuntimeException(e);
-			}catch (IOException e) {
-				throw new RuntimeException(e);
-			} 
-			//add <b> </b> around the word search in the text
-			tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("text",new StringReader(doc.get("text")));
-			try {
-				text = highlighter.getBestFragments(tokens,doc.get("text"),4 ,"<BR/>...");
-			}catch (InvalidTokenOffsetsException e){
-				throw new RuntimeException(e);
-			}catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			sectionId=doc.get("sectionId");
-			language=doc.get("language").toUpperCase();
-			
+		public CourseSearchResult(float score, Document doc, Highlighter highlighter){
+		    try {
+		        this.score=score;
+                sectionId=doc.get("sectionId");
+                language=doc.get("language").toUpperCase();
+		        
+		        //// Title
+		        //add <b> </b> around the word search in the title
+		        TokenStream tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("title",new StringReader(doc.get("title")));
+		        title = highlighter.getBestFragments(tokens, doc.get("title"),1 ,"<BR/>");
+		        if (title.isEmpty()){
+		            title=doc.get("title");
+		        }
+		        
+		        //// Text
+		        //add <b> </b> around the word search in the text
+		        tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("text",new StringReader(doc.get("text")));
+		        text = highlighter.getBestFragments(tokens, doc.get("text"),4 ,"<BR/>...");
+
+		    }catch (InvalidTokenOffsetsException e){
+		        throw new RuntimeException(e);
+		    }catch (IOException e) {
+		        throw new RuntimeException(e);
+		    }
+
 		}
 
 		public float getScore() {
