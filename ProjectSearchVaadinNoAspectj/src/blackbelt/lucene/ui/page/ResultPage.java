@@ -58,7 +58,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     }
 
     /**
-     * Create a layout to dislpay a result  
+     * Create a layout to display a result  
      *
      */
     private static class ResultDisplayer extends VerticalLayout {
