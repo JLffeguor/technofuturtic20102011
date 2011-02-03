@@ -31,5 +31,8 @@
 }
 .redLayout:hover {
 	color:red;
-}	
+}
+.rightAlign{
+	text-align:right;
+}
 /* END OF COPY/PASTE */
