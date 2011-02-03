@@ -8,6 +8,9 @@ import blackbelt.lucene.ui.page.CoursePage;
 import blackbelt.lucene.ui.page.ResultPage;
 import blackbelt.lucene.ui.page.SearchPage;
 
+/**
+ * This class is only use for demo and test
+ * */
 public class SearchWebApplication extends WebApplication implements Serializable{
 	
 	public SearchWebApplication() {

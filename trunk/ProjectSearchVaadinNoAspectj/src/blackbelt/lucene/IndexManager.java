@@ -115,7 +115,7 @@ public class IndexManager {
 				new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
 		Query query = parser.parse(queryString);
 		
-		//We use Highlight lucene library for display the result
+		//We use Highlight lucene library to format the result 
 		
 		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
 		QueryScorer scorer = new QueryScorer(query,"title");
@@ -237,7 +237,6 @@ public class IndexManager {
 			}catch (IOException e) {
 				throw new RuntimeException(e);
 			} 
-//			title=doc.get("title");
 			//add <b> </b> around the word search in the text
 			tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("text",new StringReader(doc.get("text")));
 			try {
@@ -278,7 +277,6 @@ public class IndexManager {
 
         @Override
 		public String toString() {
-			// TODO Auto-generated method stub
 			return "Score: " + score + " // title: " + title;
 		}
 	}

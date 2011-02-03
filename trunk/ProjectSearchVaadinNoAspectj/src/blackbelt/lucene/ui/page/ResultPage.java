@@ -30,13 +30,11 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     private List<CourseSearchResult> resultList;
 
     public ResultPage() {
-        // TODO Auto-generated constructor stub
         this.setSpacing(true);
     }
 
     @Override
     public void paramChanged(NavigationEvent navigationEvent) {
-        // TODO Auto-generated method stub
         try {
             resultList = SpringUtil.getBean().searchByKeyWordAndLanguage(keyWord, language);
             if(resultList.size()>0){
@@ -46,32 +44,22 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
             }else
                 this.addComponent(new Label("No result"));
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           throw new RuntimeException(e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	throw new RuntimeException(e);
         }
     }
 
-    private static class ResultDisplayer extends VerticalLayout implements LayoutClickListener{
+    private static class ResultDisplayer extends VerticalLayout {
         
         public ResultDisplayer(CourseSearchResult courseSearchResult) {
-            // TODO Auto-generated constructor stub
             this.addComponent(new ParamPageLink(courseSearchResult.getTitle(), CoursePage.class, courseSearchResult.getSectionId(), courseSearchResult.getLanguage()));
             Label labelText=new Label(courseSearchResult.getText());
             labelText.setContentMode(Label.CONTENT_XHTML);
             this.addComponent(labelText);
-            this.addListener(this);
             this.setStyleName("redLayout");
         }
 
-        @Override
-        public void layoutClick(LayoutClickEvent event) {
-            // TODO Auto-generated method stub
-            this.setStyleName("redLayout");
-        }
     }
     
-    private static class LinkTest implements componant
 }
