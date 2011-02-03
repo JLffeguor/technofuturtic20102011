@@ -44,7 +44,6 @@ public class SearchPage extends VerticalLayout {
 			
 			@Override
 			public void buttonClick(ClickEvent event) {
-				// TODO Auto-generated method stub
 				PageResource pageResource=new PageResource(ResultPage.class);
 				
 				if("".equals(tfKeyWord.getValue())){

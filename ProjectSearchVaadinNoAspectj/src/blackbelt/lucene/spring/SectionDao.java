@@ -15,7 +15,7 @@ public class SectionDao {
 	@PersistenceContext
 	EntityManager em;
 	
-	// TODO: move to SectionTextDao
+	// TODO: move to SectionTextDao during integration
 	@Transactional
 	public List<SectionText> findLastVersionOfEachSectionTexts(){
 		return em.createQuery("select s1 from SectionText s1 where s1.version=(" +

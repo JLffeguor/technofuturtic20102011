@@ -16,13 +16,11 @@ public class CoursePage extends VerticalLayout implements ParamChangeListener{
     String language;
     
     public CoursePage() {
-        // TODO Auto-generated constructor stub
         this.addComponent(new Label("Course page"));
     }
     
     @Override
     public void paramChanged(NavigationEvent navigationEvent) {
-        // TODO Auto-generated method stub
         
     }
 

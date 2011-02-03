@@ -4,7 +4,9 @@ import org.vaadin.navigator7.window.HeaderFooterFixedAppLevelWindow;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-
+/**
+ * This class is only use for demo and test
+ * */
 public class SearchAppLevelApplication extends HeaderFooterFixedAppLevelWindow{
 
 	public SearchAppLevelApplication() {
@@ -13,13 +15,11 @@ public class SearchAppLevelApplication extends HeaderFooterFixedAppLevelWindow{
 	
 	@Override
 	protected Component createHeader() {
-		// TODO Auto-generated method stub
 		return new Label("HEADER");
 	}
 
 	@Override
 	protected Component createFooter() {
-		// TODO Auto-generated method stub
 		return new Label("FOOTER");
 	}
 
