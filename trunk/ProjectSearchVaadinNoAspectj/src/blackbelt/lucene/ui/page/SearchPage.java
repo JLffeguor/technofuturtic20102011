@@ -23,6 +23,8 @@ import com.vaadin.ui.VerticalLayout;
 @Page
 public class SearchPage extends VerticalLayout {
 	
+    //Languages of each course
+    //TODO must be modified at the integration
 	private static final List<String> LANGUAGES=Arrays.asList(
 				"FR", "EN", "IT", "RU" 
 			);
@@ -32,12 +34,13 @@ public class SearchPage extends VerticalLayout {
 	public SearchPage() {
 		HorizontalLayout horizontalLayout=new HorizontalLayout();
 		
+		
 		tfKeyWord =new TextField();
-		tfKeyWord.setHeight("25px");
+		tfKeyWord.setHeight("25px"); // Resizing the height of textfield to equal the height of button search   
 		listLanguages=new NativeSelect(null,LANGUAGES);
-		listLanguages.setValue(LANGUAGES.get(1));
+		listLanguages.setValue(LANGUAGES.get(1)); // Select EN language by default
 		listLanguages.setNullSelectionAllowed(false);
-		listLanguages.setHeight("25px");
+		listLanguages.setHeight("25px"); // Resizing the height of textfield to equal the height of button search
 		Button btnSearch=new Button("Search");
 		btnSearch.setClickShortcut(KeyCode.ENTER);
 		btnSearch.addListener(new Button.ClickListener() {
@@ -47,9 +50,9 @@ public class SearchPage extends VerticalLayout {
 				PageResource pageResource=new PageResource(ResultPage.class);
 				
 				if("".equals(tfKeyWord.getValue())){
+				    //TODO create a popu at the integration
 					System.out.println("no good");
 				}else{
-				    System.out.println("****************"+tfKeyWord.getValue());
 					Navigator navigator=SearchNavigableApplication.getCurrentNavigableAppLevelWindow().getNavigator();
 					navigator.navigateTo(ResultPage.class, (String)tfKeyWord.getValue()+"/"+(String)listLanguages.getValue());
 				}
@@ -61,7 +64,7 @@ public class SearchPage extends VerticalLayout {
 		horizontalLayout.addComponent(listLanguages);
 		horizontalLayout.addComponent(btnSearch);
 		
-		Button btnCreateIndex = new Button("Create index");
+		Button btnCreateIndex = new Button("Create index"); //Button test to create the index
 		btnCreateIndex.addListener(new Button.ClickListener() {
             
             @Override

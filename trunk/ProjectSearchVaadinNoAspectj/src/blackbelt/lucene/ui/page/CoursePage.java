@@ -8,6 +8,11 @@ import org.vaadin.navigator7.uri.Param;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * It is a test page.
+ * TODO remove at the integration
+ *
+ */
 @Page
 public class CoursePage extends VerticalLayout implements ParamChangeListener{
     @Param(pos=0, required=true)

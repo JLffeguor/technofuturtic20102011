@@ -16,10 +16,15 @@ import blackbelt.lucene.spring.SpringUtil;
 
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * This page display each results found by Lucene 
+ *
+ */
 @Page
 public class ResultPage extends VerticalLayout implements ParamChangeListener {
 
@@ -36,7 +41,9 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     @Override
     public void paramChanged(NavigationEvent navigationEvent) {
         try {
+            //Start a search 
             resultList = SpringUtil.getBean().searchByKeyWordAndLanguage(keyWord, language);
+            //if results found -> display all results. Else display a message "no result"
             if(resultList.size()>0){
                 for(CourseSearchResult courseSearchResult : resultList){
                     this.addComponent(new ResultDisplayer(courseSearchResult));
@@ -50,14 +57,22 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
         }
     }
 
+    /**
+     * Create a layout to dislpay a result  
+     *
+     */
     private static class ResultDisplayer extends VerticalLayout {
         
         public ResultDisplayer(CourseSearchResult courseSearchResult) {
-            this.addComponent(new ParamPageLink(courseSearchResult.getTitle(), CoursePage.class, courseSearchResult.getSectionId(), courseSearchResult.getLanguage()));
+            HorizontalLayout titleLinkWithScore =new HorizontalLayout();
+            titleLinkWithScore.addComponent(new ParamPageLink(courseSearchResult.getTitle(), CoursePage.class, courseSearchResult.getSectionId(), courseSearchResult.getLanguage()));
+            titleLinkWithScore.addComponent(new Label("Score: " + (int)(courseSearchResult.getScore()*10) + " %"));
+            
             Label labelText=new Label(courseSearchResult.getText());
             labelText.setContentMode(Label.CONTENT_XHTML);
+            
+            this.addComponent(titleLinkWithScore);
             this.addComponent(labelText);
-            this.setStyleName("redLayout");
         }
 
     }
