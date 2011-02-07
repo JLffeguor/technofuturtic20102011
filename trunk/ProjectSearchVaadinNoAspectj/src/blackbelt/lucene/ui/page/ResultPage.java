@@ -23,7 +23,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * This page display each results found by Lucene 
+ * This page display each results found by Lucene  
  *
  */
 @Page
@@ -199,7 +199,17 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
     	
     	public void reorganizeButtonsPage(){
     		
-    		if (currentPage>BUTTON_PAGE_EDGE && currentPage<(numberTotalOfPages-BUTTON_PAGE_EDGE-1)){
+    		if(currentPage<=BUTTON_PAGE_EDGE){
+    		    for(int i=0;i<HIT_PER_PAGE;i++){
+                    listButtons.get(i).setCaption(String.valueOf(i+1));
+                }
+    		}else if(currentPage>=numberTotalOfPages-BUTTON_PAGE_EDGE){
+                for(int i=numberTotalOfPages;i<HIT_PER_PAGE;i--){
+                    listButtons.get(i).setCaption(String.valueOf(i+1));
+                }
+            }
+    	    
+    	    if (currentPage>BUTTON_PAGE_EDGE && currentPage<(numberTotalOfPages-BUTTON_PAGE_EDGE-1)){
     			listButtons.get(4).setCaption(String.valueOf(currentPage));
 //    			for(int i=0;i<BUTTON_PAGE_EDGE;i++){
 //    				listButtons.get(i).setCaption(String.valueOf(currentPage+i));
