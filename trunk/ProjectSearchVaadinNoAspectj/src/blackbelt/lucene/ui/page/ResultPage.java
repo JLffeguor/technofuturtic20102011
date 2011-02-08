@@ -18,29 +18,28 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * This page display each results found by Lucene  
+ * This page display each results found by Lucene 
  *
  */
 @Page
 // TODO @Configurable(preConpile=true);
-public class ResultPage extends VerticalLayout implements ParamChangeListener, ClickListener {
+public class ResultPage extends VerticalLayout implements ParamChangeListener {
 
     @Param(pos = 0, required = true)
     private String keyWord;
     @Param(pos = 1, required = true)
     private String language;
-    
-    private static final int HIT_PER_PAGE = 3;
+
+	private static final int HIT_PER_PAGE = 3;
     private VerticalLayout layoutResult;
-    private Button buttonBack,buttonNext;
     private List<CourseSearchResult> resultList;
-    private int numberOfResults,currentPage,numberTotalOfPages;
-    private ResultNavigator resultNavigator;
+    private int numberOfResults,currentPageOfResults;
 
     public ResultPage() {
         this.setSpacing(true);
@@ -50,7 +49,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
     public void paramChanged(NavigationEvent navigationEvent) {
         try {
             //Start a search
-        	currentPage=1;
+        	currentPageOfResults=1;
         	layoutResult=new VerticalLayout();
         	layoutResult.setSpacing(true);
         	layoutResult.setMargin(true);
@@ -60,9 +59,9 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
             this.addComponent(layoutResult);
             
 //            displayAll();
-            displayPageOfResult(currentPage);
+            displayActualPageOfResult();
             
-    		resultNavigator=new ResultNavigator();
+    		ResultNavigator resultNavigator=new ResultNavigator();
     		this.addComponent(resultNavigator);
     		this.setComponentAlignment(resultNavigator, Alignment.MIDDLE_CENTER);
             
@@ -73,7 +72,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
         }
     }
     
-    //TADO remove at the integration
+    //TODO remove at the integration
     private void displayAll(){
     	// if results found -> display all results. Else display a message "no result"
     	if (resultList.size() > 0) {
@@ -85,31 +84,10 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
     	}
     }
     
-//    private void createResultNavigator() {
-//    	HorizontalLayout resultNavigator=new HorizontalLayout();
-//    	resultNavigator.setSpacing(true);
-//		numberTotalOfPages=(int)Math.ceil((double)numberOfResults/HIT_PER_PAGE);
-//		
-//		buttonBack=new Button("< Back",this);
-//		resultNavigator.addComponent(buttonBack);
-//		resultNavigator.addComponent(new Label("-"));
-//		
-//		for(int i=1;i<=numberTotalOfPages;i++){
-//			resultNavigator.addComponent(new Button(String.valueOf(i),this));
-//		}
-//		
-//		resultNavigator.addComponent(new Label("-"));
-//		buttonNext=new Button("Next >",this);
-//		resultNavigator.addComponent(buttonNext);
-//		
-//		this.addComponent(resultNavigator);
-//		this.setComponentAlignment(resultNavigator, Alignment.MIDDLE_CENTER);
-//    }
-    
-	private void displayPageOfResult(int page) {
+	private void displayActualPageOfResult() {
 		
-		int hitStart=(page-1)*HIT_PER_PAGE;
-		int hitEnd=page*HIT_PER_PAGE;
+		int hitStart=(currentPageOfResults-1)*HIT_PER_PAGE;
+		int hitEnd=currentPageOfResults*HIT_PER_PAGE;
 		
 		if (hitEnd>numberOfResults){
 			hitEnd=numberOfResults;
@@ -118,33 +96,6 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
 		layoutResult.removeAllComponents();
 		for (int i = hitStart; i < hitEnd; i++) {
 			layoutResult.addComponent(new ResultDisplayer(resultList.get(i)));
-		}
-	}
-
-	@Override
-	public void buttonClick(ClickEvent event) {
-		System.out.println("ok");
-		if(event.getButton()==buttonBack){
-			System.out.println("Back");
-			if(currentPage!=1){
-				currentPage--;
-				displayPageOfResult(currentPage);
-				resultNavigator.reorganizeButtonsPage();
-			}
-		} else if (event.getButton()==buttonNext){
-			System.out.println("Next");
-			if(currentPage<numberTotalOfPages){
-				currentPage++;
-				displayPageOfResult(currentPage);
-				resultNavigator.reorganizeButtonsPage();
-			}
-		} else {
-			int pageSelected=Integer.valueOf(event.getButton().getCaption());
-			if(currentPage!=pageSelected){
-				currentPage=pageSelected;
-				displayPageOfResult(pageSelected);
-				resultNavigator.reorganizeButtonsPage();
-			}
 		}
 	}
 
@@ -170,55 +121,133 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener, C
         }
     }
     
-    private class ResultNavigator extends HorizontalLayout{
-    	private static final int NBR_BUTTON_PAGE = 9;
+    private class ResultNavigator extends HorizontalLayout implements ClickListener {
+    	private static final int NBR_BUTTONS_PAGE = 9;
     	private static final int BUTTON_PAGE_EDGE = 4;
-    	private List<Button> listButtons;
+    	private int numberTotalOfPages;
+    	private List<ButtonPageNavigator> listButtons;
+        private Button buttonBack,buttonNext;
     	
     	public ResultNavigator() {
         	this.setSpacing(true);
     		numberTotalOfPages=(int)Math.ceil((double)numberOfResults/HIT_PER_PAGE);
     		
-    		buttonBack=new Button("< Back",ResultPage.this);
+    		buttonBack=new ButtonNavigator("< Back",this);
     		this.addComponent(buttonBack);
     		this.addComponent(new Label("-"));
     		
-    		listButtons=new ArrayList<Button>();
+    		listButtons=new ArrayList<ButtonPageNavigator>();
     		
-    		for(int i=1;i<=numberTotalOfPages && i<=NBR_BUTTON_PAGE;i++){
-    			Button buttonPage=new Button(String.valueOf(i),ResultPage.this);
-    			buttonPage.setImmediate(true);
+    		for(int i=0;i<numberTotalOfPages && i<NBR_BUTTONS_PAGE;i++){
+    			ButtonPageNavigator buttonPage=new ButtonPageNavigator(i+1,this);
     			listButtons.add(buttonPage);
     			this.addComponent(buttonPage);
     		}
     		
     		this.addComponent(new Label("-"));
-    		buttonNext=new Button("Next >",ResultPage.this);
+    		buttonNext=new ButtonNavigator("Next >",this);
     		this.addComponent(buttonNext);
 		}
     	
-    	public void reorganizeButtonsPage(){
-    		
-    		if(currentPage<=BUTTON_PAGE_EDGE){
-    		    for(int i=0;i<HIT_PER_PAGE;i++){
-                    listButtons.get(i).setCaption(String.valueOf(i+1));
-                }
-    		}else if(currentPage>=numberTotalOfPages-BUTTON_PAGE_EDGE){
-                for(int i=numberTotalOfPages;i<HIT_PER_PAGE;i--){
-                    listButtons.get(i).setCaption(String.valueOf(i+1));
-                }
-            }
-    	    
-    	    if (currentPage>BUTTON_PAGE_EDGE && currentPage<(numberTotalOfPages-BUTTON_PAGE_EDGE-1)){
-    			listButtons.get(4).setCaption(String.valueOf(currentPage));
-//    			for(int i=0;i<BUTTON_PAGE_EDGE;i++){
-//    				listButtons.get(i).setCaption(String.valueOf(currentPage+i));
-//    				listButtons.get(NBR_BUTTON_PAGE-i-1).setCaption(String.valueOf(currentPage-i));
-//    			}
-    			for(int i=currentPage-BUTTON_PAGE_EDGE,j=0;i<=currentPage+BUTTON_PAGE_EDGE;i++,j++){
-    				listButtons.get(j).setCaption(String.valueOf(i));
+    	private void reorganizeButtonsPage(){
+    		if (numberTotalOfPages>NBR_BUTTONS_PAGE){
+    			if (currentPageOfResults<=BUTTON_PAGE_EDGE){
+    				for(int i=0;i<NBR_BUTTONS_PAGE;i++){
+    					listButtons.get(i).setCaptionCkeckActualPage(i+1);
+    				}
+    			} else if(currentPageOfResults>=numberTotalOfPages-BUTTON_PAGE_EDGE){
+    				for(int i=numberTotalOfPages,j=NBR_BUTTONS_PAGE-1;j>=0;i--,j--){
+    					listButtons.get(j).setCaptionCkeckActualPage(i);
+    				}
+    			} else {
+    				//if (currentPageOfResults>BUTTON_PAGE_EDGE && currentPageOfResults<(numberTotalOfPages-BUTTON_PAGE_EDGE-1))
+    				//listButtons.get(4).setCaption(String.valueOf(currentPage));
+//    				for(int i=currentPageOfResults-BUTTON_PAGE_EDGE,j=0;i<=currentPageOfResults+BUTTON_PAGE_EDGE;i++,j++){
+//    					listButtons.get(j).setCaption(i==currentPageOfResults ? "<b>"+currentPageOfResults+"</b>" : String.valueOf(i));
+//    				}
+    				
+    				int indexOfMiddelButton=NBR_BUTTONS_PAGE/2;
+    				listButtons.get(indexOfMiddelButton).setCaptionBold(currentPageOfResults);
+    				
+    				for(int i=1,j=indexOfMiddelButton;i<=indexOfMiddelButton;i++){
+    					listButtons.get(j+i).setCaptionNotCkeckActualPage(currentPageOfResults+i);
+    					listButtons.get(j-i).setCaptionNotCkeckActualPage(currentPageOfResults-i);
+    				}
     			}
     		}
+    	}
+    	
+    	@Override
+    	public void buttonClick(ClickEvent event) {
+    		
+    		if(event.getButton()==buttonBack){
+    			if(currentPageOfResults!=1){
+    				currentPageOfResults--;
+    				displayActualPageOfResult();
+    				reorganizeButtonsPage();
+    			}
+    		} else if (event.getButton()==buttonNext){
+    			if(currentPageOfResults<numberTotalOfPages){
+    				currentPageOfResults++;
+    				displayActualPageOfResult();
+    				reorganizeButtonsPage();
+    			}
+    		} else {
+    			ButtonPageNavigator button=(ButtonPageNavigator)event.getButton();
+    			if(currentPageOfResults!=button.getPage()){
+    				currentPageOfResults=button.getPage();
+    				displayActualPageOfResult();
+    				reorganizeButtonsPage();
+    			}
+    		}
+    	}
+    }
+    
+    private static class ButtonNavigator extends Button {
+    	
+    	public ButtonNavigator() {
+    		setImmediate(true);
+    		setStyleName(BaseTheme.BUTTON_LINK);
+		}
+    	
+    	public ButtonNavigator(String caption, ClickListener listener) {
+    		super(caption, listener);
+    		setImmediate(true);
+    		setStyleName(BaseTheme.BUTTON_LINK);
+		}
+    }
+    
+    private class ButtonPageNavigator extends ButtonNavigator {
+    	private int page;
+    	
+    	public ButtonPageNavigator(int page, ClickListener listener) {
+    		setCaptionCkeckActualPage(page);
+    		addListener(listener);
+    		setImmediate(true);
+    		setStyleName(BaseTheme.BUTTON_LINK);
+		}
+    	
+    	public void setCaptionCkeckActualPage(int page){
+    		if (page==currentPageOfResults){
+    			setCaptionBold(page);
+    		}else{
+    			setCaption(String.valueOf(page));
+    		}
+    		this.page=page;
+    	}
+    	
+    	public void setCaptionNotCkeckActualPage(int page){
+    		this.page=page;
+    		setCaption(String.valueOf(page));
+    	}
+    	
+    	public void setCaptionBold(int page){
+    		this.page=page;
+    		setCaption("<b>"+page+"</b>");
+    	}
+    	
+    	public int getPage(){
+    		return page;
     	}
     }
 }
