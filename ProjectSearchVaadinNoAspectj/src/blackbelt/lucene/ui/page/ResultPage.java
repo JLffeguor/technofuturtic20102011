@@ -132,7 +132,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
         	this.setSpacing(true);
     		numberTotalOfPages=(int)Math.ceil((double)numberOfResults/HIT_PER_PAGE);
     		
-    		buttonBack=new ButtonNavigator("< Back",this);
+    		buttonBack=new ButtonNavigator("< Previous",this);
     		this.addComponent(buttonBack);
     		this.addComponent(new Label("-"));
     		
