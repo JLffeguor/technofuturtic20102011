@@ -2,13 +2,10 @@ package blackbelt.lucene;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -24,12 +21,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.lucene.search.highlight.SimpleSpanFragmenter;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,51 +111,37 @@ public class IndexManager {
 	 * Used when the user will search one or more words in a SectionText
 	 * User can choice the language
 	 */
-	public List<CourseSearchResult> searchByKeyWordAndLanguage(String keyWord, String language) throws ParseException, IOException {
+	public ScoreDoc[] searchByKeyWordAndLanguage(String keyWord, String language) {
+		try {
+			String queryString="(" + keyWord + ") AND language:" + language;
+			Searcher searcher;
+			searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
+			// Build a Query object
+			MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, 
+					new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
+			Query query = parser.parse(queryString);
+			int hitsPerPage = 1000;
+			TopDocs hits=searcher.search(query, hitsPerPage);
 
-		String queryString="(" + keyWord + ") AND language:" + language;
-
-		Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
-
-		// Build a Query object
-		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, 
-				new String[]{"title", "text"}, new StandardAnalyzer(Version.LUCENE_30, STOP_WORDS));
-		Query query = parser.parse(queryString);
-		
-		
-		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
-		QueryScorer scorer = new QueryScorer(query,"title");
-        //We use Highlight lucene library to format the result 
-		Highlighter highlighter = new Highlighter(formatter,scorer);
-		highlighter.setTextFragmenter(new SimpleSpanFragmenter(scorer,45));
-
-		int hitsPerPage = 50;
-		// Search for the query
-		// TODO review the number of display per page 
-		TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage, false);
-		searcher.search(query, collector);
-		
-		ScoreDoc[] hits = collector.topDocs().scoreDocs;
-		int hitCount = collector.getTotalHits();
-		List<CourseSearchResult> listResultDocuments = new ArrayList<CourseSearchResult>();
-
-		// Examine the Hits object to see if there were any matches
-		if (hitCount == 0) {
-			System.out.println("No matches were found for \"" + query
-					+ "\"");
-		} else {
-			System.out.println("Hits for \"" + query + "\" were found in quotes by:");
-
-			for (int i = 0; i < hits.length; i++) {
-				ScoreDoc scoreDoc = hits[i];
-				int docId = scoreDoc.doc;
-				
-				listResultDocuments.add(new CourseSearchResult(scoreDoc.score,
-						searcher.doc(docId),highlighter));
-			}
+			return hits.scoreDocs;
+		} catch (CorruptIndexException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
 		}
-		
-		return listResultDocuments;
+	}
+	
+	public Document findDocument(ScoreDoc scoreDoc){
+		try {
+			Searcher searcher = new IndexSearcher(new SimpleFSDirectory(new File(DIRECTORY)));
+			return searcher.doc(scoreDoc.doc);
+		} catch (CorruptIndexException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -220,72 +198,5 @@ public class IndexManager {
 		doc.add(new Field("language", sectionText.getLanguage(), Field.Store.YES,Field.Index.ANALYZED));
 
 		return doc;
-	}
-	
-	/**
-	 * This class contains all information of an item found during a search to display it later.
-	 */
-	public static class CourseSearchResult {
-		private float score;
-		private String sectionId;
-		private String title;
-		private String text;
-		private String language;
-		
-		public CourseSearchResult(float score, Document doc, Highlighter highlighter){
-		    try {
-		        this.score=score;
-                sectionId=doc.get("sectionId");
-                language=doc.get("language").toUpperCase();
-		        
-		        //// Title
-		        //add <b> </b> around the word search in the title
-		        TokenStream tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("title",new StringReader(doc.get("title")));
-		        title = highlighter.getBestFragments(tokens, doc.get("title"),1 ,"<BR/>");
-		        if (title.isEmpty()){
-		            title=doc.get("title");
-		        }
-		        
-		        //// Text
-		        //add <b> </b> around the word search in the text
-		        tokens = new StandardAnalyzer(Version.LUCENE_30).tokenStream("text",new StringReader(doc.get("text")));
-		        text = highlighter.getBestFragments(tokens, doc.get("text"),4 ,"<BR/>...");
-
-		    }catch (InvalidTokenOffsetsException e){
-		        throw new RuntimeException(e);
-		    }catch (IOException e) {
-		        throw new RuntimeException(e);
-		    }
-
-		}
-
-		public float getScore() {
-			return score;
-		}
-		
-		public String getTitle() {
-			return title;
-		}
-
-		public String getText() {
-			return text;
-		}
-
-		public String getSectionId() {
-			return sectionId;
-		}
-		
-		public String getLanguage() {
-            return language;
-        }
-
-        public void setLanguage(String language) {
-            this.language = language;
-        }
-
-        @Override
-		public String toString() {
-			return "Score: " + score + " // title: " + title;
-		}
 	}
 }

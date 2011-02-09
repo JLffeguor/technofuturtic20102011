@@ -1,27 +1,25 @@
 package blackbelt.lucene.ui.page;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.queryParser.ParseException;
 import org.vaadin.navigator7.Navigator.NavigationEvent;
 import org.vaadin.navigator7.Page;
 import org.vaadin.navigator7.ParamChangeListener;
 import org.vaadin.navigator7.ParamPageLink;
 import org.vaadin.navigator7.uri.Param;
 
-import blackbelt.lucene.IndexManager.CourseSearchResult;
-import blackbelt.lucene.spring.SpringUtil;
+import blackbelt.lucene.CourseSearchResultsManager;
+import blackbelt.lucene.CourseSearchResultsManager.CourseSearchResult;
 
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 /**
  * This page display each results found by Lucene 
@@ -36,9 +34,9 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     @Param(pos = 1, required = true)
     private String language;
 
-	private static final int HIT_PER_PAGE = 3;
+	private static final int HIT_PER_PAGE = 15;
     private VerticalLayout layoutResult;
-    private List<CourseSearchResult> resultList;
+    private CourseSearchResultsManager courseSearchResultsManager;
     private int numberOfResults,currentPageOfResults;
 
     public ResultPage() {
@@ -47,41 +45,22 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
 
     @Override
     public void paramChanged(NavigationEvent navigationEvent) {
-        try {
-            //Start a search
-        	currentPageOfResults=1;
-        	layoutResult=new VerticalLayout();
-        	layoutResult.setSpacing(true);
-        	layoutResult.setMargin(true);
-            resultList = SpringUtil.getBean().searchByKeyWordAndLanguage(keyWord, language);  // TODO Autowired
-            numberOfResults=resultList.size();
-            this.addComponent(new Label("Number of results: "+numberOfResults));
-            this.addComponent(layoutResult);
-            
-//            displayAll();
-            displayActualPageOfResult();
-            
-    		ResultNavigator resultNavigator=new ResultNavigator();
-    		this.addComponent(resultNavigator);
-    		this.setComponentAlignment(resultNavigator, Alignment.MIDDLE_CENTER);
-            
-        } catch (ParseException e) {
-           throw new RuntimeException(e);
-        } catch (IOException e) {
-        	throw new RuntimeException(e);
-        }
-    }
-    
-    //TODO remove at the integration
-    private void displayAll(){
-    	// if results found -> display all results. Else display a message "no result"
-    	if (resultList.size() > 0) {
-    		for (CourseSearchResult courseSearchResult : resultList) {
-    			this.addComponent(new ResultDisplayer(courseSearchResult));
-    		}
-    	} else {
-    		this.addComponent(new Label("No result"));
-    	}
+    	//Start a search
+    	currentPageOfResults=1;
+    	layoutResult=new VerticalLayout();
+    	layoutResult.setSpacing(true);
+    	layoutResult.setMargin(true);
+    	courseSearchResultsManager = new CourseSearchResultsManager();  // TODO Autowired
+    	courseSearchResultsManager.search(keyWord, language);
+    	numberOfResults=courseSearchResultsManager.getTotalHits();
+    	this.addComponent(new Label("Number of results: "+numberOfResults));
+    	this.addComponent(layoutResult);
+
+    	displayActualPageOfResult();
+
+    	ResultNavigator resultNavigator=new ResultNavigator();
+    	this.addComponent(resultNavigator);
+    	this.setComponentAlignment(resultNavigator, Alignment.MIDDLE_CENTER);
     }
     
 	private void displayActualPageOfResult() {
@@ -95,7 +74,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
 
 		layoutResult.removeAllComponents();
 		for (int i = hitStart; i < hitEnd; i++) {
-			layoutResult.addComponent(new ResultDisplayer(resultList.get(i)));
+			layoutResult.addComponent(new ResultDisplayer(courseSearchResultsManager.getResult(i)));
 		}
 	}
 
@@ -149,7 +128,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     		this.addComponent(buttonNext);
 		}
     	
-    	private void reorganizeButtonsPage(){
+    	private void reorganizeButtonsPage(int previousPage){
     		if (numberTotalOfPages>NBR_BUTTONS_PAGE){
     			if (currentPageOfResults<=BUTTON_PAGE_EDGE){
     				for(int i=0;i<NBR_BUTTONS_PAGE;i++){
@@ -174,30 +153,37 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     					listButtons.get(j-i).setCaptionNotCkeckActualPage(currentPageOfResults-i);
     				}
     			}
+    		} else {
+    			listButtons.get(currentPageOfResults-1).setCaptionBold(currentPageOfResults);
+    			listButtons.get(previousPage-1).setCaption(previousPage);
     		}
     	}
     	
     	@Override
     	public void buttonClick(ClickEvent event) {
+    		int previousPage;
     		
     		if(event.getButton()==buttonBack){
     			if(currentPageOfResults!=1){
+    				previousPage=currentPageOfResults;
     				currentPageOfResults--;
     				displayActualPageOfResult();
-    				reorganizeButtonsPage();
+    				reorganizeButtonsPage(previousPage);
     			}
     		} else if (event.getButton()==buttonNext){
     			if(currentPageOfResults<numberTotalOfPages){
+    				previousPage=currentPageOfResults;
     				currentPageOfResults++;
     				displayActualPageOfResult();
-    				reorganizeButtonsPage();
+    				reorganizeButtonsPage(previousPage);
     			}
     		} else {
     			ButtonPageNavigator button=(ButtonPageNavigator)event.getButton();
     			if(currentPageOfResults!=button.getPage()){
+    				previousPage=currentPageOfResults;
     				currentPageOfResults=button.getPage();
     				displayActualPageOfResult();
-    				reorganizeButtonsPage();
+    				reorganizeButtonsPage(previousPage);
     			}
     		}
     	}
@@ -244,6 +230,11 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     	public void setCaptionBold(int page){
     		this.page=page;
     		setCaption("<b>"+page+"</b>");
+    	}
+    	
+    	public void setCaption(int page){
+    		this.page=page;
+    		setCaption(String.valueOf(page));
     	}
     	
     	public int getPage(){
