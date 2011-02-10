@@ -101,7 +101,7 @@ public class ResultPage extends VerticalLayout implements ParamChangeListener {
     }
     
     private class ResultNavigator extends HorizontalLayout implements ClickListener {
-    	private static final int NBR_BUTTONS_PAGE = 9;
+    	private static final int NBR_BUTTONS_PAGE = 9;  // ONLY EVEN NUMBERS (not 10, but 9 or 11 for example), else the algo breaks (because we put the current page in the middle).
     	private static final int BUTTON_PAGE_EDGE = 4;
     	private int numberTotalOfPages;
     	private List<ButtonPageNavigator> listButtons;
