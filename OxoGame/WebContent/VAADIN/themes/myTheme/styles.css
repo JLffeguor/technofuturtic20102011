@@ -1,0 +1,98 @@
+@import url(../reindeer/styles.css);
+
+/***************************************************** For the PageTemplate classes of Navigator7 addon. 
+  COPY/PASTE THIS in your styles.css */
+/****** I've been forced to require you to copy/paste stuff from this CSS file, because Vaadin 6.3 API prevents us to provide a value for the style attbitute of tags.
+  Vote for this to change the situation :    http://vaadin.uservoice.com/forums/20474-general/suggestions/699562
+  */
+.v-horizontallayout.blueColor {
+	background-color: blue;
+}
+
+.v-horizontallayout.button2 {
+	background-color: yellow;
+}
+
+.v-verticallayout.yellowColor {
+	background-color: yellow;
+}
+
+
+
+.PageTemplate-mainLayout {
+	width: 100%
+}
+
+/* Full window width */
+.FixedPageTemplate-bandOuterLayout {
+	width: 100%
+}
+
+/* Fixed width inside bandOuterLayout */
+.FixedPageTemplate-bandInnerLayout {
+	margin: 0 auto; /* Centered inside outer div */
+}
+
+/* Layout containing your pages (probably between a header and a footer) */
+.FixedPageTemplate-layoutPage {
+	padding-top: 15px; /* Not too close from the header */
+	padding-bottom: 20px; /* Not too close from the footer */
+}
+
+/* END OF COPY/PASTE */
+.v-theme-minichat {
+	background: white;
+}
+
+.invisible {
+	display: none;
+}
+
+.minichat .v-verticallayout-margin {
+	padding: 5px;
+}
+
+.minichat .v-gridlayout-spacing-on {
+	padding-top: 0px;
+	padding-left: 3px;
+}
+
+.minichat .chatmsg-time {
+	color: gray;
+}
+
+.minichat .chatmsg-user {
+	color: blue;
+}
+
+.minichat .chatmsg-message {
+	color: black;
+}
+
+.emtySquareX {
+	background-image: url(emptySquare.jpg);
+}
+.emtySquareX:hover {
+	background-image: url(xSquare.jpg);
+}
+
+.emtySquareO {
+	background-image: url(emptySquare.jpg);
+}
+.emtySquareO:hover {
+	background-image: url(oSquare.jpg);
+}
+.xSquare {
+	background-image: url(xSquare.jpg);
+}
+.oSquare {
+	background-image: url(oSquare.jpg);
+}
+
+.v-horizontallayout.red {
+	backgroud-color: red;
+}
+
+.yellow {
+	backgroud-color: #000000;
+}
