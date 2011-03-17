@@ -6,33 +6,41 @@
   Vote for this to change the situation :    http://vaadin.uservoice.com/forums/20474-general/suggestions/699562
   */ 
   
-.PageTemplate-mainLayout {
+/*.PageTemplate-mainLayout {
     width:100%
-}
+}*/
 
 /* Full window width */
-.FixedPageTemplate-bandOuterLayout {
+/*.FixedPageTemplate-bandOuterLayout {
     width:100%
-}
+}*/
 
 /* Fixed width inside bandOuterLayout */
-.FixedPageTemplate-bandInnerLayout {
+/*.FixedPageTemplate-bandInnerLayout {
     margin: 0 auto;  /* Centered inside outer div */
-}
+}*/
 
 /* Layout containing your pages (probably between a header and a footer) */
-.FixedPageTemplate-layoutPage {
+/*.FixedPageTemplate-layoutPage {
     padding-top:15px;   /* Not too close from the header */
-	padding-bottom:20px; /* Not too close from the footer */
+	/*padding-bottom:20px; /* Not too close from the footer */
+}*/
+
+/*.redLayout {
+	color:black;
+}*/
+/*.redLayout:hover {
+	color:red;
+}*/
+/*.rightAlign{
+	text-align:right;
+}*/
+/* END OF COPY/PASTE */
+
+.boldLink,.v-link-boldLink, /* for Vaadin button links. */
+	.v-button-boldLink span.v-button-caption {
+	/* for Vaadin button links */
+	font-weight: bold;
 }
 
-.redLayout {
-	color:black;
-}
-.redLayout:hover {
-	color:red;
-}
-.rightAlign{
-	text-align:right;
-}
-/* END OF COPY/PASTE */
+
